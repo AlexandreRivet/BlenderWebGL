@@ -1,0 +1,83 @@
+.global_ShaderEditor
+{
+    position: relative;   
+}
+
+.code_ShaderEditor
+{
+    position    : absolute;
+    font-family : Consolas,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New", monospace;
+    font-size   : 12pt;
+    word-break  : break-all;
+    word-wrap   : break-word;
+    white-space : pre-wrap;
+    border-width: 2px;
+    border-style: groove;
+    margin      : 0px;
+    padding     : 0px;
+    width       : 400px;
+    height      : 400px;
+}
+
+textarea.code_ShaderEditor
+{
+    z-index         : 1;
+    color           : rgba(0,0,0,0.3);
+    background-color: transparent;
+    overflow        : scroll;
+}
+
+div.code_ShaderEditor
+{
+    z-index         : 0;
+    color           : #F8F8F2;
+    background-color: black;
+    overflow        : hidden;
+}
+
+.comments, 
+.comments > .keywords,
+.comments > .types,
+.comments > .f_basics,
+.comments > .f_advanced,
+.comments > .numerics,
+.comments > .quotes
+{
+    color: #75715E;
+}
+
+.quotes, 
+.quotes > .keywords,
+.quotes > .types,
+.quotes > .f_basics,
+.quotes > .f_advanced,
+.quotes > .numerics,
+.quotes > .comments
+{
+    color: yellow;
+}
+
+.keywords
+{
+    color: #F92672;
+}
+
+.types
+{
+    color: #F92672;
+}
+
+.f_basics
+{
+    color: #66D9EF;
+}
+
+.f_advanced
+{
+    color: #AE81FF;   
+}
+
+.numerics
+{
+    color: #AE81FF;   
+}
