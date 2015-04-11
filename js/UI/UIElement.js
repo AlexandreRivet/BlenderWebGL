@@ -1,5 +1,5 @@
 /**************************************************
-
+    Class UIElement
 **************************************************/
 
 var UIElement = function (dom) {
@@ -8,24 +8,36 @@ var UIElement = function (dom) {
     this.mVisible = true;
 };
 
+/*
+    Définition de l'ID de la div
+*/
 UIElement.prototype.setID = function (ID) {
     'use strict';
 	this.mDOM.id = ID;
 	return this;
 };
 
+/*
+    Définition de la classe (écrase toutes celles existantes)
+*/
 UIElement.prototype.setClass = function (className) {
     'use strict';
 	this.mDOM.className = className;
 	return this;
 };
 
+/*
+    Ajoute une classe à celles existantes
+*/
 UIElement.prototype.addClass = function (className) {
     'use strict';
     this.mDOM.className += " " + className;
     return this;
 };
 
+/*
+    Définition du style de la div
+*/
 UIElement.prototype.setStyle = function (styles) {
     'use strict';
     var key;
@@ -34,28 +46,54 @@ UIElement.prototype.setStyle = function (styles) {
     return this;
 };
 
+/*
+    Définit si la div doit être visible
+*/
 UIElement.prototype.setVisible = function (enable) {
     'use strict';
     this.mVisible = enable;
     this.setStyle({'display' : ((enable) ? 'block' : 'none') });
 };
 
+/*
+    Définit si on désactive la div
+*/
 UIElement.prototype.setDisabled = function (enable) {
     'use strict';
 	this.mDOM.disabled = enable;
 	return this;
 };
 
+/*
+    Définit le content direct de la div
+*/
 UIElement.prototype.setTextContent = function (content) {
     'use strict';
 	this.mDOM.textContent = content;
 	return this;
 };
 
+/*
+    Retourne le content direct de la div
+*/
 UIElement.prototype.getTextContent = function () {
     'use strict';
 	return this.mDOM.textContent;
 };
 
-UIElement.prototype.click = function (callback) { 'use strict'; this.mDOM.addEventListener('click', callback); };
-UIElement.prototype.change = function (callback) { 'use strict'; };
+/*
+    Gestion de la souris
+*/
+UIElement.prototype.click       = function (callback) { 'use strict'; this.mDOM.addEventListener('click', callback); };
+UIElement.prototype.mousedown   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousedown', callback); };
+UIElement.prototype.mouseup     = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseup', callback); };
+UIElement.prototype.mouseenter  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseenter', callback); };
+UIElement.prototype.mouseleave  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseleave', callback); };
+UIElement.prototype.mousemove   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousemove', callback); };
+
+/*
+    Gestion du clavier
+*/
+UIElement.prototype.change      = function (callback) { 'use strict'; this.mDOM.addEventListener('change', callback); };
+UIElement.prototype.keydown     = function (callback) { 'use strict'; this.mDOM.addEventListener('keydown', callback); };
+UIElement.prototype.keyup       = function (callback) { 'use strict'; this.mDOM.addEventListener('keyup', callback); };

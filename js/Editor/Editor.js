@@ -1,24 +1,41 @@
-/*global window, THREE, console */
+/*global window, console, check */
+/*global THREE, EditorEvent */
 
 var Editor = function (name, container) {
     'use strict';
+    
     this.mName = name;
-    this.mScene = new THREE.Scene();
-    this.mObject = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff}));
-    this.mScene.add(this.mObject);
+    this.mObjectCount = 0;
     
-    // debugger;
+    this.mPrincipalScene = new THREE.Scene();
+    this.mPrincipalScene.name = 'PrincipalScene';
+    this.mObjects = {};
     
-    // this.mCameraList = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
-    this.mCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.mCamera.position.z = 5;
+    this.mHelpersScene = new THREE.Scene();
+    this.mHelpersScene.name = 'HelpersScene';
+    this.mHelpers = {};
     
-    this.mRenderer = new THREE.WebGLRenderer();
-    this.mRenderer.setPixelRatio(window.devicePixelRatio);
-    this.mRenderer.setSize(container.offsetWidth, container.offsetHeight);
-    this.mRenderer.setClearColor(0xdddddd);
-    this.mRenderer.domElement.style.position = "relative";
-    container.appendChild(this.mRenderer.domElement);
+    this.mEditObjectScene = new THREE.Scene();
+    this.mEditObjectScene.name = 'EditObjectScene';
+    this.mEditObjects = {};
+    
+    this.mGeometries = {};
+    this.mMaterials = {};
+    this.mTextures = {};
+    
+    this.mCameras = {};
+    
+    this.mEvents = new EditorEvent();
+};
+
+Editor.prototype.init = function () {
+    'use strict';
+    
+    // Préparation de toutes les caméras
+    
+    
+    this.mEvents.addEvent("addObject");
+    this.mEvents.addFunctionToEvent("addObject", function (o) { console.log(o); });
 };
 
 Editor.prototype.getName = function () {
@@ -31,51 +48,15 @@ Editor.prototype.setName = function (name) {
     this.mName = name;
 };
 
-Editor.prototype.isActive = function () {
+Editor.prototype.addObject = function (object) {
     'use strict';
-    return this.mActive;
-};
-
-Editor.prototype.setActive = function (active) {
-    'use strict';
-    this.mActive = active;
-};
-
-Editor.prototype.prepareFrame = function () {
-    'use strict';
-
-    // Some updates if we need
+    var event = this.mEvents.getEvent("addObject");
+    if (!check(event)) {
+        console.error("No event 'add object' defined in this editor.");
+        return;
+    }
     
-    this.render();
-};
-
-Editor.prototype.render = function () {
-    'use strict';
-    console.log("Editor " + this.mName + " is rendering.");
+    this.mPrincipalScene.add(object);
     
-    this.mObject.rotation.x += 0.1;
-    this.mObject.rotation.y += 0.1;
-    
-    // debugger;
-    
-    this.mRenderer.render(this.mScene, this.mCamera);
-    
-    var cameraName, camera;
-    
-    // this.mRenderer.render(this.mScene, this.mCamera);
-    
-    /*
-    for (cameraName in this.mCameraList) {
-        if (this.mCameraList.hasOwnProperty(cameraName)) {
-            camera =  this.mCameraList[cameraName];
-            if (camera.active === true && camera.object !== null) {
-                this.mRenderer.render(this.mScene, camera.object);
-            }
-        }
-    }*/
-};
-
-Editor.prototype.setClearColor = function (color) {
-    'use strict';
-    this.mRenderer.setClearColor(color);
+    event.dispatch(object);
 };

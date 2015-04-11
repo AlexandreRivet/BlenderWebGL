@@ -1,0 +1,65 @@
+@font-face
+{
+    font-family:                    "Nexa";
+    src:                            url("../../../resources/fonts/Nexa Light.otf");
+}
+
+/* Définition de la classe Panel générique */
+.Panel
+{   
+    background-color:               #222;
+    color:                          #eee;
+}
+
+
+/* Définition de la class Menu générique */
+.Menu
+{
+    font-family:                    "Nexa";
+    float:                          left;
+    cursor:                         pointer;
+    padding-right:                  8px;
+}
+
+.Menu .Title
+{
+    display:                        inline-block;
+    color:                          #eee;
+    margin:                         0px;
+    padding:                        5px;
+}
+
+.Menu .Options
+{
+    position:                       absolute;
+    display:                        none;
+    padding:                        5px 0px;
+    background:                     #eee;
+    width:                          150px;
+}
+
+.Menu:hover .Options
+{
+    display:                        block;
+}
+
+.Menu .Options .Option
+{
+    color:                          #222;
+    background-color:               transparent;
+    padding:                        5px 10px;
+    margin:                         0px !important;
+}
+
+.Menu .Options .Option:hover
+{
+    color:                          #eee;
+    background-color:               #222;
+}
+
+.Menu .Options .Option:active
+{
+    color:                          #666;
+    background:                     transparent;
+}
+

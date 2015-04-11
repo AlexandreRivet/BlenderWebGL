@@ -5,22 +5,18 @@ var UIMenu = function(name)
     this.mName = name;
     
     this.mBlock = new UIPanel();
+    this.mBlock.setClass('Menu');
     
     this.mMenuTitle = new UIPanel();
-    this.mMenuTitle.add(new UIText(name));
+    this.mMenuTitle.setClass('Title');
+    this.mMenuTitle.setTextContent(name);
     
     this.mMenuItems = new UIPanel();
-    this.mMenuItems.setVisible(false);
+    this.mMenuItems.setClass('Options');
 
     this.mBlock.add(this.mMenuTitle);
     this.mBlock.add(this.mMenuItems);
-    
-    var scope = this;
-    scope.mMenuTitle.mDOM.addEventListener('mousedown', function(e){
-        scope.mMenuItems.setVisible(true);
-        
-    });
-    
+	
     this.mDOM = this.mBlock.mDOM;
     
     return this;
@@ -30,5 +26,6 @@ UIMenu.prototype = Object.create(UIElement.prototype);
 
 UIMenu.prototype.addMenuItem = function(menuItem)
 {
+    menuItem.addClass('Option');
     this.mMenuItems.add(menuItem);
 };

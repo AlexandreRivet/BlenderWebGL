@@ -1,52 +1,32 @@
-/*global console, Editor, UIPanel, UITab, UIText, UIButton */
+/*global console, HashMap, check */
+/*global THREE, Editor */
+/*global UIPanel, UIButton, UIText */
 
-var EditorUserInterface = function (editorMng) {
+var EditorUserInterface = function (editor) {
     'use strict';
     
-    this.mEditorManager = editorMng;
-    
-    this.mTopPanel = new UIPanel();
-    this.mTopPanel.addClass('topPanel');
-    
-    this.mMiddlePanel = new UIPanel();
-    this.mMiddlePanel.addClass('middlePanel');
-    
-    this.mMiddleContent = new UIPanel();
-    this.mMiddleContent.addClass('middleContent');
-    
-    this.mMiddlePanel.add(this.mMiddleContent);
-    
-    this.mLeftPanel = new UIPanel();
-    this.mLeftPanel.addClass('leftPanel');
-    
-    this.mWorkspacePanel = new UITab('workspacePanel');
-    
-    this.mRightPanel = new UIPanel();
-    this.mRightPanel.addClass('rightPanel');
-    
-    this.mBottomPanel = new UIPanel();
-    this.mBottomPanel.addClass('bottomPanel');
-    
-    this.mMiddleContent.add(this.mLeftPanel);
-    this.mMiddleContent.add(this.mWorkspacePanel);
-    this.mMiddleContent.add(this.mRightPanel);
-    
-    document.body.appendChild(this.mTopPanel.mDOM);
-    document.body.appendChild(this.mMiddlePanel.mDOM);
-    document.body.appendChild(this.mBottomPanel.mDOM);
+    this.mEditor = editor;
+    this.mUIElements = new HashMap();
 };
 
-EditorUserInterface.prototype.init = function () {
+EditorUserInterface.prototype.add = function (name, object, parent) {
     'use strict';
-    var context = this, panel;
+    if (!check(name) || !check(object)) {
+        console.error("Error with parameters");
+        return;
+    }
     
-    panel = new UIButton("Add new workspace");
-    panel.click(function () {
-        context.mEditorManager.addWorkspace(null, context.mWorkspacePanel.mPanelContents.mDOM);
-        var tab = context.mWorkspacePanel.add(context.mEditorManager.mEditorActive.mName, null, function () {
-            var editor = context.mEditorManager.getEditorByName(tab.mDOM.id);
-            context.mEditorManager.setEditorActive(editor);
-        });
-    });
-    this.mTopPanel.add(panel);
+    if (this.mUIElements.get(name)) {
+        console.info("UIElement already created. Can't override.");
+        return;
+    }
+    
+    parent = this.mUIElements.get(parent);
+    if (!check(parent) || parent === "#") {
+        document.body.appendChild(object.mDOM);
+    } else {
+        parent.add(object);
+    }
+    
+    this.mUIElements.put(name, object);
 };
