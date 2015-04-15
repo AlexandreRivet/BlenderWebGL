@@ -1,5 +1,7 @@
-var UIMenu = function(name)
-{
+/*global UIElement, UIPanel, UISeparator */
+
+var UIMenu = function (name) {
+    'use strict';
     UIElement.call(this);
     
     this.mName = name;
@@ -24,8 +26,13 @@ var UIMenu = function(name)
 
 UIMenu.prototype = Object.create(UIElement.prototype);
 
-UIMenu.prototype.addMenuItem = function(menuItem)
-{
+UIMenu.prototype.addMenuItem = function (menuItem) {
+    'use strict';
     menuItem.addClass('Option');
     this.mMenuItems.add(menuItem);
+};
+
+UIMenu.prototype.addSeparator = function () {
+    'use strict';
+    this.mMenuItems.add(new UISeparator());
 };

@@ -32,7 +32,7 @@ Editor.prototype.init = function () {
     'use strict';
     
     // Préparation de toutes les caméras
-    
+    this.mCamera = new THREE.PerspectiveCamera(50, 1, 1, 100000);
     
     this.mEvents.addEvent("addObject");
     this.mEvents.addFunctionToEvent("addObject", function (o) { console.log(o); });

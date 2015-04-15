@@ -4,6 +4,11 @@
     src:                            url("../../../resources/fonts/Nexa Light.otf");
 }
 
+*
+{
+    font-family:                    "Nexa";
+}
+
 /* Définition de la classe Panel générique */
 .Panel
 {   
@@ -11,11 +16,21 @@
     color:                          #eee;
 }
 
+.PanelClickable
+{
+    cursor:                         pointer;
+}
+
+hr
+{
+	border: 0px;
+	border-top: 1px solid #ccc;
+}
+
 
 /* Définition de la class Menu générique */
 .Menu
 {
-    font-family:                    "Nexa";
     float:                          left;
     cursor:                         pointer;
     padding-right:                  8px;
@@ -26,7 +41,7 @@
     display:                        inline-block;
     color:                          #eee;
     margin:                         0px;
-    padding:                        5px;
+    padding:                        5px 10px;
 }
 
 .Menu .Options
@@ -48,7 +63,7 @@
     color:                          #222;
     background-color:               transparent;
     padding:                        5px 10px;
-    margin:                         0px !important;
+    margin:                         2px !important;
 }
 
 .Menu .Options .Option:hover
@@ -62,4 +77,3 @@
     color:                          #666;
     background:                     transparent;
 }
-
