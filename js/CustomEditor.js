@@ -14,8 +14,10 @@ function initialiseCustomEditor() {
     topPanel.add(fileMenu);
     
     var newOption = (new UIPanel()).setTextContent("New");
+    newOption.setDisabled(true);
     newOption.click(function() {
-       alert('New'); 
+        if (!newOption.mDOM.disabled)
+            alert('New'); 
     });
     fileMenu.addMenuItem(newOption);
     
@@ -69,23 +71,45 @@ function initialiseCustomEditor() {
     var addMenu = new UIMenu('Add');
     topPanel.add(addMenu);
     
-    var addCube = (new UIPanel()).setTextContent("Cube");
-    addCube.click(function() {
-        var geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
-        var material = new THREE.MeshBasicMaterial();
+    var addPlane = (new UIPanel()).setTextContent("Plane");
+    addPlane.click(function() {
+        var geometry = new THREE.PlaneGeometry(100, 100);
+        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
         var mesh = new THREE.Mesh(geometry, material);
         EDITORUI.mEditor.addObject(mesh);
+        EDITORUI.mEditor.selectObject(mesh);
+    });
+    addMenu.addMenuItem(addPlane); 
+    
+    var addCube = (new UIPanel()).setTextContent("Cube");
+    addCube.click(function() {
+        var geometry = new THREE.BoxGeometry(100, 100, 100, 1, 1, 1);
+        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var mesh = new THREE.Mesh(geometry, material);
+        EDITORUI.mEditor.addObject(mesh);
+        EDITORUI.mEditor.selectObject(mesh);
     });
     addMenu.addMenuItem(addCube);
     
     var addCylinder = (new UIPanel()).setTextContent("Cylinder");
     addCylinder.click(function() {
-        var geometry = new THREE.CylinderGeometry(10, 10, 20, 1, 1, false);
-        var material = new THREE.MeshBasicMaterial();
+        var geometry = new THREE.CylinderGeometry(40, 40, 100, 16, 16);
+        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
         var mesh = new THREE.Mesh(geometry, material);
         EDITORUI.mEditor.addObject(mesh);
+        EDITORUI.mEditor.selectObject(mesh);
     });
     addMenu.addMenuItem(addCylinder);
+    
+    var addSphere = (new UIPanel()).setTextContent("Sphere");
+    addSphere.click(function() {
+        var geometry = new THREE.SphereGeometry(100, 16, 16);
+        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var mesh = new THREE.Mesh(geometry, material);
+        EDITORUI.mEditor.addObject(mesh);
+        EDITORUI.mEditor.selectObject(mesh);
+    });
+    addMenu.addMenuItem(addSphere);
     
     // HelpMenu
     var helpMenu = new UIMenu('Help');
@@ -93,7 +117,7 @@ function initialiseCustomEditor() {
     
     var aboutUs = (new UIPanel()).setTextContent("About us");
     aboutUs.click(function () {
-        alert('About us');
+        alert('----------- WebBlender -----------\nMaxime Helaine\nAlexandre Rivet\nArthur Torrent\nKevin Waththuewa\nJamal Bouizem\n-------------------------------------');
     });
     helpMenu.addMenuItem(aboutUs);
     
@@ -115,31 +139,33 @@ function initialiseCustomEditor() {
     
     var button = (new UIButton('Mov.')).addClass('sideBar_btn');
     button.click(function() {
-        alert('Move');
+        EDITORUI.mEditor.mEvents.getEvent("transformControlModeChanged").dispatch("translate");
     });
     sideBarLeft.add(button);
     
     var button = (new UIButton('Rot.')).addClass('sideBar_btn');
     button.click(function() {
-        alert('Rotate');
+        EDITORUI.mEditor.mEvents.getEvent("transformControlModeChanged").dispatch("rotate");
     });
     sideBarLeft.add(button);
     
     var button = (new UIButton('Sca.')).addClass('sideBar_btn');
     button.click(function() {
-        alert('Scale');
+        EDITORUI.mEditor.mEvents.getEvent("transformControlModeChanged").dispatch("scale");
     });
     sideBarLeft.add(button);
     
     sideBarLeft.add( new UISeparator());
     
     var button = (new UIButton('Persp')).addClass('sideBar_btn');
+    button.setDisabled(true);
     button.click(function() {
         alert('One camera - perspective');
     });
     sideBarLeft.add(button);
     
     var button = (new UIButton('4V.')).addClass('sideBar_btn');
+    button.setDisabled(true);
     button.click(function() {
         alert('Four cameras - top, front, left, perspective');
     });
@@ -161,13 +187,12 @@ function initialiseCustomEditor() {
     sideBarRight.add(others);
     
     // Création du Viewport
-    // var renderViewport = new Viewport(EDITOR, viewport.mDOM);
-    // renderViewport.init();
-    // renderViewport.render();
+    var renderViewport = new Viewport(EDITOR, viewport.mDOM);
+    renderViewport.init();
     
     // Création de la ToolBar
     var bottomPanel = new UIPanel();
+    bottomPanel.setTextContent("ANIMATIONS");
     bottomPanel.addClass('bottomPanel');
     EDITORUI.add('bottomPanel', bottomPanel);
-    
 }

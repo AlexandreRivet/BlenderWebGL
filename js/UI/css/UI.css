@@ -77,3 +77,18 @@ hr
     color:                          #666;
     background:                     transparent;
 }
+
+.Button
+{
+    outline:                        0px;
+    border:                         0px;
+
+    cursor:                         pointer;
+}
+
+.Button:disabled
+{
+    opacity:                        0.5;
+    
+    cursor:                         auto;
+}

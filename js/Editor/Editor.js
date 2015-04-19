@@ -10,14 +10,14 @@ var Editor = function (name, container) {
     this.mPrincipalScene = new THREE.Scene();
     this.mPrincipalScene.name = 'PrincipalScene';
     this.mObjects = {};
-    
+
     this.mHelpersScene = new THREE.Scene();
     this.mHelpersScene.name = 'HelpersScene';
     this.mHelpers = {};
     
     this.mEditObjectScene = new THREE.Scene();
     this.mEditObjectScene.name = 'EditObjectScene';
-    this.mEditObjects = {};
+    this.mEditObject = null;
     
     this.mGeometries = {};
     this.mMaterials = {};
@@ -33,9 +33,12 @@ Editor.prototype.init = function () {
     
     // Préparation de toutes les caméras
     this.mCamera = new THREE.PerspectiveCamera(50, 1, 1, 100000);
+    this.mCamera.position.fromArray([500, 250, 500]);
+    this.mCamera.lookAt(new THREE.Vector3().fromArray([0, 0, 0]));
     
     this.mEvents.addEvent("addObject");
-    this.mEvents.addFunctionToEvent("addObject", function (o) { console.log(o); });
+    this.mEvents.addEvent("selectObject");
+    this.mEvents.addEvent("transformControlModeChanged");
 };
 
 Editor.prototype.getName = function () {
@@ -58,5 +61,17 @@ Editor.prototype.addObject = function (object) {
     
     this.mPrincipalScene.add(object);
     
+    event.dispatch(object);
+};
+
+Editor.prototype.selectObject = function (object) {
+    'use strict';
+    var event = this.mEvents.getEvent("selectObject");
+    
+    if (this.mEditObject === object) {
+        return;
+    }
+    
+    this.mEditObject = object;
     event.dispatch(object);
 };

@@ -23,7 +23,8 @@ EditorEvent.prototype.addEvent = function (name) {
 */
 EditorEvent.prototype.addFunctionToEvent = function (name, callback) {
     'use strict';
-    this.mSignals[name].add(callback);
+    if (this.getEvent(name))
+        this.mSignals[name].add(callback);
 };
 
 /*
