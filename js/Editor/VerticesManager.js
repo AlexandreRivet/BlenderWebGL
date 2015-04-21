@@ -4,39 +4,93 @@
 var VerticesManager = function() {
     "use strict";
     
-    this.m_ObjectGeometry = null;
+    this.mObjectGeometry = null;
     this.mVertices = [];
 };
 
+VerticesManager.prototype.cleanContext = function() {
+    /**
+     * Clean le context du manager
+     */
+    "use strict";
+    this.mVertices = [];
+    this.mObjectGeometry = null;
+};
 
 VerticesManager.prototype.setObject = function(object) {
-    "use strict";
+    /**
+     * Clean le context courant
+     * 
+     * Réattribut l'objet managé
+     */
     
-    this.mVertices = [];
-    this.m_ObjectGeometry = object.geometry;
+    "use strict";
+    this.cleanContext();
+    
+    this.mObjectGeometry = object.geometry;
 };
 
 VerticesManager.prototype.addVertices = function(idVertices) {
-  "use strict";
+    /**
+     * Supprime tous les vertices selectionné et ajoute le nouveau vertices à la liste
+     */
     
+    "use strict";    
+    console.log("Add vetices : " + idVertices);
+    
+    this.clearVertices();
+    this.pushVertice(idVertices);
 };
 
 VerticesManager.prototype.pushVertice = function(idVertices) {
-  "use strict";
+    /**
+     * Ajout à la liste de vetices selectionné idVertices
+     */
     
+    "use strict";
+    console.log("Push vetices : " + idVertices);
+    
+    if(idVertices > this.mObjectGeometry)
+    {
+        console.log("Out of range idVertice");
+    }
+    else
+    {
+        this.mVertices.push(idVertices);
+    }
 };
 
 VerticesManager.prototype.popVertice = function() {
-  "use strict";
+    /**
+     * Supprime le dernier vertices selectionné
+     */
     
+    "use strict";
+    console.log("Pop vetices");
+    
+    this.mVertices.pop();
 };
 
-VerticesManager.prototype.clearVertice = function() {
-  "use strict";
+VerticesManager.prototype.clearVertices = function() {
+    /**
+     * Supprime tous les vertices selectionné
+     */
     
+    "use strict";
+    console.log("Clear vertices");
+    
+    this.mVertices = [];
 };
 
 VerticesManager.prototype.move = function(axis, delta) {
-  "use strict";
+    /**
+     * Deplace tous les vertices selectionné sur l'axe donné en paramètre de delta
+     */
     
+    "use strict";
+    console.log("Move vertices");
+    
+    for(var i = 0; i < this.mVertices.length; ++i) {
+        this.mObjectGeometry.vertices[this.mVertices[i]] += delta;
+    }
 };
