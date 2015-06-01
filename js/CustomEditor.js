@@ -181,8 +181,6 @@ function initialiseCustomEditor() {
     graphScene.add((new UIPanel()).addClass('graphPanel'));
     sideBarRight.add(graphScene);
     
-    sideBarRight.add( new UISeparator());
-    
     var others = new UIHidingPanel(' > OTHERS');
     sideBarRight.add(others);
     

@@ -78,6 +78,7 @@ hr
     background:                     transparent;
 }
 
+/* Définition de la classe Button générique */
 .Button
 {
     outline:                        0px;
@@ -91,4 +92,30 @@ hr
     opacity:                        0.5;
     
     cursor:                         auto;
+}
+
+.Node
+{
+    padding-left:                   20px;
+}
+
+.header_node
+{
+    width:                          100%;
+    height:                         20px;
+    margin-bottom:                  1px;
+    background-color:               white;
+}
+
+.header_title_node
+{
+    color:                          #217ab2;
+    font-size:                      12px;
+    
+}
+
+.children_node
+{
+    width:                          100%;
+    background-color:               #aaa;
 }
