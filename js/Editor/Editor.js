@@ -39,6 +39,7 @@ Editor.prototype.init = function () {
     this.mEvents.addEvent("addObject");
     this.mEvents.addEvent("selectObject");
     this.mEvents.addEvent("transformControlModeChanged");
+    this.mEvents.addEvent("sceneGraphChanged");
 };
 
 Editor.prototype.getName = function () {
@@ -53,7 +54,7 @@ Editor.prototype.setName = function (name) {
 
 Editor.prototype.addObject = function (object) {
     'use strict';
-    var event = this.mEvents.getEvent("addObject");
+
     if (!check(event)) {
         console.error("No event 'add object' defined in this editor.");
         return;
@@ -61,7 +62,8 @@ Editor.prototype.addObject = function (object) {
     
     this.mPrincipalScene.add(object);
     
-    event.dispatch(object);
+    this.mEvents.getEvent("addObject").dispatch(object);
+    this.mEvents.getEvent("sceneGraphChanged").dispatch();
 };
 
 Editor.prototype.selectObject = function (object) {

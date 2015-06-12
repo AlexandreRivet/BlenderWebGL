@@ -40,7 +40,7 @@ body
 
 .leftPanel {
     display:                        table-cell;
-    width:                          40px;
+    width:                          50px;
     padding:                        5px;
     
     vertical-align:                 top;
@@ -78,7 +78,7 @@ body
 {
     width:                          40px;
     height:                         40px;
-    margin:                         5px 0px;
+    margin:                         5px 5px;
     
     background-color:               #217ab2;
     color:                          white;
@@ -100,7 +100,8 @@ body
     background-color:               black;
     border:                         1px solid #eee;
     width:                          100%;
-    height:                         100px;
+    height:                         150px;
+    overflow:                       auto;
 }
 
 .hierarchy_btn
@@ -116,3 +117,33 @@ body
     color:                          white;
 }
 
+.node_active
+{
+    background-color: yellow;   
+}
+
+/**************************************
+SCROLLBAR
+**************************************/
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #217ab2;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: #217ab2;
+}

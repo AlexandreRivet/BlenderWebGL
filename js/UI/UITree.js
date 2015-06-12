@@ -1,92 +1,131 @@
-/*global $, UIElement, console, HashMap */
-
-var UINode = function(name, defaultOpened, callback) {
+/*global UIElement */
+var UITree = function(editor) {
     'use strict';
+    
     UIElement.call(this);
     
-    this.mName = name;
-    this.mOpened = defaultOpened;
-    this.mChildren = new HashMap();
-    this.mButtonHidden = true;
-    
-    this.mBlock = new UIPanel();
-    this.mBlock.setClass('Node');
-    
-    this.mHeaderPanel = new UIPanel();
-    this.mHeaderPanel.addClass('header_node');
-    
-    this.mChildrenPanel = new UIPanel();
-    this.mChildrenPanel.addClass('children_node');
-    
-    this.mBlock.add(this.mHeaderPanel);
-    this.mBlock.add(this.mChildrenPanel);
-    
-    this.mDOM = this.mBlock.mDOM;
-    
-    this.mOpenButton = null;
-    this.mActionButton = null;    
-    
-    this.init();
-    
-    return this;
-};
-
-UINode.prototype = Object.create(UIElement.prototype);
-
-UINode.prototype.init = function() {
-    "use strict";
     var context = this;
     
-    // Button definition
-    this.mOpenButton = (new UIButton('+')).addClass('hierarchy_btn');
-    this.mOpenButton.click(function(e) {
-        context.mOpened = !context.mOpened;
-        if (context.mOpened) {
-            context.mChildrenPanel.setVisible(true);
-            context.mOpenButton.setTextContent('-');
-        } else {
-            context.mChildrenPanel.setVisible(false);
-            context.mOpenButton.setTextContent('+');
+    var dom = document.createElement('div');
+    dom.ClassName = 'Tree';
+    dom.tabIndex = 0;
+    
+    this.mPrincipalScene = editor.mPrincipalScene;
+    
+    var changeEvent = document.createEvent('HTMLEvents');
+    changeEvent.initEvent('change', true, true);
+    
+    dom.addEventListener('keydown', function(event) {
+        
+        switch(event.keyCode) {
+            case 38:
+            case 40:
+                event.preventDefault();
+                event.stopPropagation();
+                break;                
         }
-    });
-    this.mHeaderPanel.add(this.mOpenButton);
+        
+    }, false);
     
-    if (this.mOpened) {
-        this.mChildrenPanel.setVisible(true);
-        this.mOpenButton.setTextContent('-');
-    } else {
-        this.mChildrenPanel.setVisible(false);
-        this.mOpenButton.setTextContent('+');
-    }
+    dom.addEventListener('keyup', function(event) {
+        
+        switch(event.keyCode) {
+            case 38:
+            case 40:
+                context.mSelectedIndex += (event.keyCode == 38) ? -1 : 1;
+                
+                if(context.mSelectedIndex >= 0 && context.mSelectedIndex < context.mOptions.length)
+                {
+                    context.setValue(context.mOptions[context.mSelectedIndex].value);
+                    context.mDOM.dispatchEvent(changeEvent);
+                }
+                break;                
+        }        
+        
+    }, false);    
     
-    if (this.mButtonHidden) {
-        this.mOpenButton.setDisabled(true);
-    }
+    this.mDOM = dom;
     
-    // Title definition
-    var title = new UIText(this.mName);
-    title.addClass('header_title_node');
+    this.mOptions = [];
+    this.mSelectedIndex = -1;
+    this.mSelectedValue = null;
     
-    this.mHeaderPanel.add(title);
+    return this;
+};  
+
+UITree.prototype = Object.create(UIElement.prototype);
+
+UITree.prototype.setOptions = function(options) {
+    'use strict';
+    
+    var context = this;
+    
+    var changeEvent = document.createEvent( 'HTMLEvents' );
+	changeEvent.initEvent( 'change', true, true );
+
+	while ( context.mDOM.children.length > 0 ) {
+
+		context.mDOM.removeChild( context.mDOM.firstChild );
+
+	}
+
+	context.mOptions = [];
+    
+    for ( var i = 0; i < options.length; i ++ ) {
+
+		var option = options[i];
+
+		var div = document.createElement( 'div' );
+		div.className = 'node';
+		div.innerHTML = option.html;
+		div.value = option.value;
+		context.mDOM.appendChild( div );
+
+		context.mOptions.push( div );
+
+		div.addEventListener( 'click', function ( event ) {
+
+			context.setValue( this.value );
+			context.mDOM.dispatchEvent( changeEvent );
+
+		}, false );
+
+	}
+
+	return context;
+};
+
+UITree.prototype.getValue = function() {
+    'use strict';
+    
+    return this.mSelectedValue;
     
 };
 
-UINode.prototype.add = function(node) {
+UITree.prototype.setValue = function(value) {
     'use strict';
     
-    this.mChildrenPanel.add(node);
+    var context = this;
     
-    this.mChildren.put(node.mName, node);
+    for (var i = 0; i < this.mOptions.length; i++) {
+     
+        var option = this.mOptions[i];
+        
+        if (option.value == value) {
+            
+            option.classList.add('node_active');         // Devient l'option active
+            
+            // TODO: Scroller jusqu'à l'élément dans la liste ??
+            
+        } else {
+            
+            option.classList.remove('node_active');      // N'est plus l'option active
+            
+        }
+        
+    }   
     
-    if (this.hasChildren() && this.mButtonHidden) {
-        this.mButtonHidden = false;
-        this.mOpenButton.setDisabled(false);
-    }
+    this.mSelectedValue = value;
     
-};
-
-UINode.prototype.hasChildren = function() {
-    'use strict';
-    
-    return (this.mChildren.size() > 0 ? true : false);
+    return context;
 };

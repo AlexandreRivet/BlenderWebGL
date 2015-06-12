@@ -2,28 +2,18 @@
 /*global THREE, Editor, EditorUserInterface */
 /*global UIElement, UIPanel, UIMenu */
 
-var EDITOR = null, EDITORUI = null;
-
 $(document).ready(function () {
     'use strict';
-    /*
-    var menu = new UIMenu('test');
-    menu.addMenuItem((new UIPanel()).setTextContent("Option 1"));
-    menu.addMenuItem(new UIButton("Button Test in Menu"));
-    menu.addMenuItem(new UIRange(0, 10, 5));
-    menu.addMenuItem((new UIPanel()).setTextContent("Option 4"));
-    document.body.appendChild(menu.mDOM);
     
-    var menu = new UIMenu('test2');
-    menu.addMenuItem((new UIPanel()).setTextContent("Option 1"));
-    menu.addMenuItem(new UIButton("Button Test in Menu"));
-    menu.addMenuItem(new UIRange(0, 10, 5));
-    menu.addMenuItem((new UIPanel()).setTextContent("Option 4"));
-    document.body.appendChild(menu.mDOM);*/
+    var editor = new Editor();
+    editor.init();
     
-    EDITOR = new Editor();
-    EDITOR.init();
+    var menubar = new Menubar(editor);
+    document.body.appendChild(menubar.mDOM);
     
-    EDITORUI = new EditorUserInterface(EDITOR);
-    initialiseCustomEditor();
+    var middlePanel = new MiddlePanel(editor);
+    document.body.appendChild(middlePanel.mDOM);
+    
+    var animationPanel = new AnimationPanel(editor);
+    document.body.appendChild(animationPanel.mDOM);
 });

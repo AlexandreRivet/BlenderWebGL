@@ -17,7 +17,7 @@ var UIHidingPanel = function(name)
     this.mBlock.add(this.mPanelContent);
     
     var scope = this;
-    scope.mPanelTitle.mDOM.addEventListener('click', function(e)
+    scope.mPanelTitle.click(function(e)
     {
         scope.mPanelContent.setVisible(!scope.mPanelContent.mVisible);
     });

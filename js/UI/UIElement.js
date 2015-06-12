@@ -84,16 +84,16 @@ UIElement.prototype.getTextContent = function () {
 /*
     Gestion de la souris
 */
-UIElement.prototype.click       = function (callback) { 'use strict'; this.mDOM.addEventListener('click', callback); };
-UIElement.prototype.mousedown   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousedown', callback); };
-UIElement.prototype.mouseup     = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseup', callback); };
-UIElement.prototype.mouseenter  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseenter', callback); };
-UIElement.prototype.mouseleave  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseleave', callback); };
-UIElement.prototype.mousemove   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousemove', callback); };
+UIElement.prototype.click       = function (callback) { 'use strict'; this.mDOM.addEventListener('click', callback.bind(this), false); };
+UIElement.prototype.mousedown   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousedown', callback.bind(this), false); };
+UIElement.prototype.mouseup     = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseup', callback.bind(this), false); };
+UIElement.prototype.mouseenter  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseenter', callback.bind(this), false); };
+UIElement.prototype.mouseleave  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseleave', callback.bind(this), false); };
+UIElement.prototype.mousemove   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousemove', callback.bind(this), false); };
 
 /*
     Gestion du clavier
 */
-UIElement.prototype.change      = function (callback) { 'use strict'; this.mDOM.addEventListener('change', callback); };
-UIElement.prototype.keydown     = function (callback) { 'use strict'; this.mDOM.addEventListener('keydown', callback); };
-UIElement.prototype.keyup       = function (callback) { 'use strict'; this.mDOM.addEventListener('keyup', callback); };
+UIElement.prototype.change      = function (callback) { 'use strict'; this.mDOM.addEventListener('change', callback.bind(this), false); };
+UIElement.prototype.keydown     = function (callback) { 'use strict'; this.mDOM.addEventListener('keydown', callback.bind(this), false); };
+UIElement.prototype.keyup       = function (callback) { 'use strict'; this.mDOM.addEventListener('keyup', callback.bind(this), false); };

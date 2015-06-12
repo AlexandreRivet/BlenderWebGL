@@ -1,30 +1,24 @@
-var Viewport = function (editor, container) {
+var Viewport = function (editor) {
     'use strict';
     
-    // Mémorisation de paramètres
-    this.mEditor = editor;
-    this.mContainer = container;
+    this.mEvents = editor.mEvents;
     
-    // Création du renderer
-    this.mRenderer = new THREE.WebGLRenderer({antialias: true });
-    this.mRenderer.setClearColor(0xbbbbbb);
-    this.mRenderer.setPixelRatio(window.devicePixelRatio);
-    this.mRenderer.autoClear = false;
-    this.mRenderer.autoUpdateScene = false;
-    this.mRenderer.setSize(container.offsetWidth, container.offsetHeight);
-    container.appendChild(this.mRenderer.domElement);
+    var container = new UIPanel();
+    container.addClass('viewportPanel');
     
-    console.log(this.mRenderer);
+    this.mScene = editor.mPrincipalScene;
+    this.mHelpersScene = editor.mHelpersScene;
     
-    // Création des différentes positions
+    // Helpers
+    var grid = new THREE.GridHelper(400, 25);
+    this.mHelpersScene.add(grid);
     
-    // Raycast et souris
-    this.mRaycaster = new THREE.Raycaster();
-    this.mMouse = new THREE.Vector2();
-    this.mMouseDownPosition = new THREE.Vector2();
-    this.mMouseUpPosition = new THREE.Vector2();    
+    // Camera
+    this.mCamera = editor.mCamera;
     
-    this.mObjects = [];
+    // this.init();
+    
+    return container;
 };
 
 Viewport.prototype.init = function () {

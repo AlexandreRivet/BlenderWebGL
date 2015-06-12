@@ -9,8 +9,8 @@ function getMousePositionInDOM(dom, x, y) {
     return [(x - rect.left) / rect.width, (y - rect.top) / rect.height];
 }
 
-String.prototype.replaceArrayWithContent = function(find, balise, className)
-{
+String.prototype.replaceArrayWithContent = function(find, balise, className) {
+    'use strict';
     var context = this, regex, replace;
     for (var i = 0; i < find.length; i++)
     {
@@ -23,4 +23,9 @@ String.prototype.replaceArrayWithContent = function(find, balise, className)
     }
     
     return context;
+}
+
+function ZeroBeforeString(str, max) {
+    str = str.toString();
+    return str.length < max ? ZeroBeforeString("0" + str, max) : str;    
 }

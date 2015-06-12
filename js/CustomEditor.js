@@ -177,8 +177,9 @@ function initialiseCustomEditor() {
     var sideBarRight = (new UIPanel()).addClass('rightPanel');
     middleContent.add(sideBarRight);  
     
-    var graphScene = new UIHidingPanel(' > SCENE');
-    graphScene.add((new UIPanel()).addClass('graphPanel'));
+    var graphScene = new UIHidingPanel(' > SCENE').setStyle({"width" : "250px"});
+    var graphPanel = (new UIPanel()).addClass('graphPanel')
+    graphScene.add(graphPanel);
     sideBarRight.add(graphScene);
     
     var others = new UIHidingPanel(' > OTHERS');
@@ -193,4 +194,19 @@ function initialiseCustomEditor() {
     bottomPanel.setTextContent("ANIMATIONS");
     bottomPanel.addClass('bottomPanel');
     EDITORUI.add('bottomPanel', bottomPanel);
-}
+    
+    // Création du ROOT
+    var root = new UINode('Scene', true, undefined);
+    graphPanel.add(root);
+    
+    root.add(new UINode('Child1 fef erf  fer fer fjkberf rfjrhf fjkrhf', false, undefined));
+    root.add(new UINode('Child2', false, undefined));
+    var child = new UINode('Child3', false, undefined);
+    root.add(child);
+    child.add(new UINode('SubChild3_1', false, undefined));
+    child.add(new UINode('SubChild3_2', false, undefined));            
+    root.add(new UINode('Child4', false, undefined));
+    child = new UINode('Child5', true, undefined);
+    root.add(child);
+    child.add(new UINode('SubChild5', false, undefined));
+    }
