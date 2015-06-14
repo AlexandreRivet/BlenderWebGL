@@ -6,7 +6,6 @@ $(document).ready(function () {
     'use strict';
     
     var editor = new Editor();
-    editor.init();
     
     var menubar = new Menubar(editor);
     document.body.appendChild(menubar.mDOM);
@@ -16,4 +15,15 @@ $(document).ready(function () {
     
     var animationPanel = new AnimationPanel(editor);
     document.body.appendChild(animationPanel.mDOM);
+    
+    var windowResize = function(e) {
+        
+        editor.mEvents.windowResized.dispatch();
+        
+    }
+    window.addEventListener('resize', windowResize, false);
+    
+    windowResize();    
+    
+    
 });

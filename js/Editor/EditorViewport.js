@@ -1,173 +1,317 @@
 var Viewport = function (editor) {
     'use strict';
     
-    this.mEvents = editor.mEvents;
+    var events = editor.mEvents;
     
     var container = new UIPanel();
     container.addClass('viewportPanel');
+
+    var scene = editor.mScene;
+    var sceneHelpers = editor.mSceneHelpers;
+    var editionScene = editor.mEditionScene;
+    var editionHelpersScene = editor.mEditionHelpersScene;
     
-    this.mScene = editor.mPrincipalScene;
-    this.mHelpersScene = editor.mHelpersScene;
+    // Objects
+    var objects = [];
     
     // Helpers
-    var grid = new THREE.GridHelper(400, 25);
-    this.mHelpersScene.add(grid);
+    var gridScene = new THREE.GridHelper(400, 25);
+    var gridEdition = new THREE.GridHelper(400, 25);
+    sceneHelpers.add(gridScene);
+    editionHelpersScene.add(gridEdition);
     
-    // Camera
-    this.mCamera = editor.mCamera;
+    // Set cameras
+    var cameras = editor.mCameras;
     
-    // this.init();
+    cameras.persp.position.fromArray([500, 250, 500]);
+    cameras.persp.lookAt(new THREE.Vector3(0, 0, 0));
     
-    return container;
-};
-
-Viewport.prototype.init = function () {
-    'use strict';
-    var context = this;    
+    cameras.top.position.fromArray([0, 100, 0]);
+    cameras.top.lookAt(new THREE.Vector3(0, 0, 0));
     
-    // Correction de l'aspect ratio de la caméra
-    this.mEditor.mCamera.aspect = this.mContainer.offsetWidth / this.mContainer.offsetHeight;
-    this.mEditor.mCamera.updateProjectionMatrix();
+    cameras.front.position.fromArray([0, 0, 100]);
+    cameras.front.lookAt(new THREE.Vector3(0, 0, 0));
     
-    // Création de la grille
-    var grid = new THREE.GridHelper(400, 25);
-    this.mEditor.mHelpersScene.add(grid);
+    cameras.left.position.fromArray([-100, 0, 0]);
+    cameras.left.lookAt(new THREE.Vector3(0, 0, 0));
     
-    // Définition du transform
-    var transformControls = new THREE.TransformControls(this.mEditor.mCamera, this.mContainer);
+    
+    // Transform control
+    var transformControls = new THREE.TransformControls(cameras.persp, container.mDOM);
     transformControls.setMode( 'translate' );
     
     transformControls.addEventListener('change', function() {
+        
         var object = transformControls.object;
-        if (object !== undefined) {
-            if (context.mEditor.mHelpers[object.id] !== undefined) {
-                console.log(context.mEditor.mHelpers[object.id]);
-                context.mEditor.mHelpers[object.id].update();
+        
+        if (check(object)) {
+            
+            if (editor.mHelpers[object.id] !== undefined) {
+                
+                editor.mHelpers[object.id].update();
+                
             }
         }
-        context.render();
+        
+        render();
     });
     
-    transformControls.addEventListener('mouseDown', function() {
-        editorControls.enabled = false; 
+    transformControls.addEventListener('mouseDown', function() 
+                                       {
+        controls.enabled = false;
+        
     });
     
     transformControls.addEventListener('mouseUp', function() {
-        editorControls.enabled = true; 
+        
+        events.objectChanged.dispatch(transformControls.object);
+        controls.enabled = true; 
+        
     });
+    transformControls.detach();    
+    sceneHelpers.add(transformControls);
     
-    this.mEditor.mHelpersScene.add(transformControls);
+    // Picking and interaction
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
     
-    var editorControls = new THREE.EditorControls(this.mEditor.mCamera, this.mContainer);
-    editorControls.addEventListener('change', function() {
+    var getIntersects = function(point, object) {
+        
+        mouse.set((point.x * 2) - 1, - (point.y * 2) + 1);
+        
+        // TODO: Depends mode and viewport
+        
+        raycaster.setFromCamera(mouse, cameras.persp);
+        
+        if (object instanceof Array) {
+            
+            return raycaster.intersectObjects(object);
+            
+        }
+        
+        return raycaster.intersectObject(object);
+        
+    };
+    
+    var mouseDownPosition = new THREE.Vector2();
+    var mouseUpPosition = new THREE.Vector2();
+    
+    var getMousePosition = function (domElement, x, y) {
+      
+        var rect = domElement.getBoundingClientRect();
+        return [( (x - rect.left) / rect.width ), ( (y - rect.top) / rect.height )];
+        
+    };
+    
+    var click = function() {
+        
+        // To avoid drag
+        if (mouseDownPosition.distanceTo(mouseUpPosition) == 0) {
+            
+            var intersects = getIntersects(mouseUpPosition, objects);
+            
+            if (intersects.length > 0) {
+                
+                var object = intersects[0].object;
+                
+                if (object.userData.object !== undefined) {
+                
+                    editor.selectObject(object.userData.object);
+                    
+                } else {
+                
+                    editor.selectObject(object);
+                    
+                }
+                
+            } else {
+                
+                editor.selectObject(null);
+                
+            }
+            
+            render();
+        }
+        
+    };
+    
+    
+    var mouseDown = function(e) {
+    
+        e.preventDefault();
+        
+        var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
+        mouseDownPosition.fromArray(position);
+        
+        document.addEventListener('mouseup', mouseUp, false);
+        
+    };
+    
+    var mouseUp = function(e) {
+    
+        var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
+        mouseUpPosition.fromArray(position);
+        
+        click();
+        
+        document.removeEventListener('mouseup', mouseUp, false);
+    };
+    
+    // TODO: Do we want our application on tablet ??
+    
+    container.mousedown(mouseDown);
+    
+    var controls = new THREE.EditorControls(cameras.persp, container.mDOM);
+    controls.center.fromArray([0, 0, 0]);
+    controls.addEventListener('change', function() {
+    
         transformControls.update();
-        context.render();
+        render();
     });
     
     
-    this.mContainer.addEventListener('mousedown', function(e) { context.mouseDown(e); }, false);
+    // Events
+    events.editorCleared.add(function() {
     
-    // Signals
-    this.mEditor.mEvents.addFunctionToEvent('addObject', function(object) {
-        object.traverse(function(child) {
-             context.mObjects.push(child);
-        });
-        context.render();
+        controls.center.set(0, 0, 0);
+        render();
+        
     });
     
-    this.mEditor.mEvents.addFunctionToEvent('selectObject', function(object) {
+    events.transformModeChanged.add(function(mode) {
+    
+        transformControls.setMode(mode);
+        
+    });
+    
+    events.sceneGraphChanged.add(function() {
+    
+        render();
+        
+    });
+    
+    events.sceneModeChanged.add(function() {
+       
+        editor.updateOrthographicsCameras(container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+        
+        render();
+        
+    });
+    
+    events.objectSelected.add(function(object) {
+        
         transformControls.detach();
-        if (object !== null) {
+        
+        if (check(object) && !(object instanceof THREE.Scene)) {
+         
             transformControls.attach(object);
         }
-        context.render();
+        
+        render();
+        
     });
     
+    events.objectAdded.add(function(object) {
     
-    this.mEditor.mEvents.addFunctionToEvent('transformControlModeChanged', function(mode) {
-        transformControls.setMode(mode);
-        context.render();
+        object.traverse(function(child) {
+            
+            objects.push(child);
+            
+        });
+        
+        render();
+            
     });
     
-    this.render();
-};
-
-Viewport.prototype.getIntersects = function (point, object) {
-    'use strict';
-    this.mMouse.set((point.x * 2) - 1, -(point.y * 2) + 1);
-    this.mRaycaster.setFromCamera(this.mMouse, this.mEditor.mCamera);
-    if (object instanceof Array)
-        return this.mRaycaster.intersectObjects(object);
-    return this.mRaycaster.intersectObject(obejct);
-};
-
-Viewport.prototype.click = function () {
-    'use strict';
+    events.objectChanged.add(function(object) {
+       
+        transformControls.update();
+        
+        render();
+        
+    });
     
-    if (this.mMouseDownPosition.distanceTo(this.mMouseUpPosition) == 0) {
-        var intersections = this.getIntersects(this.mMouseUpPosition, this.mObjects);
-        if (intersections.length > 0) {
-            var object = intersections[0].object;
-            if (object.userData.object !== undefined) {
-                // Select helper
-                this.mEditor.selectObject(object.userData.object);
-            } else {
-                // Select object
-                this.mEditor.selectObject(object);
-            }
-        } else {
-            // Select nothing   
-            this.mEditor.selectObject(null);
+    events.objectRemoved.add(function(object) {
+    
+        object.traverse(function(child) {
+            
+            objects.splice(objects.indexOf(child), 1);
+            
+        });
+        
+        render();
+        
+    });
+    
+    events.windowResized.add(function() {
+      
+        cameras.persp.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.persp.updateProjectionMatrix();
+        
+        renderer.setSize(container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+        
+        render();        
+    });
+    
+    // Renderer
+    var renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setClearColor(0xbbbbbb);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.autoClear = false;
+    renderer.autoUpdateScene = false;
+    
+    container.mDOM.appendChild(renderer.domElement);   
+    
+    
+    function render() {
+        
+        var w = container.mDOM.offsetWidth / 2;
+        var h = container.mDOM.offsetHeight / 2;
+        
+        if (editor.mEditMode === EditMode.SCENE) {
+            
+            sceneHelpers.updateMatrixWorld();
+            scene.updateMatrixWorld();
+            
+            renderer.setViewport(0, 0, w * 2, h * 2);
+            
+            renderer.clear();
+            renderer.render(scene, cameras.persp);
+            renderer.render(sceneHelpers, cameras.persp);
+            
+        } else if (editor.mEditMode === EditMode.OBJECT) {
+            
+            editionHelpersScene.updateMatrixWorld();
+            editionScene.updateMatrixWorld();
+            
+            renderer.clear();
+            
+            // We want 4 views
+            
+            // persp
+            renderer.setViewport(0, h, w, h);   
+            renderer.render(editionScene, cameras.persp);
+            renderer.render(editionHelpersScene, cameras.persp);
+            
+            // top
+            renderer.setViewport(w, h, w, h);  
+            renderer.render(editionScene, cameras.top);
+            renderer.render(editionHelpersScene, cameras.top);            
+            
+            // back
+            renderer.setViewport(0, 0, w, h);  
+            renderer.render(editionScene, cameras.front);
+            renderer.render(editionHelpersScene, cameras.front);   
+            
+            // left
+            renderer.setViewport(w, 0, w, h); 
+            renderer.render(editionScene, cameras.left);
+            renderer.render(editionHelpersScene, cameras.left);   
+            
         }
+        
+
     }
-    this.render();
-};
-
-Viewport.prototype.mouseDown = function (event) {
-    'use strict';
-    event.preventDefault();
-    var context = this;
-    
-    var mousePosition = getMousePositionInDOM(context.mContainer, event.clientX, event.clientY);
-    context.mMouseDownPosition.fromArray(mousePosition);
-    
-    document.addEventListener('mouseup', function(e) { context.mouseUp(e); }, false);
-}
-
-Viewport.prototype.mouseUp = function (event) {
-    'use strict';
-    event.preventDefault();
-    var context = this;
-    
-    var mousePosition = getMousePositionInDOM(context.mContainer, event.clientX, event.clientY);
-    context.mMouseUpPosition.fromArray(mousePosition);
-    
-    context.click();
-    
-    document.removeEventListener( 'mouseup', function(e) { context.mouseUp(e); }, false);
-}
-
-Viewport.prototype.render = function () {
-    'use strict';
-    
-    var scene = this.mEditor.mPrincipalScene;
-    var sceneHelpers = this.mEditor.mHelpersScene;
-    var cameras = this.mEditor.mCameras;    
-    
-    sceneHelpers.updateMatrixWorld();
-    scene.updateMatrixWorld();
-    
-    this.mRenderer.clear();    
-    this.mRenderer.render(scene, this.mEditor.mCamera);
-    this.mRenderer.render(sceneHelpers, this.mEditor.mCamera);
-    
-    /*      PLUS TARD POUR LE MULTI CAMERA
-    // Rendu de la scène
-    for (var cam in cameras)
-        this.mRenderer.render(scene, cam);
-    
-    // Rendu des helpers
-    for (var cam in cameras)
-        this.mRenderer.render(sceneHelpers, cam);
-    */
+      
+    return container;
 };

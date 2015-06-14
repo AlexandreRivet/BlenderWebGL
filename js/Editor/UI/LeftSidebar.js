@@ -4,35 +4,56 @@ var LeftSidebar = function(editor) {
     var container = new UIPanel();
     container.addClass('leftPanel');
     
-    // MOVE BUTTON
-    var button = new UIButton('Mov.');
-    button.addClass('sideBar_btn');
-    button.click(function() {
-        
-        alert("TODO: move");
-        
-    });
-    container.add(button);
+    var events = editor.mEvents;
     
     // MOVE BUTTON
-    var button = new UIButton('Rot.');
-    button.addClass('sideBar_btn');
-    button.click(function() {
+    var buttonM = new UIButton('Mov.');
+    buttonM.addClass('sideBar_btn');
+    buttonM.click(function() {
         
-        alert("TODO: rotate");
+        events.transformModeChanged.dispatch('translate');
         
     });
-    container.add(button);
+    container.add(buttonM);
     
     // MOVE BUTTON
-    var button = new UIButton('Sca.');
-    button.addClass('sideBar_btn');
-    button.click(function() {
+    var buttonR = new UIButton('Rot.');
+    buttonR.addClass('sideBar_btn');
+    buttonR.click(function() {
         
-        alert("TODO: scale");
+        events.transformModeChanged.dispatch('rotate');
         
     });
-    container.add(button);
+    container.add(buttonR);
+    
+    // MOVE BUTTON
+    var buttonS = new UIButton('Sca.');
+    buttonS.addClass('sideBar_btn');
+    buttonS.click(function() {
+        
+        events.transformModeChanged.dispatch('scale');
+        
+    });
+    container.add(buttonS);
+    
+    events.sceneModeChanged.add(function() {
+       
+        if (editor.mEditMode === EditMode.SCENE) {
+         
+            buttonM.setDisabled(false); 
+            buttonR.setDisabled(false);
+            buttonS.setDisabled(false);
+            
+        } else if (editor.mEditMode === EditMode.OBJECT) {
+         
+            buttonM.setDisabled(true);
+            buttonR.setDisabled(true);
+            buttonS.setDisabled(true);
+            
+        }
+        
+    });
+    
     
     return container;    
 }

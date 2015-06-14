@@ -14,8 +14,3 @@ var UIButton = function (value) {
 };
 
 UIButton.prototype = Object.create(UIElement.prototype);
-
-UIButton.prototype.click = function (callback) {
-    'use strict';
-    this.mDOM.addEventListener('click', callback);
-};

@@ -3,68 +3,88 @@ RightSidebar.Scene = function(editor) {
     
     var context = this;
     
-    this.mEditor = editor;
+    var events = editor.mEvents;
     
     var container = new UIHidingPanel('SCENE');
+    var content = new UIPanel();
+    content.addClass('graphPanel');
+    container.add(content);
     
     var tree = new UITree(editor);
     tree.change(function() {
-       
-        console.log(parseInt(tree.getValue()));
+        
+        editor.selectObjectById(parseInt(tree.getValue()));
         
         // alert('TODO: tree changed');
         
         // editor.selectObjectById(parseInt(tree.getValue()));
         
     }); 
-    container.add(tree);
-    this.mTree = tree;
+    content.add(tree);
     
-    this.refreshUI();
+    var refreshUI = function() {
+           
+        var scene = editor.mScene;
+        
+        var options = [];
     
-    var events = editor.mEvents;
+        options.push(
+            {
+                value: scene.id,
+                html: '<span style="font-size:12px;margin-left:5px;">' + scene.name + '</span>'
+            }
+        );
     
-    events.addFunctionToEvent('sceneGraphChanged', function() { context.refreshUI(); });
+        (function addObjects(objects, pad){
+            
+            for (var i = 0; i < objects.length; i++) {
+                
+                var object = objects[i];
+                
+                var content = pad;
+                content += '<span style="font-size:12px;">' + object.name + '</span>';
+                
+                options.push(
+                    {
+                        value: object.id,
+                        html: content
+                    }
+                );
+                
+                addObjects(object.children, pad + pad);
+            }
+        
+        
+        })(scene.children, '&nbsp;&nbsp;&nbsp;')
+    
+        tree.setOptions(options);   
+        
+    };
+    
+    refreshUI();
+    
+    // Events
+    events.sceneGraphChanged.add(refreshUI);
+    
+    events.objectSelected.add(function(object) {
+      
+        tree.setValue(check(object) ? object.id : null);
+        
+    });
+    
+    events.sceneModeChanged.add(function() {
+       
+        if (editor.mEditMode === EditMode.SCENE) {
+         
+            container.setVisible(true); 
+            
+        } else if (editor.mEditMode === EditMode.OBJECT) {
+         
+            container.setVisible(false);
+            
+        }
+        
+    });
     
     return container;    
-};
-
-RightSidebar.Scene.prototype.refreshUI = function() {
-    'use strict';
-    
-    debugger;
-    
-    var scene = this.mEditor.mPrincipalScene;
-    
-    var options = [];
-    
-    options.push(
-        {
-            value: scene.id,
-            html: scene.name
-        }
-    );
-    
-    (function addObjects(objects, pad){
-        
-        for (var i = 0; i < objects.length; i++) {
-         
-            var object = objects[i];
-            
-            var content = pad + object.name;
-            
-            options.push(
-                {
-                    value: object.id,
-                    html: content
-                }
-            );
-            
-            addObjects(object.children, pad + pad);
-        }
-        
-        
-    })(scene.children, '&nbsp;&nbsp;&nbsp;')
-    
-    this.mTree.setOptions(options);   
 };

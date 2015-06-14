@@ -55,12 +55,16 @@ body
 
 .rightPanel {
     display:                        table-cell;
-    width:                          250px;
+    width:                          300px;
     padding:                        5px;
     
     vertical-align:                 top;
     background-color:               #222;
     border-left:                    solid 1px #ccc;
+}
+
+.rightPanel .Panel {
+    margin-bottom: 10px;
 }
 
 .bottomPanel {
@@ -74,52 +78,39 @@ body
     border-top:                     solid 1px #ccc;
 }
 
-.sideBar_btn
-{
+.sideBar_btn {
     width:                          40px;
     height:                         40px;
-    margin:                         5px 5px;
-    
-    background-color:               #217ab2;
-    color:                          white;
-    
-    text-shadow:                    rgb(15, 106, 88) 1px 1px,
-                                    rgb(15, 106, 88) 2px 2px,
-                                    rgb(15, 106, 88) 3px 3px;
 }
 
-.sidebar_btn:active
-{
+.sidebar_btn:active {
     text-shadow:                    rgb(15, 106, 88) 1px 1px,
                                     rgb(15, 106, 88) 2px 2px;
- 
 }
 
-.graphPanel
-{
-    background-color:               black;
-    border:                         1px solid #eee;
-    width:                          100%;
+.graphPanel {
+    background-color:               #333;
     height:                         150px;
-    overflow:                       auto;
-}
-
-.hierarchy_btn
-{
-    width:                          10px;
-    height:                         10px;
-    margin-top:                     5px;
-    margin-left:                    5px;
-    margin-right:                   5px;
+    overflow-y:                     auto;
     
-    font-size:                      10px;
-    background-color:               #217ab2;
-    color:                          white;
 }
 
-.node_active
-{
-    background-color: yellow;   
+.HidingPanelArrow {
+    float: left;
+    margin-right: 6px;
+    width: 0px;
+    height: 0px;
+    border: 6px solid transparent;
+}
+
+.HidingPanelArrow.disabled {
+    border-left-color: #eee;
+    margin-top: 2px;
+}
+
+.HidingPanelArrow.enabled {
+    border-top-color: #eee;
+    margin-top: 6px;
 }
 
 /**************************************

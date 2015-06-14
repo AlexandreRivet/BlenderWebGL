@@ -117,6 +117,8 @@ UITree.prototype.setValue = function(value) {
             
             // TODO: Scroller jusqu'à l'élément dans la liste ??
             
+            this.mSelectedIndex = i;
+            
         } else {
             
             option.classList.remove('node_active');      // N'est plus l'option active

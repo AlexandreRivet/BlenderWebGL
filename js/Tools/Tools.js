@@ -3,12 +3,6 @@ function check(variable) {
 	return !(variable === undefined || variable === null);
 }
 
-function getMousePositionInDOM(dom, x, y) {
-    'use strict';
-    var rect = dom.getBoundingClientRect();
-    return [(x - rect.left) / rect.width, (y - rect.top) / rect.height];
-}
-
 String.prototype.replaceArrayWithContent = function(find, balise, className) {
     'use strict';
     var context = this, regex, replace;
