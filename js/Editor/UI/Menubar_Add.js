@@ -13,7 +13,7 @@ Menubar.Add = function(editor) {
     option.click(function() {
        
         var geometry = new THREE.PlaneGeometry(100, 100, 1, 1);
-        var material = new THREE.MeshPhongMaterial();
+        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Plane.' + (ZeroBeforeString(meshCount++, 3));
         

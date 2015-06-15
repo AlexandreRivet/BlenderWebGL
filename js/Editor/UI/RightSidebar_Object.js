@@ -10,7 +10,7 @@ RightSidebar.Object3D = function(editor) {
     
     // NAME
     var objectNamePanel = new UIPanel();
-    var objectName = new UIInput().change(function() {
+    var objectName = new UIInput().setStyle({"background-color": "#333", "color": "#eee"}).change(function() {
         
         editor.setObjectName(editor.mEditObject, objectName.getValue());
         
@@ -197,6 +197,16 @@ RightSidebar.Object3D = function(editor) {
     }
     
     function updateUI(object) {
+        
+        if (object instanceof THREE.Scene) {
+         
+            objectBtnsPanel.setVisible(false);
+            
+        } else {
+         
+            objectBtnsPanel.setVisible(true);
+            
+        }        
      
         objectName.setValue(object.name);
         

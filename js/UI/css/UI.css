@@ -101,6 +101,12 @@ hr
     cursor:                         auto;
 }
 
+.Input
+{
+    border:                         none;
+    padding:                        2px;
+}
+
 .node
 {
     color:                          #217ab2;

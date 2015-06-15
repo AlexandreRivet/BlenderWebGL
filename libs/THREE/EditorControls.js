@@ -25,6 +25,14 @@ THREE.EditorControls = function ( object, domElement ) {
         };
     
 
+    this.actionsAllowed =
+        {
+            "ROTATE": true,
+            "ZOOM": true,
+            "PAN": true        
+        };
+    
+    
 	var scope = this;
 	var vector = new THREE.Vector3();
 
@@ -121,40 +129,45 @@ THREE.EditorControls = function ( object, domElement ) {
     
     this.setAreaInteraction = function(originX, originY, width, height) {
     
-        this.areaInteraction.originX = originX;
-        this.areaInteraction.originY = originY;
-        this.areaInteraction.width = width;
-        this.areaInteraction.height = height;
+        scope.areaInteraction.originX = originX;
+        scope.areaInteraction.originY = originY;
+        scope.areaInteraction.width = width;
+        scope.areaInteraction.height = height;
         
     }
 
+    this.setActionsAllowed = function(rotate, zoom, pan) {
+        
+        scope.actionsAllowed.ROTATE = rotate;
+        scope.actionsAllowed.ZOOM = zoom;
+        scope.actionsAllowed.PAN = pan;
+    
+    };
+    
 	// mouse
 
-    var context = this;
-    
 	function onMouseDown( event ) {
 
-		if ( scope.enabled === false ) return;
-
-        debugger;
+		if ( scope.enabled === false ) 
+            return;
         
         // Gestion supplémentaire pour la zone dans le domElement
         var x = event.clientX;
         var y = event.clientY;
         
-        if ( (x < context.areaInteraction.originX) || (x > context.areaInteraction.originX + context.areaInteraction.width) || 
-             (y < context.areaInteraction.originY) || (y > context.areaInteraction.originY + context.areaInteraction.height) )
+        if ( (x < scope.areaInteraction.originX) || (x > scope.areaInteraction.originX + scope.areaInteraction.width) || 
+             (y < scope.areaInteraction.originY) || (y > scope.areaInteraction.originY + scope.areaInteraction.height) )
             return;      
         
-		if ( event.button === 0 ) {
+		if ( event.button === 0  && scope.actionsAllowed.ROTATE) {
 
 			state = STATE.ROTATE;
 
-		} else if ( event.button === 1 ) {
+		} else if ( event.button === 1 && scope.actionsAllowed.ZOOM) {
 
 			state = STATE.ZOOM;
 
-		} else if ( event.button === 2 ) {
+		} else if ( event.button === 2 && scope.actionsAllowed.PAN) {
 
 			state = STATE.PAN;
 
@@ -211,8 +224,19 @@ THREE.EditorControls = function ( object, domElement ) {
 
 		event.preventDefault();
 
-		// if ( scope.enabled === false ) return;
+		if ( scope.enabled === false ) 
+            return;
 
+        debugger;
+        
+        // Gestion supplémentaire pour la zone dans le domElement
+        var x = event.clientX;
+        var y = event.clientY;
+        
+        if ( (x < scope.areaInteraction.originX) || (x > scope.areaInteraction.originX + scope.areaInteraction.width) || 
+             (y < scope.areaInteraction.originY) || (y > scope.areaInteraction.originY + scope.areaInteraction.height) )
+            return;     
+        
 		var delta = 0;
 
 		if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9

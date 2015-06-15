@@ -57,7 +57,13 @@ RightSidebar.Scene = function(editor) {
         
         })(scene.children, '&nbsp;&nbsp;&nbsp;')
     
-        tree.setOptions(options);   
+        tree.setOptions(options);
+        
+        if (check(editor.mEditObject)) {
+         
+            tree.setValue(editor.mEditObject.id);
+            
+        }
         
     };
     

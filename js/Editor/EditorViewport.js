@@ -56,16 +56,16 @@ var Viewport = function (editor) {
         render();
     });
     
-    transformControls.addEventListener('mouseDown', function() 
-                                       {
-        controls.enabled = false;
+    transformControls.addEventListener('mouseDown', function() {
+        
+        mainControls.enabled = false;
         
     });
     
     transformControls.addEventListener('mouseUp', function() {
         
         events.objectChanged.dispatch(transformControls.object);
-        controls.enabled = true; 
+        mainControls.enabled = true; 
         
     });
     transformControls.detach();    
@@ -161,19 +161,62 @@ var Viewport = function (editor) {
     
     container.mousedown(mouseDown);
     
-    var controls = new THREE.EditorControls(cameras.persp, container.mDOM);
-    controls.center.fromArray([0, 0, 0]);
-    controls.addEventListener('change', function() {
-    
+    // Camera controller
+    var mainControls = new THREE.EditorControls(cameras.persp, container.mDOM);
+    mainControls.center.fromArray([0, 0, 0]);
+    mainControls.addEventListener('change', function() {
+       
         transformControls.update();
         render();
+        
     });
     
+    var editPerspControls = new THREE.EditorControls(cameras.persp, container.mDOM);
+    editPerspControls.center.fromArray([0, 0, 0]);
+    editPerspControls.addEventListener('change', function() {
+       
+        render();
+        
+    });
+    editPerspControls.enabled = false;
+    
+    
+    //TODO: Set mode allowed
+    var editTopControls = new THREE.EditorControls(cameras.top, container.mDOM);
+    editTopControls.center.fromArray([0, 0, 0]);
+    editTopControls.setActionsAllowed(false, true, true);
+    editTopControls.addEventListener('change', function() {
+       
+        render();
+        
+    });
+    editTopControls.enabled = false;
+    
+    
+    var editLeftControls = new THREE.EditorControls(cameras.left, container.mDOM);
+    editLeftControls.center.fromArray([0, 0, 0]);
+    editLeftControls.setActionsAllowed(false, true, true);
+    editLeftControls.addEventListener('change', function() {
+       
+        render();
+        
+    });
+    editLeftControls.enabled = false;
+    
+    var editFrontControls = new THREE.EditorControls(cameras.front, container.mDOM);
+    editFrontControls.center.fromArray([0, 0, 0]);
+    editFrontControls.setActionsAllowed(false, true, true);
+    editFrontControls.addEventListener('change', function() {
+       
+        render();
+        
+    });
+    editFrontControls.enabled = false;       
     
     // Events
     events.editorCleared.add(function() {
     
-        controls.center.set(0, 0, 0);
+        mainControls.center.set(0, 0, 0);
         render();
         
     });
@@ -193,12 +236,26 @@ var Viewport = function (editor) {
     events.sceneModeChanged.add(function() {
         
         if (editor.mEditMode === EditMode.SCENE) {
+        
+            // Disable object controls
+            editPerspControls.enabled = false;
+            editTopControls.enabled = false;
+            editFrontControls.enabled = false;
+            editLeftControls.enabled = false;
             
-            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+            // Enable scene controls
+            mainControls.enabled = true;
             
         } else if (editor.mEditMode === EditMode.OBJECT) {
          
-            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth / 2, container.mDOM.offsetHeight / 2);
+            // Disable scene controls
+            mainControls.enabled = false;
+            
+            // Enable object controls
+            editPerspControls.enabled = true;
+            editTopControls.enabled = true;
+            editFrontControls.enabled = true;
+            editLeftControls.enabled = true;
             
         }
         
@@ -264,27 +321,32 @@ var Viewport = function (editor) {
     });
     
     events.windowResized.add(function() {
-      
-        if (editor.mEditMode === EditMode.SCENE) {
-            
-            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth, container.mDOM.offsetHeight);
-            
-        } else if (editor.mEditMode === EditMode.OBJECT) {
-         
-            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth / 2, container.mDOM.offsetHeight / 2);
-            
-        }
+    
+        // Get new size
+        var w = container.mDOM.offsetWidth;
+        var h = container.mDOM.offsetHeight;
+        var w_over2 = w / 2; 
+        var h_over2 = h / 2;
         
-        cameras.persp.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        // Set area interaction
+        mainControls.setAreaInteraction(0, 0, w, h);
+        editPerspControls.setAreaInteraction(0, 0, w_over2, h_over2);
+        editTopControls.setAreaInteraction(w_over2, 0, w_over2, h_over2);
+        editFrontControls.setAreaInteraction(0, h_over2, w_over2, h_over2);
+        editLeftControls.setAreaInteraction(w_over2, h_over2, w_over2, h_over2);
+        
+        
+        // Set cameras aspect
+        cameras.persp.aspect = w / h;
         cameras.persp.updateProjectionMatrix();
         
-        cameras.top.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.top.aspect = w / h;
         cameras.top.updateProjectionMatrix();
         
-        cameras.left.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.left.aspect = w / h;
         cameras.left.updateProjectionMatrix();
         
-        cameras.front.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.front.aspect = w / h;
         cameras.front.updateProjectionMatrix();
         
         renderer.setSize(container.mDOM.offsetWidth, container.mDOM.offsetHeight);
@@ -362,7 +424,7 @@ var Viewport = function (editor) {
             renderer.render(editionScene, cameras.top);
             renderer.render(editionHelpersScene, cameras.top);            
             
-            // back
+            // front
             renderer.setViewport(0, 0, w, h);  
             renderer.render(editionScene, cameras.front);
             renderer.render(editionHelpersScene, cameras.front);   
