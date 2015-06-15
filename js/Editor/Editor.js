@@ -95,12 +95,42 @@ Editor.prototype.addObject = function (object) {
 
     var context = this;
     
-    // TODO: Add Helpers ??
+    object.traverse(function(child) {
+       
+        scope.addHelper(child);
+        
+    });
     
     this.mScene.add(object);
     
     this.mEvents.objectAdded.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();
+};
+
+Editor.prototype.addHelper = function(object) {
+    'use strict';
+    
+    var geometry = new THREE.SphereGeometry( 20, 4, 2 );
+    var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+    
+    var helper;
+    
+    if (object instanceof THREE.PointLight) {
+     
+        helper = new THREE.PointLightHelper(object, 10);
+        
+    }
+    
+    var picker = new THREE.Mesh(geometry, material);
+    picker.name = 'picker';
+    picker.userData.object = object;
+    picker.visible = false;
+    helper.add(picker);
+    
+    this.mSceneHelpers.add(helper);
+    this.mHelpers[object.id] = helper;
+    
+    // this.mEvents.helperAdded.dispatch(helper);    
 };
 
 Editor.prototype.removeObject = function(object) {

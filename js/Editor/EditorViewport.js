@@ -255,7 +255,7 @@ var Viewport = function (editor) {
     
     // Renderer
     var renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setClearColor(0xbbbbbb);
+    renderer.setClearColor(0x555555);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.autoClear = false;
     renderer.autoUpdateScene = false;
