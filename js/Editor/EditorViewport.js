@@ -26,13 +26,13 @@ var Viewport = function (editor) {
     cameras.persp.position.fromArray([500, 250, 500]);
     cameras.persp.lookAt(new THREE.Vector3(0, 0, 0));
     
-    cameras.top.position.fromArray([0, 100, 0]);
+    cameras.top.position.fromArray([0, 250, 0]);
     cameras.top.lookAt(new THREE.Vector3(0, 0, 0));
     
-    cameras.front.position.fromArray([0, 0, 100]);
+    cameras.front.position.fromArray([0, 250, 0]);
     cameras.front.lookAt(new THREE.Vector3(0, 0, 0));
     
-    cameras.left.position.fromArray([-100, 0, 0]);
+    cameras.left.position.fromArray([-250, 0, 0]);
     cameras.left.lookAt(new THREE.Vector3(0, 0, 0));
     
     
@@ -191,8 +191,16 @@ var Viewport = function (editor) {
     });
     
     events.sceneModeChanged.add(function() {
-       
-        editor.updateOrthographicsCameras(container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+        
+        if (editor.mEditMode === EditMode.SCENE) {
+            
+            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+            
+        } else if (editor.mEditMode === EditMode.OBJECT) {
+         
+            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth / 2, container.mDOM.offsetHeight / 2);
+            
+        }
         
         render();
         
@@ -213,14 +221,26 @@ var Viewport = function (editor) {
     
     events.objectAdded.add(function(object) {
     
+        var materialsNeedUpdate = false;
+        
         object.traverse(function(child) {
+            
+            if (child instanceof THREE.Light) materialsNeedUpdate = true;
             
             objects.push(child);
             
         });
         
+        if (materialsNeedUpdate === true) updateMaterials();
+        
         render();
             
+    });
+    
+    events.helperAdded.add(function(object) {
+       
+        objects.push(object.getObjectByName('picker'));
+        
     });
     
     events.objectChanged.add(function(object) {
@@ -245,8 +265,27 @@ var Viewport = function (editor) {
     
     events.windowResized.add(function() {
       
+        if (editor.mEditMode === EditMode.SCENE) {
+            
+            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+            
+        } else if (editor.mEditMode === EditMode.OBJECT) {
+         
+            controls.setAreaInteraction(0, 0, container.mDOM.offsetWidth / 2, container.mDOM.offsetHeight / 2);
+            
+        }
+        
         cameras.persp.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
         cameras.persp.updateProjectionMatrix();
+        
+        cameras.top.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.top.updateProjectionMatrix();
+        
+        cameras.left.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.left.updateProjectionMatrix();
+        
+        cameras.front.aspect = container.mDOM.offsetWidth / container.mDOM.offsetHeight;
+        cameras.front.updateProjectionMatrix();
         
         renderer.setSize(container.mDOM.offsetWidth, container.mDOM.offsetHeight);
         
@@ -261,6 +300,31 @@ var Viewport = function (editor) {
     renderer.autoUpdateScene = false;
     
     container.mDOM.appendChild(renderer.domElement);   
+    
+    
+    function updateMaterials() {
+      
+        editor.mScene.traverse( function ( child ) {
+
+			if ( child.material ) {
+
+				child.material.needsUpdate = true;
+
+				if ( child.material instanceof THREE.MeshFaceMaterial ) {
+
+					for ( var i = 0; i < child.material.materials.length; i ++ ) {
+
+						child.material.materials[ i ].needsUpdate = true;
+
+					}
+
+				}
+
+			}
+
+		} );
+        
+    };
     
     
     function render() {

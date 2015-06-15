@@ -27,7 +27,9 @@ var Editor = function (name) {
         objectSelected: new signals.Signal(),
         objectAdded: new signals.Signal(),
         objectChanged: new signals.Signal(),
-        objectRemoved: new signals.Signal(), 
+        objectRemoved: new signals.Signal(),
+        
+        helperAdded: new signals.Signal(),
         
         windowResized: new signals.Signal(),
         
@@ -36,10 +38,10 @@ var Editor = function (name) {
     
     this.mCameras =
         {
-            persp: new THREE.PerspectiveCamera(50, 1, 1, 100000),
-            top: new THREE.OrthographicCamera(-100, 100, 100, -100, 1, 100000),
-            front: new THREE.OrthographicCamera(-100, 100, 100, -100, 1, 100000),
-            left: new THREE.OrthographicCamera(-100, 100, 100, -100, 1, 100000),        
+            persp:  new THREE.PerspectiveCamera(50, 1, 1, 100000),
+            top:    new THREE.PerspectiveCamera(50, 1, 1, 100000),
+            front:  new THREE.PerspectiveCamera(50, 1, 1, 100000),
+            left:   new THREE.PerspectiveCamera(50, 1, 1, 100000)
         }
     
     // Principal Scene
@@ -97,7 +99,10 @@ Editor.prototype.addObject = function (object) {
     
     object.traverse(function(child) {
        
-        scope.addHelper(child);
+        if (check(child.geometry)) context.addGeometry(child.geometry);
+        if (check(child.material)) context.addMaterial(child.material);
+        
+        context.addHelper(child);
         
     });
     
@@ -105,6 +110,20 @@ Editor.prototype.addObject = function (object) {
     
     this.mEvents.objectAdded.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();
+};
+
+Editor.prototype.addGeometry = function(geometry) {
+    'use strict';
+    
+    this.mGeometries[geometry.uuid] = geometry;
+    
+};
+
+Editor.prototype.addMaterial = function(material) {
+    'use strict';
+    
+    this.mMaterials[material.uuid] = material;
+    
 };
 
 Editor.prototype.addHelper = function(object) {
@@ -119,7 +138,19 @@ Editor.prototype.addHelper = function(object) {
      
         helper = new THREE.PointLightHelper(object, 10);
         
-    }
+    } else if (object instanceof THREE.SpotLight) {
+     
+        helper = new THREE.SpotLightHelper(object, 10);
+        
+    } else if (object instanceof THREE.DirectionalLight) {
+     
+        helper = new THREE.DirectionalLightHelper(object, 10);
+        
+    } else {
+	
+		return;
+	
+	}
     
     var picker = new THREE.Mesh(geometry, material);
     picker.name = 'picker';
@@ -130,7 +161,7 @@ Editor.prototype.addHelper = function(object) {
     this.mSceneHelpers.add(helper);
     this.mHelpers[object.id] = helper;
     
-    // this.mEvents.helperAdded.dispatch(helper);    
+    this.mEvents.helperAdded.dispatch(helper);    
 };
 
 Editor.prototype.removeObject = function(object) {
@@ -208,31 +239,6 @@ Editor.prototype.setMode = function(mode) {
     
     this.mEvents.sceneModeChanged.dispatch();    
 };
-
-Editor.prototype.updateOrthographicsCameras = function(w, h) {
-    'use strict';
-    
-    var fW = w / 2;
-    var fH = h / 2;
-    
-    this.mCameras.top.left = -fW;
-    this.mCameras.top.right = fW;
-    this.mCameras.top.top = fH;
-    this.mCameras.top.bottom = -fH;
-    this.mCameras.top.updateProjectionMatrix();
-    
-    this.mCameras.front.left = -fW;
-    this.mCameras.front.right = fW;
-    this.mCameras.front.top = fH;
-    this.mCameras.front.bottom = -fH;
-    this.mCameras.front.updateProjectionMatrix();
-    
-    this.mCameras.left.left = -fW;
-    this.mCameras.left.right = fW;
-    this.mCameras.left.top = fH;
-    this.mCameras.left.bottom = -fH;
-    this.mCameras.left.updateProjectionMatrix();
-}
 
 Editor.prototype.clear = function() {
     'use strict';

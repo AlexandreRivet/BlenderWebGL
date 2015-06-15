@@ -13,7 +13,7 @@ Menubar.Add = function(editor) {
     option.click(function() {
        
         var geometry = new THREE.PlaneGeometry(100, 100, 1, 1);
-        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var material = new THREE.MeshPhongMaterial();
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Plane.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -31,7 +31,7 @@ Menubar.Add = function(editor) {
     option.click(function() {
         
         var geometry = new THREE.BoxGeometry(100, 100, 100, 1, 1, 1);
-        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var material = new THREE.MeshPhongMaterial();
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Cube.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -48,7 +48,7 @@ Menubar.Add = function(editor) {
     option.click(function() {
        
         var geometry = new THREE.CylinderGeometry(50, 50, 100, 32, 1, false);
-        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var material = new THREE.MeshPhongMaterial();
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Cylinder.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -66,7 +66,7 @@ Menubar.Add = function(editor) {
     option.click(function() {
        
         var geometry = new THREE.SphereGeometry(50, 32, 32);
-        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var material = new THREE.MeshPhongMaterial();
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Sphere.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -84,7 +84,7 @@ Menubar.Add = function(editor) {
     option.click(function() {
        
         var geometry = new THREE.IcosahedronGeometry(50, 2);
-        var material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+        var material = new THREE.MeshPhongMaterial();
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Icosahedron.' + (ZeroBeforeString(meshCount++, 3));
         

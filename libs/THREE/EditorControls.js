@@ -15,6 +15,15 @@ THREE.EditorControls = function ( object, domElement ) {
 	this.center = new THREE.Vector3();
 
 	// internals
+    
+    this.areaInteraction = 
+        {
+            "originX": 0,
+            "originY": 0,
+            "width": domElement.offsetWidth,
+            "height": domElement.offsetHeight            
+        };
+    
 
 	var scope = this;
 	var vector = new THREE.Vector3();
@@ -109,13 +118,34 @@ THREE.EditorControls = function ( object, domElement ) {
 		scope.dispatchEvent( changeEvent );
 
 	};
+    
+    this.setAreaInteraction = function(originX, originY, width, height) {
+    
+        this.areaInteraction.originX = originX;
+        this.areaInteraction.originY = originY;
+        this.areaInteraction.width = width;
+        this.areaInteraction.height = height;
+        
+    }
 
 	// mouse
 
+    var context = this;
+    
 	function onMouseDown( event ) {
 
 		if ( scope.enabled === false ) return;
 
+        debugger;
+        
+        // Gestion supplémentaire pour la zone dans le domElement
+        var x = event.clientX;
+        var y = event.clientY;
+        
+        if ( (x < context.areaInteraction.originX) || (x > context.areaInteraction.originX + context.areaInteraction.width) || 
+             (y < context.areaInteraction.originY) || (y > context.areaInteraction.originY + context.areaInteraction.height) )
+            return;      
+        
 		if ( event.button === 0 ) {
 
 			state = STATE.ROTATE;
