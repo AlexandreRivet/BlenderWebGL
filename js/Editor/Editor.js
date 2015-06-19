@@ -216,7 +216,7 @@ Editor.prototype.setMode = function(mode) {
         this.mTransformEditObject.rotation.copy(this.mEditObject.rotation);
         this.mTransformEditObject.scale.copy(this.mEditObject.scale);
         
-        this.mEditObject.material.wireframe = true;
+        // this.mEditObject.material.wireframe = true;
         this.mEditObject.position.set(0, 0, 0);
         this.mEditObject.rotation.set(0, 0, 0);
         this.mEditObject.scale.set(1, 1, 1);
@@ -225,7 +225,7 @@ Editor.prototype.setMode = function(mode) {
         
     } else if (this.mEditMode === EditMode.SCENE) {
 
-        this.mEditObject.material.wireframe = false;
+        // this.mEditObject.material.wireframe = false;
         this.mEditObject.position.copy(this.mTransformEditObject.position);
         this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
         this.mEditObject.scale.copy(this.mTransformEditObject.scale);

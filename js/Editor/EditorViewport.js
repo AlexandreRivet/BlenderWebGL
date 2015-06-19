@@ -29,7 +29,7 @@ var Viewport = function (editor) {
     cameras.top.position.fromArray([0, 250, 0]);
     cameras.top.lookAt(new THREE.Vector3(0, 0, 0));
     
-    cameras.front.position.fromArray([0, 250, 0]);
+    cameras.front.position.fromArray([0, 0, 250]);
     cameras.front.lookAt(new THREE.Vector3(0, 0, 0));
     
     cameras.left.position.fromArray([-250, 0, 0]);
@@ -80,8 +80,31 @@ var Viewport = function (editor) {
         mouse.set((point.x * 2) - 1, - (point.y * 2) + 1);
         
         // TODO: Depends mode and viewport
-        
-        raycaster.setFromCamera(mouse, cameras.persp);
+        if (editor.mEditMode === EditMode.SCENE) {
+         
+            raycaster.setFromCamera(mouse, cameras.persp);
+            
+        } else if (editor.mEditMode === EditMode.OBJECT) {
+            
+            // We have to change camera depends where mouse is in the container
+            // Don't forget mouse is between -1 and 1 on x and on y
+            if (mouse.x <= 0 && mouse.y >= 0) {
+                mouse.set((mouse.x + 0.5) * 2, (mouse.y * 2) - 1);
+                raycaster.setFromCamera(mouse, cameras.persp);
+            }
+            else if (mouse.x > 0 && mouse.y >= 0) {
+                mouse.set((mouse.x * 2) - 1, (mouse.y * 2) - 1);
+                raycaster.setFromCamera(mouse, cameras.top);
+            }
+            else if (mouse.x <= 0 && mouse.y < 0) {
+                mouse.set((mouse.x + 0.5) * 2, (mouse.y +0.5) * 2);
+                raycaster.setFromCamera(mouse, cameras.front);
+            }
+            else if (mouse.x > 0 && mouse.y < 0) {
+                mouse.set((mouse.x * 2) - 1,(mouse.y +0.5) * 2);
+                raycaster.setFromCamera(mouse, cameras.left);
+            }
+        }
         
         if (object instanceof Array) {
             
@@ -108,23 +131,38 @@ var Viewport = function (editor) {
         // To avoid drag
         if (mouseDownPosition.distanceTo(mouseUpPosition) == 0) {
             
-            var intersects = getIntersects(mouseUpPosition, objects);
+            var intersects = [];
+            if (editor.mEditMode === EditMode.SCENE)
+                intersects = getIntersects(mouseUpPosition, objects);
+            else if (editor.mEditMode === EditMode.OBJECT)
+                intersects = getIntersects(mouseUpPosition, editionScene.children);
             
             if (intersects.length > 0) {
                 
-                var object = intersects[0].object;
+                var intersect = intersects[0];
                 
-                if (object.userData.object !== undefined) {
-                
-                    editor.selectObject(object.userData.object);
+                // Mode Scene: object picking
+                // Mode Object: raycast for vertices manager
+                if (editor.mEditMode === EditMode.SCENE) {
+                                     
+                    if (object.userData.object !== undefined) {
+                        
+                        editor.selectObject(object.userData.object);
                     
-                } else {
-                
-                    editor.selectObject(object);
+                    } else {
+                        
+                        editor.selectObject(object);
+                        
+                    }
+                    
+                } else if (editor.mEditMode === EditMode.OBJECT) {
+                    
+                    alert("j'ai touché l'objet");
+                    // console.log(intersect);
                     
                 }
                 
-            } else {
+            } else if (editor.mEditMode === EditMode.SCENE) {
                 
                 editor.selectObject(null);
                 
@@ -334,7 +372,6 @@ var Viewport = function (editor) {
         editTopControls.setAreaInteraction(w_over2, 0, w_over2, h_over2);
         editFrontControls.setAreaInteraction(0, h_over2, w_over2, h_over2);
         editLeftControls.setAreaInteraction(w_over2, h_over2, w_over2, h_over2);
-        
         
         // Set cameras aspect
         cameras.persp.aspect = w / h;

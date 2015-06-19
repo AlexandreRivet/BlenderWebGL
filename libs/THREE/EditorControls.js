@@ -226,8 +226,6 @@ THREE.EditorControls = function ( object, domElement ) {
 
 		if ( scope.enabled === false ) 
             return;
-
-        debugger;
         
         // Gestion supplémentaire pour la zone dans le domElement
         var x = event.clientX;
