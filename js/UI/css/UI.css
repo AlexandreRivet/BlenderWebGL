@@ -146,3 +146,46 @@ input[type=checkbox].Checkbox:checked + label.LabelForCheckbox {
 .LabelForCheckbox {
     background-image:               url('../../../resources/images/checkbox_bg.png');
 }
+.AnimationEditor{
+    width: 100%;
+    height:100%;  
+}
+.AnimationEditorTool{
+    width: 100%;
+    height:20%;  
+}
+.AnimationEditorToolTitle{
+    float:left;
+    height:100%;  
+}
+.AnimationEditorToolTitleText{
+    
+}
+.AnimationEditorToolButtons{
+    display:inline-block;
+    float:right;
+    height:100%; 
+}
+.AnimationEditorArea{
+    width: 100%;
+    height:80%;
+    overflow-x: scroll;
+}
+.AnimationEditorAreaScroll{
+    min-width: 100%;
+    height:100%;
+    background-color: #333;
+}
+.AnimationEditorCursorPrincipal{
+    display:inline-block;
+    position:relative;
+    width: 2px;
+    height:100%;
+    background-color: #F39C12;
+}
+.AnimationEditorCursor{
+    display:inline-block;
+    position: absolute;
+    width: 2px;
+    background-color: #217ab2;
+}

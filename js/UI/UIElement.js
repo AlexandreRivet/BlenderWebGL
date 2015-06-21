@@ -90,6 +90,8 @@ UIElement.prototype.mouseup     = function (callback) { 'use strict'; this.mDOM.
 UIElement.prototype.mouseenter  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseenter', callback.bind(this), false); return this; };
 UIElement.prototype.mouseleave  = function (callback) { 'use strict'; this.mDOM.addEventListener('mouseleave', callback.bind(this), false); return this; };
 UIElement.prototype.mousemove   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousemove', callback.bind(this), false); return this; };
+UIElement.prototype.mousewheel   = function (callback) { 'use strict'; this.mDOM.addEventListener('mousewheel', callback.bind(this), false); return this; };
+
 
 /*
     Gestion du clavier

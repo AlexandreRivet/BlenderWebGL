@@ -1,3 +1,4 @@
+var requestIdAnimation;
 var Viewport = function (editor) {
     'use strict';
     
@@ -488,6 +489,9 @@ var Viewport = function (editor) {
         render();        
     });
     
+    events.animatorLaunched.add(function() {
+        renderAnimation();    
+    });
     // Renderer
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setClearColor(0x555555);
@@ -521,8 +525,40 @@ var Viewport = function (editor) {
 		} );
         
     };
-    
-    
+    var context = this;
+    function renderAnimation() {
+        
+        if(!(ANIMATIONMGR.getState() == STATE.PAUSE))
+        {
+            ANIMATIONMGR.updateAnimation(); 
+            
+            var w = container.mDOM.offsetWidth / 2;
+            var h = container.mDOM.offsetHeight / 2;
+
+            sceneHelpers.updateMatrixWorld();
+            scene.updateMatrixWorld();
+
+            renderer.setViewport(0, 0, w * 2, h * 2);
+
+            renderer.clear();
+            renderer.render(scene, cameras.persp);
+            renderer.render(sceneHelpers, cameras.persp);
+            
+            var currentTime = ANIMATIONMGR.mDurationPlay/1000;
+            setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
+            updateTimeEditorAnimation(currentTime);
+            if(ANIMATIONMGR.getState() == STATE.STOP)
+            {
+                debugger;
+                window.cancelAnimationFrame(requestIdAnimation);
+                return;
+            }
+            
+             
+        } 
+        
+        requestIdAnimation = requestAnimationFrame(renderAnimation); 
+    };
     function render() {
         
         var w = container.mDOM.offsetWidth / 2;

@@ -35,7 +35,9 @@ var Editor = function (name) {
         
         windowResized: new signals.Signal(),
         
-        sceneModeChanged: new signals.Signal()
+        sceneModeChanged: new signals.Signal(),
+        
+        animatorLaunched: new signals.Signal()
     };
     
     this.mCameras =
