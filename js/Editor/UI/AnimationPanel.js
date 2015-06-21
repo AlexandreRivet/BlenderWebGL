@@ -1,5 +1,6 @@
 var editorCursor;
 var editorTimeText;
+var buttonPlay;
 var AnimationPanel = function(editor) {
     'use strict';
     
@@ -25,6 +26,7 @@ var AnimationPanel = function(editor) {
     var editorPanelAreaScroll = new UIPanel();
     editorPanelAreaScroll.addClass('AnimationEditorAreaScroll');
     editorPanelAreaScroll.mousewheel(function(e) {
+        return;
         var delta = e.wheelDelta;
         var width = editorPanelAreaScroll.mDOM.offsetWidth + delta;
         editorPanelAreaScroll.setStyle({"width":width});
@@ -70,7 +72,7 @@ var AnimationPanel = function(editor) {
     toolPanelButtons.add(durationValueAnimation);
     
    
-    var buttonPlay = new UIButton(">");
+    buttonPlay = new UIButton(">");
     buttonPlay.addClass('sideBar_btn_small');
     buttonPlay.click(function() {
         if(editor.mEditMode == EditMode.OBJECT)
@@ -78,6 +80,7 @@ var AnimationPanel = function(editor) {
         
         if(buttonPlay.getTextContent() == '>')
         {
+            editor.deselectObject();
             buttonPlay.setTextContent('||');
             var lastState = ANIMATIONMGR.mState;
             ANIMATIONMGR.play();
@@ -146,11 +149,13 @@ var AnimationPanel = function(editor) {
         
         var currentTime = getTimeWithPos(editorCursor.mDOM.offsetLeft, editorPanelAreaScroll.mDOM.offsetWidth, ANIMATIONMGR.mEnd);
         var currentObject = editor.mEditObject;
+        debugger;
         if(check(currentObject))
         {
-            if(!check(ANIMATIONMGR.getAnimationSelected()))
+            var currentAnimationSelected = ANIMATIONMGR.getAnimationSelected();
+            var currentAnimation = ANIMATIONMGR.getAnimationSelectedByObject(currentObject);
+            if(!check(currentAnimationSelected) || currentAnimationSelected != currentAnimation)
             {
-                var currentAnimation = ANIMATIONMGR.getAnimationSelectedByObject(currentObject);
                 if(!check(currentAnimation))
                 {
                     currentAnimation = new Animation(currentObject,currentTime);
@@ -175,7 +180,10 @@ var AnimationPanel = function(editor) {
             return;
         if(e.keyCode == 13)
         {
-            setPosWithTime(parseFloat(timeValueAnimation.getValue()), ANIMATIONMGR.mEnd);
+            var currentTime = parseFloat(timeValueAnimation.getValue());
+            if(currentTime > ANIMATIONMGR.mEnd)
+                return;
+            setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
         }
     }
     function updateDurationEditorAnimation()

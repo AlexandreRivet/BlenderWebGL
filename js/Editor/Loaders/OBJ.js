@@ -352,8 +352,6 @@ OBJ.prototype.export = function(object)
     
     var parseObject = function(child) {
      
-        debugger;
-        
         var nbVertex = 0;
         var nbVertexUvs = 0;
         var nbNormals = 0;

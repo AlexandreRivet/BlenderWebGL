@@ -135,7 +135,6 @@ AnimationManager.prototype.setAnimationSelectedByObject = function(object)
 };
 AnimationManager.prototype.getAnimationSelectedByObject = function(object)
 {
-    this.mAnimationSelected = null;
     for(var i = 0; i < this.mAnimationList.length; i++)
     {
         if(object === this.mAnimationList[i].mObject)

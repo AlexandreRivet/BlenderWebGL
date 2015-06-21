@@ -549,7 +549,7 @@ var Viewport = function (editor) {
             updateTimeEditorAnimation(currentTime);
             if(ANIMATIONMGR.getState() == STATE.STOP)
             {
-                debugger;
+                buttonPlay.setTextContent('>');
                 window.cancelAnimationFrame(requestIdAnimation);
                 return;
             }
