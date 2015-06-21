@@ -119,7 +119,7 @@ var RightSidebar_Material = function(editor) {
     
     // WIREFRAME
     var materialWireframePanel = new UIPanel();
-    var materialWireframe = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_scalelink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    var materialWireframe = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_wireframeLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
     
     materialWireframePanel.add(new UIText('Wireframe').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
     materialWireframePanel.add(materialWireframe);

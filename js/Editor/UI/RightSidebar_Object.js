@@ -251,14 +251,22 @@ RightSidebar.Object3D = function(editor) {
     
     function updateTransformParameters(object) {
      
-        if ( object instanceof THREE.Light ||
+        if (object instanceof THREE.Scene) {
+        
+            objectPositionPanel.setVisible(false);
+			objectRotationPanel.setVisible(false);
+			objectScalePanel.setVisible(false);
+            
+        } else if ( object instanceof THREE.Light ||
 		   ( object instanceof THREE.Object3D && object.userData.targetInverse ) ) {
 
+            objectPositionPanel.setVisible(true);
 			objectRotationPanel.setVisible(false);
 			objectScalePanel.setVisible(false);
 
 		} else {
 
+            objectPositionPanel.setVisible(true);
 			objectRotationPanel.setVisible(true);
 			objectScalePanel.setVisible(true);
 

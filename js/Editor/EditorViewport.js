@@ -337,6 +337,10 @@ var Viewport = function (editor) {
             // Enable scene controls
             mainControls.enabled = true;
             
+            // Attach transform to object
+            transformControls.attach(editor.mEditObject);
+            
+            
         } else if (editor.mEditMode === EditMode.OBJECT) {
          
             // Disable scene controls
@@ -347,6 +351,9 @@ var Viewport = function (editor) {
             editTopControls.enabled = true;
             editFrontControls.enabled = true;
             editLeftControls.enabled = true;
+            
+            // Detach transform
+            transformControls.detach();
             
         }
         
