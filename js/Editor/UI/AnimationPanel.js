@@ -149,7 +149,7 @@ var AnimationPanel = function(editor) {
         
         var currentTime = getTimeWithPos(editorCursor.mDOM.offsetLeft, editorPanelAreaScroll.mDOM.offsetWidth, ANIMATIONMGR.mEnd);
         var currentObject = editor.mEditObject;
-        debugger;
+        
         if(check(currentObject))
         {
             var currentAnimationSelected = ANIMATIONMGR.getAnimationSelected();
