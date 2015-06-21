@@ -48,6 +48,7 @@ var RightSidebar_Geometry_Info = function(editor) {
     };
     
     events.sceneModeChanged.add(update);
+    events.geometryChanged.add(update);
     
     return container;
     

@@ -9,7 +9,11 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
-        alert('TODO: new');
+        if (confirm('Are you sure you want to clear editor?\nYou should save before.')) {
+         
+               editor.clear();
+            
+        }
         
     });
     container.addMenuItem(option);
@@ -31,7 +35,11 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
-        alert('TODO: save');
+        var content = editor.mScene.toJSON();
+        content = JSON.stringify( content, null, '\t' );
+		content = content.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+        
+        exportString(content, editor.mScene.name + '.json');
         
     });
     container.addMenuItem(option);
@@ -40,12 +48,21 @@ Menubar.File = function(editor) {
     container.addSeparator();
     
     // IMPORT OBJ OPTION
+    // Create a fileinput but not visible for the user
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.addEventListener('change', function(e) {
+      
+        editor.mLoader.loadFile(fileInput.files[0]);    // On veut charger que le premier (peut être plusieurs ??)
+        
+    });
+    
     var option = new UIPanel();
     option.setTextContent('Import OBJ');
     
     option.click(function() {
         
-        alert('TODO: import obj');
+        fileInput.click();
         
     });
     container.addMenuItem(option);
@@ -70,7 +87,11 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
-        alert('TODO: export obj');
+        var object = editor.mEditObject;
+        
+        var output = new OBJ().export(object);
+        
+        exportString(output, object.name + '.obj');
         
     });
     container.addMenuItem(option);
@@ -87,4 +108,17 @@ Menubar.File = function(editor) {
     container.addMenuItem(option);
     
     return container;    
+}
+
+function exportString(content, filename) {
+    
+    var blob = new Blob([content], {type: 'text/plain'});
+    var objectURL = URL.createObjectURL(blob);
+    
+    var link = document.createElement('a');
+    link.href = objectURL;
+    link.download = filename || 'data.json';
+    link.target = '_blank';
+    link.click();
+    
 }

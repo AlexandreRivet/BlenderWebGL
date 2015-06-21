@@ -8,7 +8,7 @@ var UICheckboxGroup = function(checkbox, label) {
     
     label.setFor(checkbox.mDOM.id);
     
-    var container = new UIPanel().setStyle({"display": "inline-block"});
+    var container = new UIPanel().setStyle({"display": "inline-block", "margin-bottom": "0px"});
     container.add(checkbox);
     container.add(label);
     
@@ -23,5 +23,14 @@ UICheckboxGroup.prototype.getValue = function() {
     'use strict';
     
     return this.mCheckbox.getValue(); 
+    
+};
+
+UICheckboxGroup.prototype.setValue = function(value) {
+    'use strict';
+    
+    this.mCheckbox.setValue(value);
+    
+    return this;
     
 };

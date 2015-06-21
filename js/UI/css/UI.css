@@ -107,6 +107,11 @@ hr
     padding:                        2px;
 }
 
+.Color 
+{
+    background:                     transparent;
+}
+
 .node
 {
     color:                          #217ab2;

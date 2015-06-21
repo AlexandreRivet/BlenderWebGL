@@ -62,6 +62,61 @@ RightSidebar.Object3D = function(editor) {
     
     container.add(objectScalePanel);
     
+    // INTENSITY
+    var objectIntensityPanel = new UIPanel();
+    var objectIntensity = new UINumber(0.0, 0.01).setRange(0, Infinity).setStyle({"width": "200px", "margin": "0px 5px", "background-color": "#333", "color": "#eee", "border": "none", "padding": "2px", "font-size": "10px"}).change(update);
+    
+    objectIntensityPanel.add(new UIText('Intensity').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    objectIntensityPanel.add(objectIntensity);
+    
+    container.add(objectIntensityPanel);
+    
+    // COLOR
+    var objectColorPanel = new UIPanel();
+    var objectColor = new UIColor().setStyle({"width": "200px", "margin": "0px 5px", "border": "none", "padding": "2px"}).change(update);
+    
+    objectColorPanel.add(new UIText('Color').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    objectColorPanel.add(objectColor);
+    
+    container.add(objectColorPanel);
+    
+    // DISTANCE
+    var objectDistancePanel = new UIPanel();
+    var objectDistance = new UINumber(0.0, 0.01).setRange(0, Infinity).setStyle({"width": "200px", "margin": "0px 5px", "background-color": "#333", "color": "#eee", "border": "none", "padding": "2px", "font-size": "10px"}).change(update);
+    
+    objectDistancePanel.add(new UIText('Distance').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    objectDistancePanel.add(objectDistance);
+    
+    container.add(objectDistancePanel);
+    
+    // ANGLE
+    var objectAnglePanel = new UIPanel();
+    var objectAngle = new UINumber(0.0, 0.01).setRange(0, Math.PI / 2).setStyle({"width": "200px", "margin": "0px 5px", "background-color": "#333", "color": "#eee", "border": "none", "padding": "2px", "font-size": "10px"}).change(update);
+    
+    objectAnglePanel.add(new UIText('Angle').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    objectAnglePanel.add(objectAngle);
+    
+    container.add(objectAnglePanel);
+    
+    // EXPONENT
+    var objectExponentPanel = new UIPanel();
+    var objectExponent = new UINumber(0.0, 0.01).setRange(0, Infinity).setStyle({"width": "200px", "margin": "0px 5px", "background-color": "#333", "color": "#eee", "border": "none", "padding": "2px", "font-size": "10px"}).change(update);
+    
+    objectExponentPanel.add(new UIText('Exponent').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    objectExponentPanel.add(objectExponent);
+    
+    container.add(objectExponentPanel);
+    
+    // DECAY
+    var objectDecayPanel = new UIPanel();
+    var objectDecay = new UINumber(0.0, 0.01).setRange(0, Infinity).setStyle({"width": "200px", "margin": "0px 5px", "background-color": "#333", "color": "#eee", "border": "none", "padding": "2px", "font-size": "10px"}).change(update);
+    
+    objectDecayPanel.add(new UIText('Decay').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    objectDecayPanel.add(objectDecay);
+    
+    container.add(objectDecayPanel);
+    
+    // Buttons
     var objectBtnsPanel = new UIPanel();
     var panelForPlacement = new UIPanel().setStyle({"width": "220px", "position": "relative", "margin": "0 auto" });
     var btn_remove = new UIButton('Remove object').setStyle({"padding": "2px", "width": "100px"}).click(function(e) {
@@ -101,12 +156,16 @@ RightSidebar.Object3D = function(editor) {
     
     events.objectSelected.add(function(object) {
         if (object != null) {
+            
             container.setVisible(true);
             
+            updateParameters(object);
             updateUI(object);
             
         } else {
+            
             container.setVisible(false);   
+            
         }
     });
     
@@ -116,6 +175,7 @@ RightSidebar.Object3D = function(editor) {
             return;
         
         updateUI(object);
+        
         
     });
     
@@ -170,13 +230,48 @@ RightSidebar.Object3D = function(editor) {
         
     }
     
+    function updateParameters(object) {
+        
+        var properties = {
+			'intensity': objectIntensityPanel,
+			'color': objectColorPanel,
+			'distance' : objectDistancePanel,
+			'angle' : objectAnglePanel,
+			'exponent' : objectExponentPanel,
+			'decay' : objectDecayPanel
+		};
+
+		for ( var property in properties ) {
+
+			properties[ property ].setVisible(check(object[ property ]));
+
+		}
+        
+    }
+    
+    function updateTransformParameters(object) {
+     
+        if ( object instanceof THREE.Light ||
+		   ( object instanceof THREE.Object3D && object.userData.targetInverse ) ) {
+
+			objectRotationPanel.setVisible(false);
+			objectScalePanel.setVisible(false);
+
+		} else {
+
+			objectRotationPanel.setVisible(true);
+			objectScalePanel.setVisible(true);
+
+		}
+    }
+    
     
     function update() {
         
         var object = editor.mEditObject;
         
         if (check(object)) {
-         
+            
             object.position.x = objectPositionX.getValue();
             object.position.y = objectPositionY.getValue();
             object.position.z = objectPositionZ.getValue();
@@ -189,10 +284,44 @@ RightSidebar.Object3D = function(editor) {
 			object.scale.y = objectScaleY.getValue();
 			object.scale.z = objectScaleZ.getValue();
             
+            if (check(object.intensity)) {
+             
+                object.intensity = objectIntensity.getValue();
+                
+            }
+            
+            if (check(object.color)) {
+             
+                object.color.setHex(objectColor.getHexaValue());
+                
+            }
+            
+            if (check(object.distance)) {
+             
+                object.distance = objectDistance.getValue();
+                
+            }
+            
+            if (check(object.angle)) {
+             
+                object.angle = objectAngle.getValue();
+                
+            }
+            
+            if (check(object.exponent)) {
+             
+                object.exponent = objectExponent.getValue();
+                
+            }
+            if (check(object.decay)) {
+             
+                object.decay = objectDecay.getValue();
+                
+            }
+            
+            events.objectChanged.dispatch(object);
+            
         }
-        
-        
-        events.objectChanged.dispatch(object);
         
     }
     
@@ -202,11 +331,17 @@ RightSidebar.Object3D = function(editor) {
          
             objectBtnsPanel.setVisible(false);
             
+        } else if (object instanceof THREE.Light) {
+         
+            objectBtnsPanel.setVisible(true);
+            btn_edit.setStyle({display: "none"});
+            
         } else {
          
             objectBtnsPanel.setVisible(true);
+            btn_edit.setStyle({display: "inline-block"});
             
-        }        
+        }
      
         objectName.setValue(object.name);
         
@@ -221,6 +356,43 @@ RightSidebar.Object3D = function(editor) {
 		objectScaleX.setValue( object.scale.x );
 		objectScaleY.setValue( object.scale.y );
 		objectScaleZ.setValue( object.scale.z );
+        
+        if (check(object.intensity)) {
+             
+            objectIntensity.setValue(object.intensity);
+                
+        }
+            
+        if (check(object.color)) {
+
+            objectColor.setHexaValue(object.color.getHexString());
+
+        }
+
+        if (check(object.distance)) {
+
+            objectDistance.setValue(object.distance);
+
+        }
+
+        if (check(object.angle)) {
+
+            objectAngle.setValue(object.angle);
+
+        }
+
+        if (check(object.exponent)) {
+
+            objectExponent.setValue(object.exponent);
+
+        }
+        if (check(object.decay)) {
+
+            objectDecay.setValue(object.decay);
+
+        }
+        
+        updateTransformParameters(object);
         
     }
     

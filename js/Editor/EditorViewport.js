@@ -14,6 +14,9 @@ var Viewport = function (editor) {
     // Objects
     var objects = [];
     
+    // Edition
+    var lastFaceIndex = -1;
+    
     // Helpers
     var gridScene = new THREE.GridHelper(400, 25);
     var gridEdition = new THREE.GridHelper(400, 25);
@@ -129,11 +132,11 @@ var Viewport = function (editor) {
     var click = function() {
         
         // To avoid drag
-        if (mouseDownPosition.distanceTo(mouseUpPosition) == 0) {
-            
+        if (mouseDownPosition.distanceTo(mouseUpPosition) === 0) {
+   
             var intersects = [];
             if (editor.mEditMode === EditMode.SCENE)
-                intersects = getIntersects(mouseUpPosition, objects);
+                intersects = getIntersects(mouseUpPosition, scene.children);
             else if (editor.mEditMode === EditMode.OBJECT)
                 intersects = getIntersects(mouseUpPosition, editionScene.children);
             
@@ -144,7 +147,9 @@ var Viewport = function (editor) {
                 // Mode Scene: object picking
                 // Mode Object: raycast for vertices manager
                 if (editor.mEditMode === EditMode.SCENE) {
-                                     
+                              
+                    var object = intersects[0].object;
+                    
                     if (object.userData.object !== undefined) {
                         
                         editor.selectObject(object.userData.object);
@@ -173,6 +178,38 @@ var Viewport = function (editor) {
         
     };
     
+    var move = function() {
+        
+        var intersects = [];
+        if (editor.mEditMode === EditMode.SCENE)
+            return;
+        else if (editor.mEditMode === EditMode.OBJECT)
+            intersects = getIntersects(mouseUpPosition, editionScene.children);
+            
+        if (intersects.length > 0) {
+                
+            var intersect = intersects[0];
+            
+            if (intersect.faceIndex != lastFaceIndex)
+            {
+                var currentFace = intersect.face;
+                
+                if (lastFaceIndex != -1)
+                    editor.mEditObject.geometry.faces[lastFaceIndex].color.setHex(0x000000);
+                
+                currentFace.color.setHex(0xff0000);
+                
+                editor.mEditObject.geometry.colorsNeedUpdate = true;
+                
+                lastFaceIndex = intersect.faceIndex;
+            
+                render();    
+            }
+            
+            
+        }
+    };
+    
     
     var mouseDown = function(e) {
     
@@ -195,9 +232,21 @@ var Viewport = function (editor) {
         document.removeEventListener('mouseup', mouseUp, false);
     };
     
+    var mouseMove = function(e) {
+      
+        e.preventDefault();
+        
+        var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
+        mouseUpPosition.fromArray(position);
+        
+        move();
+        
+    };
+    
     // TODO: Do we want our application on tablet ??
     
     container.mousedown(mouseDown);
+    container.mousemove(mouseMove);
     
     // Camera controller
     var mainControls = new THREE.EditorControls(cameras.persp, container.mDOM);
@@ -219,7 +268,6 @@ var Viewport = function (editor) {
     editPerspControls.enabled = false;
     
     
-    //TODO: Set mode allowed
     var editTopControls = new THREE.EditorControls(cameras.top, container.mDOM);
     editTopControls.center.fromArray([0, 0, 0]);
     editTopControls.setActionsAllowed(false, true, true);
@@ -255,6 +303,10 @@ var Viewport = function (editor) {
     events.editorCleared.add(function() {
     
         mainControls.center.set(0, 0, 0);
+        editPerspControls.center.set(0, 0, 0);
+        editTopControls.center.set(0, 0, 0);
+        editFrontControls.center.set(0, 0, 0);
+        editLeftControls.center.set(0, 0, 0);
         render();
         
     });
@@ -314,6 +366,35 @@ var Viewport = function (editor) {
         
     });
     
+    events.geometryChanged.add(function() {
+        
+        // Update WireframeHelper
+        var helpers = editionHelpersScene.children;
+        
+        for (var i = 0; i < helpers.length; i++) {
+         
+            if (helpers[i] instanceof THREE.WireframeHelper) {
+                
+                helpers[i].parent.remove(helpers[i]);   
+                
+            }
+        
+        }
+        
+        var helper = new THREE.WireframeHelper(editor.mEditObject);
+        helper.material.color.set( 0xffffff );
+        editionHelpersScene.add(helper)
+       
+        render();
+        
+    });
+    
+    events.materialChanged.add(function(material) {
+       
+        render();
+        
+    });
+    
     events.objectAdded.add(function(object) {
     
         var materialsNeedUpdate = false;
@@ -338,9 +419,21 @@ var Viewport = function (editor) {
         
     });
     
+    events.helperRemoved.add(function(object) {
+       
+        objects.splice(objects.indexOf(object.getObjectByName('picker')), 1);
+        
+    });
+    
     events.objectChanged.add(function(object) {
        
         transformControls.update();
+        
+        if (check(editor.mHelpers[object.id])) {
+            
+            editor.mHelpers[object.id].update();
+            
+        }
         
         render();
         
@@ -360,6 +453,8 @@ var Viewport = function (editor) {
     
     events.windowResized.add(function() {
     
+        renderer.domElement.style.display = 'none';
+        
         // Get new size
         var w = container.mDOM.offsetWidth;
         var h = container.mDOM.offsetHeight;
@@ -387,6 +482,8 @@ var Viewport = function (editor) {
         cameras.front.updateProjectionMatrix();
         
         renderer.setSize(container.mDOM.offsetWidth, container.mDOM.offsetHeight);
+        
+        renderer.domElement.style.display = 'block';
         
         render();        
     });

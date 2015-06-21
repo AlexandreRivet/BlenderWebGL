@@ -26,8 +26,26 @@ UISelect.prototype.setOptions = function(options)
     for (var key in options)
     {
         var option = document.createElement('option');
-        option.value = options[key];
+        option.value = key;
         option.innerHTML = options[key];
         this.mDOM.appendChild(option);
     }
+    
+    return this;
+};
+
+UISelect.prototype.getValue = function() {
+  
+    return this.mDOM.value;
+    
+};
+
+UISelect.prototype.setValue = function(value) {
+  
+    value = String(value);
+    
+    this.mDOM.value = value;
+    
+    return this;
+    
 };

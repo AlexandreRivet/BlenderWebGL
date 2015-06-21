@@ -8,6 +8,9 @@ var RightSidebar_Geometry = function(editor) {
     
     container.add(new RightSidebar_Geometry_Info(editor));
     
+    var parameters = new UIPanel();
+    container.add(parameters);
+    
     function build() {
         
         var object = editor.mEditObject;
@@ -17,6 +20,35 @@ var RightSidebar_Geometry = function(editor) {
 			var geometry = object.geometry;
             
             container.setVisible(true);
+            
+            parameters.clean();
+            
+            if (geometry instanceof THREE.PlaneGeometry) {
+                
+                parameters.add(new RightSidebar_Geometry_PlaneGeometry(editor));
+                
+            } else if (geometry instanceof THREE.BoxGeometry) {
+             
+                parameters.add(new RightSidebar_Geometry_BoxGeometry(editor));
+                
+            } else if (geometry instanceof THREE.CylinderGeometry) {
+             
+                parameters.add(new RightSidebar_Geometry_CylinderGeometry(editor));
+                
+            } else if (geometry instanceof THREE.SphereGeometry) {
+                
+                parameters.add(new RightSidebar_Geometry_SphereGeometry(editor));
+                
+            } else if (geometry instanceof THREE.IcosahedronGeometry) {
+             
+                parameters.add(new RightSidebar_Geometry_IcosahedronGeometry(editor));
+                
+            } else if (geometry instanceof THREE.TorusGeometry) {
+             
+                parameters.add(new RightSidebar_Geometry_TorusGeometry(editor));
+                
+            }
+                       
         
         } else {
          
@@ -27,6 +59,7 @@ var RightSidebar_Geometry = function(editor) {
     };
     
     events.sceneModeChanged.add(build);
+    events.geometryChanged.add(build);
     
     return container;    
 };

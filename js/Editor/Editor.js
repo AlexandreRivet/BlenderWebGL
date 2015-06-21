@@ -23,6 +23,7 @@ var Editor = function (name) {
         sceneGraphChanged: new signals.Signal(),
         
         geometryChanged: new signals.Signal(),
+        materialChanged: new signals.Signal(),
         
         objectSelected: new signals.Signal(),
         objectAdded: new signals.Signal(),
@@ -30,6 +31,7 @@ var Editor = function (name) {
         objectRemoved: new signals.Signal(),
         
         helperAdded: new signals.Signal(),
+        helperRemoved: new signals.Signal(),
         
         windowResized: new signals.Signal(),
         
@@ -43,6 +45,9 @@ var Editor = function (name) {
             front:  new THREE.PerspectiveCamera(50, 1, 1, 100000),
             left:   new THREE.PerspectiveCamera(50, 1, 1, 100000)
         }
+    
+    // Loader
+    this.mLoader = new Loader(this);
     
     // Principal Scene
     this.mScene = new THREE.Scene();
@@ -170,13 +175,36 @@ Editor.prototype.removeObject = function(object) {
     if (!check(object.parent))
         return;
     
-    // TODO: Remove Helpers ??
+    var context = this;
+    
+    object.traverse(function(child) {
+    
+        context.removeHelper(child);
+        
+    });
+    
     
     object.parent.remove(object);
     
     this.mEvents.objectRemoved.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();    
-}
+};
+
+Editor.prototype.removeHelper = function(object) {
+    'use strict';
+    
+    if ( check(this.mHelpers[ object.id ])) {
+
+        var helper = this.mHelpers[ object.id ];
+		helper.parent.remove( helper );
+		
+        delete this.mHelpers[ object.id ];
+
+		this.mEvents.helperRemoved.dispatch( helper );
+
+    }
+    
+};
 
 Editor.prototype.selectObject = function (object) {
     'use strict';
@@ -223,7 +251,24 @@ Editor.prototype.setMode = function(mode) {
         
         this.mEditionScene.add(this.mEditObject);
         
+        // Add Edges helper
+        var helper = new THREE.WireframeHelper(this.mEditObject);
+        helper.material.color.set( 0xffffff );
+        this.mEditionHelpersScene.add(helper);
+        
+        
     } else if (this.mEditMode === EditMode.SCENE) {
+        
+        // Clear Edition Scene
+        var objects = this.mEditionScene.children;
+        while(objects.length > 0)
+            this.removeObject(objects[0]);
+        
+        // TODO CHECKER ICI (suppression pendant parcours)
+        var objects = this.mEditionHelpersScene.children;
+        for (var i = 0; i < objects.length; i++)
+            if (!(objects[i] instanceof THREE.GridHelper))
+                this.removeObject(objects[i]);        
 
         // this.mEditObject.material.wireframe = false;
         this.mEditObject.position.copy(this.mTransformEditObject.position);
@@ -242,6 +287,22 @@ Editor.prototype.setMode = function(mode) {
 Editor.prototype.clear = function() {
     'use strict';
     
+    this.setMode(EditMode.SCENE);
+    
+    var cameras = this.mCameras;
+    
+    cameras.persp.position.fromArray([500, 250, 500]);
+    cameras.persp.lookAt(new THREE.Vector3(0, 0, 0));
+    
+    cameras.top.position.fromArray([0, 250, 0]);
+    cameras.top.lookAt(new THREE.Vector3(0, 0, 0));
+    
+    cameras.front.position.fromArray([0, 0, 250]);
+    cameras.front.lookAt(new THREE.Vector3(0, 0, 0));
+    
+    cameras.left.position.fromArray([-250, 0, 0]);
+    cameras.left.lookAt(new THREE.Vector3(0, 0, 0));
+    
     var objects = this.mScene.children;
     
     while(objects.length > 0)
@@ -252,4 +313,6 @@ Editor.prototype.clear = function() {
     this.mTextures = {};
     
     this.deselectObject();    
+    
+    this.mEvents.editorCleared.dispatch();
 };

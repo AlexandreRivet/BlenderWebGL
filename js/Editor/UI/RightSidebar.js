@@ -7,6 +7,7 @@ var RightSidebar = function(editor) {
     container.add(new RightSidebar.Scene(editor));
     container.add(new RightSidebar.Object3D(editor));
     container.add(new RightSidebar_Geometry(editor));
+    container.add(new RightSidebar_Material(editor));
     
     
     return container;    
