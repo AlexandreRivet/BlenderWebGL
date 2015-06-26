@@ -233,6 +233,7 @@ AnimationManager.prototype.stop = function()
     
     this.mDurationPlay = 0;
     this.mLastTime = 0;
+    this.mIsInit = false;
 };
 AnimationManager.prototype.updateAnimation = function()
 {
@@ -271,5 +272,10 @@ AnimationManager.prototype.updateAnimation = function()
     }
     
 };
+AnimationManager.prototype.clear = function()
+{
+    this.stop();
+    this.mAnimationList.splice(0,this.mAnimationList.length);
+}
     
 ANIMATIONMGR = new AnimationManager("AnimMgr",0.0,10.0);

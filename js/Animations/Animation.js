@@ -83,6 +83,15 @@ Animation.prototype.getKey = function(id)
     }
     return null;
 }
+Animation.prototype.removeKey = function(key)
+{
+    for(var i = 0; i < this.mSceneNodeAnimMap.length; i++)
+    {
+        currentSceneNodeAnim = this.mSceneNodeAnimMap[i];
+        if(key == currentSceneNodeAnim.getKeyframe())
+            this.mSceneNodeAnimMap.splice(i,1);
+    }
+}
 /***********************************************************************************************\
 * playAnimation
 \***********************************************************************************************/

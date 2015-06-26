@@ -499,6 +499,7 @@ var Viewport = function (editor) {
     events.animatorLaunched.add(function() {
         renderAnimation();    
     });
+
     // Renderer
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setClearColor(0x555555);
@@ -552,11 +553,11 @@ var Viewport = function (editor) {
             renderer.render(sceneHelpers, cameras.persp);
             
             var currentTime = ANIMATIONMGR.mDurationPlay/1000;
-            setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
-            updateTimeEditorAnimation(currentTime);
+            ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
+            ANIMATIONEDITOR.updateTimeEditorAnimation(currentTime);
             if(ANIMATIONMGR.getState() == STATE.STOP)
             {
-                buttonPlay.setTextContent('>');
+                ANIMATIONEDITOR.getPlayButton().setTextContent('>');
                 window.cancelAnimationFrame(requestIdAnimation);
                 return;
             }

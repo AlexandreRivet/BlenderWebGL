@@ -37,7 +37,8 @@ var Editor = function (name) {
         
         sceneModeChanged: new signals.Signal(),
         
-        animatorLaunched: new signals.Signal()
+        animatorLaunched: new signals.Signal(),
+        
     };
     
     this.mCameras =
@@ -214,6 +215,7 @@ Editor.prototype.selectObject = function (object) {
     if (this.mEditObject === object)
         return;
     
+    ANIMATIONEDITOR.updateDisplay(ANIMATIONMGR.getAnimationSelectedByObject(object));
     this.mEditObject = object;
     
     this.mEvents.objectSelected.dispatch(object);

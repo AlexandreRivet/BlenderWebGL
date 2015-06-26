@@ -1,6 +1,3 @@
-var editorCursor;
-var editorTimeText;
-var buttonPlay;
 var AnimationPanel = function(editor) {
     'use strict';
     
@@ -34,7 +31,7 @@ var AnimationPanel = function(editor) {
     editorPanelArea.add(editorPanelAreaScroll);
     
     //Cursor Animation
-    editorCursor = new UIPanel();
+    var editorCursor = new UIPanel();
     editorCursor.addClass('AnimationEditorCursorPrincipal');
     editorPanelAreaScroll.add(editorCursor);
     editorPanelAreaScroll.click(function(e) {
@@ -43,11 +40,19 @@ var AnimationPanel = function(editor) {
         var x = e.offsetX;
         editorCursor.setStyle({'left':x+'px'});
         
+        ANIMATIONEDITOR.unselectCursor(ANIMATIONEDITOR.mCursorSelected);
+        ANIMATIONEDITOR.mCursorSelected = null;
+        
         var currentTime = getTimeWithPos(x, editorPanelAreaScroll.mDOM.offsetWidth, ANIMATIONMGR.mEnd);
-        editorTimeText.setValue(currentTime);
+        ANIMATIONEDITOR.getCurrentTimeEditor().setValue(currentTime);
+        if(check(ANIMATIONMGR.mAnimationSelected))
+        {
+            ANIMATIONMGR.mAnimationSelected.playAnimation(currentTime);
+            editor.mEvents.sceneGraphChanged.dispatch();
+        }
         
     });
-    
+    ANIMATIONEDITOR.setCursorPrincipal(editorCursor);
     //Panel du Titre
     var toolPanelTitle = new UIPanel();
     toolPanelTitle.addClass('AnimationEditorToolTitle');
@@ -64,7 +69,7 @@ var AnimationPanel = function(editor) {
     
     toolPanelButtons.add(new UIText('Time').setStyle({"width": "40px", "display": "inline-block", "font-size": "12px"}));
     var timeValueAnimation = new UINumber(0.0, 1.0).setStyle({"width": "60px", "margin": "0px 5px", "background-color": "#333", "color": "#eee","border": "none", "padding": "2px", "font-size": "10px"}).keyup(setTimeEditorAnimation);
-    editorTimeText = timeValueAnimation;
+    ANIMATIONEDITOR.setCurrentTimeEditor(timeValueAnimation);
     toolPanelButtons.add(timeValueAnimation);
     
     toolPanelButtons.add(new UIText('Duration').setStyle({"width": "50px", "display": "inline-block", "font-size": "12px"}));
@@ -72,7 +77,7 @@ var AnimationPanel = function(editor) {
     toolPanelButtons.add(durationValueAnimation);
     
    
-    buttonPlay = new UIButton(">");
+    var buttonPlay = new UIButton(">");
     buttonPlay.addClass('sideBar_btn_small');
     buttonPlay.click(function() {
         if(editor.mEditMode == EditMode.OBJECT)
@@ -86,7 +91,7 @@ var AnimationPanel = function(editor) {
             ANIMATIONMGR.play();
             if( lastState == STATE.STOP)
                 editor.mEvents.animatorLaunched.dispatch();
-            
+
         }
         else
         {
@@ -96,6 +101,7 @@ var AnimationPanel = function(editor) {
            
     });
     toolPanelButtons.add(buttonPlay);
+    ANIMATIONEDITOR.setPlayButton(buttonPlay);
     
     var buttonStop = (new UIButton('[]')).addClass('sideBar_btn_small');
     buttonStop.click(function() {
@@ -170,9 +176,26 @@ var AnimationPanel = function(editor) {
             var x = editorCursor.mDOM.offsetLeft;
             var height = editorCursor.mDOM.offsetHeight;
             cursorKey.setStyle({'left':x+'px', 'height':height+'px'});
+            cursorKey.click(function(e) {
+                e.stopPropagation();
+                ANIMATIONEDITOR.mCursorSelected = cursorKey;
+                ANIMATIONEDITOR.selectCursor(cursorKey);
+            });
+            ANIMATIONEDITOR.addKeyFrameAll(new KeyFrameMarker(cursorKey, currentAnimation.getKey(currentTime) ,currentTime, currentAnimation));
+            ANIMATIONEDITOR.updateCurrentKeyFrames(currentAnimation);
         }
     });
     toolPanelButtons.add(buttonAddKey);
+    
+    var buttonRemoveKey = (new UIButton('-')).addClass('sideBar_btn_small');
+    buttonRemoveKey.click(function() {
+        if(editor.mEditMode == EditMode.OBJECT)
+            return;
+        if(ANIMATIONMGR.getState() == STATE.PLAY || ANIMATIONMGR.getState() == STATE.PAUSE)
+            return;
+        ANIMATIONEDITOR.removeKeyframeMarkerSelected();
+    });
+    toolPanelButtons.add(buttonRemoveKey);
     
     function setTimeEditorAnimation(e)
     {
@@ -183,7 +206,7 @@ var AnimationPanel = function(editor) {
             var currentTime = parseFloat(timeValueAnimation.getValue());
             if(currentTime > ANIMATIONMGR.mEnd)
                 return;
-            setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
+            ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
         }
     }
     function updateDurationEditorAnimation()
@@ -191,20 +214,11 @@ var AnimationPanel = function(editor) {
         ANIMATIONMGR.mEnd = parseFloat(durationValueAnimation.getValue());
     }
     
+    ANIMATIONEDITOR.mCursorArea = editorPanelAreaScroll;
     return container;  
 };
 
 function getTimeWithPos(pos, widthMax, timeMax)
 {
     return (pos/widthMax) * timeMax;
-}
-function setPosWithTime(currentTime, timeMax)
-{
-    var widthMax = $('.AnimationEditorAreaScroll')[0].offsetWidth;
-    var pos = (currentTime / timeMax) * widthMax;
-    editorCursor.setStyle({'left':pos+'px'});
-}
-function updateTimeEditorAnimation(currentTime)
-{
-    editorTimeText.setValue(currentTime);
 }

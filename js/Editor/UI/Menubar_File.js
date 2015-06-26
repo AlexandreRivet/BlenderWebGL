@@ -11,8 +11,9 @@ Menubar.File = function(editor) {
         
         if (confirm('Are you sure you want to clear editor?\nYou should save before.')) {
          
-               editor.clear();
-            
+            editor.clear();
+            ANIMATIONMGR.clear(); 
+            ANIMATIONEDITOR.clear(); 
         }
         
     });
