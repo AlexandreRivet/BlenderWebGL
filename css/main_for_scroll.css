@@ -1,0 +1,148 @@
+*
+{
+	margin:                         0;
+	padding:                        0;
+}
+
+body
+{
+    width:                          100%;
+    height:                         100%;
+    background-color:               #333;
+}
+
+.topPanel {
+    position:                       absolute;
+    top:                            0px; 
+    
+    width:                          100%;
+    height:                         30px;
+    
+    border-bottom:                  solid 1px #eee;
+    z-index:                        1;
+}
+
+.middlePanel {
+    position:                       absolute;
+    top:                            31px;
+    bottom:                         150px;
+    
+    width:                          100%;
+}
+
+.middleContent {
+    display:                        table;
+    width:                          100%;
+    height:                         100%;
+    
+    background-color:               #000;
+}
+
+.leftPanel {
+    display:                        table-cell;
+    width:                          50px;
+    padding:                        5px;
+    
+    vertical-align:                 top;
+    background-color:               #222;
+    border-right:                   solid 1px #ccc;
+}
+
+.viewportPanel {
+    width: calc(100% - 312px);
+    height: 100%;
+}
+
+.rightPanel {
+  display: block;
+  width: 300px;
+  padding: 5px;
+  vertical-align: top;
+  background-color: #222;
+  border-left: solid 1px #ccc;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: auto;
+  right: 0;
+}
+
+
+.rightPanel .Panel {
+    margin-bottom: 10px;
+}
+
+.bottomPanel {
+    position:                       absolute;
+    bottom:                         0px;
+    
+    width:                          100%;
+    height:                         149px;    
+    
+    background-color:               #222;
+    border-top:                     solid 1px #ccc;
+}
+
+.sideBar_btn {
+    width:                          40px;
+    height:                         40px;
+}
+.sideBar_btn_small {
+    width:                          40px;
+    height:                         20px;
+}
+.sidebar_btn:active {
+    text-shadow:                    rgb(15, 106, 88) 1px 1px,
+                                    rgb(15, 106, 88) 2px 2px;
+}
+
+.graphPanel {
+    background-color:               #333;
+    height:                         150px;
+    overflow-y:                     auto;
+    
+}
+
+.HidingPanelArrow {
+    float: left;
+    margin-right: 6px;
+    width: 0px;
+    height: 0px;
+    border: 6px solid transparent;
+}
+
+.HidingPanelArrow.disabled {
+    border-left-color: #eee;
+    margin-top: 2px;
+}
+
+.HidingPanelArrow.enabled {
+    border-top-color: #eee;
+    margin-top: 6px;
+}
+
+/**************************************
+SCROLLBAR
+**************************************/
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #217ab2;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: #217ab2;
+}
