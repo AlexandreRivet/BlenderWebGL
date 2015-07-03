@@ -509,6 +509,8 @@ var Viewport = function (editor) {
     
     container.mDOM.appendChild(renderer.domElement);   
     
+	var shader = new Shader(editor);
+	container.add(shader);
     
     function updateMaterials() {
       

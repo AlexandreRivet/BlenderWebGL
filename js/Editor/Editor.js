@@ -24,6 +24,7 @@ var Editor = function (name) {
         
         geometryChanged: new signals.Signal(),
         materialChanged: new signals.Signal(),
+		shaderEdited: new signals.Signal(),
         
         objectSelected: new signals.Signal(),
         objectAdded: new signals.Signal(),
