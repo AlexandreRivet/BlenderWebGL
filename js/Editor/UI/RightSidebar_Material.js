@@ -73,6 +73,15 @@ var RightSidebar_Material = function(editor) {
     
     container.add(materialShininessPanel);
     
+    // VERTEX SHADER
+    var materialVertexShaderPanel = new UIPanel();
+    var materialVertexShader = new UIButton('Edit');
+    
+    materialVertexShaderPanel.add(new UIText('Vertex Shader').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialVertexShaderPanel.add(materialVertexShader);
+    
+    container.add(materialVertexShaderPanel);
+    
     // SIDE
     var materialSidePanel = new UIPanel();
     var materialSide = new UISelect().setOptions({
