@@ -24,7 +24,6 @@ var Editor = function (name) {
         
         geometryChanged: new signals.Signal(),
         materialChanged: new signals.Signal(),
-		shaderEdited: new signals.Signal(),
         
         objectSelected: new signals.Signal(),
         objectAdded: new signals.Signal(),
@@ -39,6 +38,9 @@ var Editor = function (name) {
         sceneModeChanged: new signals.Signal(),
         
         animatorLaunched: new signals.Signal(),
+        
+        shaderEdited: new signals.Signal(),
+        shaderClosed: new signals.Signal()
         
     };
     
@@ -249,7 +251,6 @@ Editor.prototype.setMode = function(mode) {
         this.mTransformEditObject.rotation.copy(this.mEditObject.rotation);
         this.mTransformEditObject.scale.copy(this.mEditObject.scale);
         
-        // this.mEditObject.material.wireframe = true;
         this.mEditObject.position.set(0, 0, 0);
         this.mEditObject.rotation.set(0, 0, 0);
         this.mEditObject.scale.set(1, 1, 1);
@@ -257,10 +258,14 @@ Editor.prototype.setMode = function(mode) {
         this.mEditionScene.add(this.mEditObject);
         
         // Add Edges helper
-        var helper = new THREE.WireframeHelper(this.mEditObject);
-        helper.material.color.set( 0xffffff );
-        this.mEditionHelpersScene.add(helper);
+        //var helper = new THREE.WireframeHelper(this.mEditObject);
+        //helper.material.color.set( 0xffffff );
+        //this.mEditionHelpersScene.add(helper);
         
+        // Add VertexColor for edit
+        // this.mEditObject.material.vertexColors = THREE.FaceColors;
+        this.mEditObject.material.vertexColors = THREE.VertexColors;
+        this.mEditObject.material.needsUpdate = true;
         
     } else if (this.mEditMode === EditMode.SCENE) {
         
@@ -275,7 +280,6 @@ Editor.prototype.setMode = function(mode) {
             if (!(objects[i] instanceof THREE.GridHelper))
                 this.removeObject(objects[i]);        
 
-        // this.mEditObject.material.wireframe = false;
         this.mEditObject.position.copy(this.mTransformEditObject.position);
         this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
         this.mEditObject.scale.copy(this.mTransformEditObject.scale);
@@ -283,6 +287,10 @@ Editor.prototype.setMode = function(mode) {
         this.mScene.add(this.mEditObject);
         this.mEvents.sceneGraphChanged.dispatch();
         this.mEvents.objectSelected.dispatch(this.mEditObject);
+        
+        // Remove VertexColor
+        this.mEditObject.material.vertexColors = THREE.NoColors;
+        this.mEditObject.material.needsUpdate = true;
         
     }
     

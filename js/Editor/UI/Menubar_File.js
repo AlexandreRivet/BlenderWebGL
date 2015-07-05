@@ -9,6 +9,13 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         if (confirm('Are you sure you want to clear editor?\nYou should save before.')) {
          
             editor.clear();
@@ -25,6 +32,13 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }        
+        
         alert('TODO: open');
         
     });
@@ -35,6 +49,13 @@ Menubar.File = function(editor) {
     option.setTextContent('Save');
     
     option.click(function() {
+        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
         
         var content = editor.mScene.toJSON();
         content = JSON.stringify( content, null, '\t' );
@@ -53,7 +74,7 @@ Menubar.File = function(editor) {
     var fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.addEventListener('change', function(e) {
-      
+        
         editor.mLoader.loadFile(fileInput.files[0]);    // On veut charger que le premier (peut être plusieurs ??)
         
     });
@@ -62,6 +83,13 @@ Menubar.File = function(editor) {
     option.setTextContent('Import OBJ');
     
     option.click(function() {
+        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
         
         fileInput.click();
         
@@ -73,6 +101,13 @@ Menubar.File = function(editor) {
     option.setTextContent('Import DAE');
     
     option.click(function() {
+        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
         
         alert('TODO: import dae');
         
@@ -88,7 +123,17 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var object = editor.mEditObject;
+        
+        if (!check(object))
+            return;
         
         var output = new OBJ().export(object);
         
@@ -103,23 +148,17 @@ Menubar.File = function(editor) {
     
     option.click(function() {
         
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         alert('TODO: export dae');
         
     });
     container.addMenuItem(option);
     
     return container;    
-}
-
-function exportString(content, filename) {
-    
-    var blob = new Blob([content], {type: 'text/plain'});
-    var objectURL = URL.createObjectURL(blob);
-    
-    var link = document.createElement('a');
-    link.href = objectURL;
-    link.download = filename || 'data.json';
-    link.target = '_blank';
-    link.click();
-    
 }

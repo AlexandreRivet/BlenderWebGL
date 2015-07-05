@@ -11,9 +11,16 @@ Menubar.Add = function(editor) {
     option.setTextContent('Plane');
     
     option.click(function() {
+        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
        
         var geometry = new THREE.PlaneGeometry(100, 100, 1, 1);
-        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Plane.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -30,8 +37,15 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
         
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var geometry = new THREE.BoxGeometry(100, 100, 100, 1, 1, 1);
-        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Cube.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -47,8 +61,15 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var geometry = new THREE.CylinderGeometry(50, 50, 100, 32, 1, false);
-        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Cylinder.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -65,8 +86,15 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var geometry = new THREE.SphereGeometry(50, 32, 32);
-        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Sphere.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -83,8 +111,15 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var geometry = new THREE.IcosahedronGeometry(50, 2);
-        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Icosahedron.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -101,8 +136,15 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var geometry = new THREE.TorusGeometry(100, 40, 16, 16);
-        var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Torus.' + (ZeroBeforeString(meshCount++, 3));
         
@@ -121,6 +163,13 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var light = new THREE.PointLight(0xffffff, 1, 0);
         light.name = 'PointLight.' + (ZeroBeforeString(lightCount++, 3));
         
@@ -137,6 +186,13 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var light = new THREE.SpotLight(0xffffff, 1, 0, Math.PI * 0.1, 10);
         light.name = 'SpotLight.' + (ZeroBeforeString(lightCount++, 3));
         
@@ -153,6 +209,13 @@ Menubar.Add = function(editor) {
     
     option.click(function() {
        
+        if (editor.mEditMode === EditMode.OBJECT) {
+         
+            alert('You need to be in principal scene to do this.');            
+            return;
+            
+        }
+        
         var light = new THREE.DirectionalLight(0xffffff, 1);
         light.name = 'DirectionalLight.' + (ZeroBeforeString(lightCount++, 3));
         

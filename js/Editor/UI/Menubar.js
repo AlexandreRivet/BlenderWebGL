@@ -22,7 +22,6 @@ var Menubar = function(editor) {
     
     
     // Events
-    
     events.sceneModeChanged.add(function() {
 
         if (editor.mEditMode === EditMode.SCENE) {
@@ -32,6 +31,7 @@ var Menubar = function(editor) {
         } else if (editor.mEditMode === EditMode.OBJECT) {
 
             btnQ.setVisible(true);
+            $('.Menu').unbind('mouseenter mouseleave');
 
         }
         

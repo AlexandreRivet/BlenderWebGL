@@ -1,4 +1,5 @@
 var requestIdAnimation;
+
 var Viewport = function (editor) {
     'use strict';
     
@@ -89,7 +90,7 @@ var Viewport = function (editor) {
             raycaster.setFromCamera(mouse, cameras.persp);
             
         } else if (editor.mEditMode === EditMode.OBJECT) {
-            
+
             // We have to change camera depends where mouse is in the container
             // Don't forget mouse is between -1 and 1 on x and on y
             if (mouse.x <= 0 && mouse.y >= 0) {
@@ -189,26 +190,41 @@ var Viewport = function (editor) {
             
         if (intersects.length > 0) {
                 
-            var intersect = intersects[0];
+            var intersected = intersects[0];
             
-            if (intersect.faceIndex != lastFaceIndex)
-            {
-                var currentFace = intersect.face;
-                
+            if (intersected.faceIndex != lastFaceIndex)
+            {                
                 if (lastFaceIndex != -1)
-                    editor.mEditObject.geometry.faces[lastFaceIndex].color.setHex(0x000000);
+                    editor.mEditObject.geometry.faces[lastFaceIndex].vertexColors[0] = editor.mEditObject.material.color;
                 
-                currentFace.color.setHex(0xff0000);
+                debugger;
                 
-                editor.mEditObject.geometry.colorsNeedUpdate = true;
+                editor.mEditObject.geometry.faces[intersected.faceIndex].vertexColors[0] = new THREE.Color(0xff0000);
+                editor.mEditObject.geometry.colorsNeedUpdate = true;            
                 
-                lastFaceIndex = intersect.faceIndex;
-            
-                render();    
+                lastFaceIndex = intersected.faceIndex;
+                
+                render();
             }
             
             
+        } else {
+        
+            if (lastFaceIndex != -1) {
+                
+                editor.mEditObject.geometry.faces[lastFaceIndex].vertexColors[0] = editor.mEditObject.material.color;
+                editor.mEditObject.geometry.colorsNeedUpdate = true;
+                
+                lastFaceIndex = -1;
+                
+                render();
+            }   
+            
+            
         }
+        
+        
+        
     };
     
     
@@ -403,6 +419,26 @@ var Viewport = function (editor) {
         
     });
     
+    events.shaderEdited.add(function(object, type) {
+       
+        // Disable object controls
+        editPerspControls.enabled = false;
+        editTopControls.enabled = false;
+        editFrontControls.enabled = false;
+        editLeftControls.enabled = false;
+        
+    });
+    
+    events.shaderClosed.add(function() {
+       
+        // Enable object controls
+        editPerspControls.enabled = true;
+        editTopControls.enabled = true;
+        editFrontControls.enabled = true;
+        editLeftControls.enabled = true;
+        
+    });
+    
     events.objectAdded.add(function(object) {
     
         var materialsNeedUpdate = false;
@@ -463,18 +499,23 @@ var Viewport = function (editor) {
     
         renderer.domElement.style.display = 'none';
         
+        // Get offset (little custom for our case)
+        var oX = container.mDOM.offsetLeft;
+        var oY = container.mDOM.offsetParent.offsetTop;
+        
         // Get new size
         var w = container.mDOM.offsetWidth;
         var h = container.mDOM.offsetHeight;
+        
         var w_over2 = w / 2; 
         var h_over2 = h / 2;
         
         // Set area interaction
-        mainControls.setAreaInteraction(0, 0, w, h);
-        editPerspControls.setAreaInteraction(0, 0, w_over2, h_over2);
-        editTopControls.setAreaInteraction(w_over2, 0, w_over2, h_over2);
-        editFrontControls.setAreaInteraction(0, h_over2, w_over2, h_over2);
-        editLeftControls.setAreaInteraction(w_over2, h_over2, w_over2, h_over2);
+        mainControls.setAreaInteraction(oX, oY, w, h);
+        editPerspControls.setAreaInteraction(oX, oY, w_over2, h_over2);
+        editTopControls.setAreaInteraction(w_over2 + oX, oY, w_over2, h_over2);
+        editFrontControls.setAreaInteraction(oX, h_over2 + oY, w_over2, h_over2);
+        editLeftControls.setAreaInteraction(w_over2 + oX, h_over2 + oY, w_over2, h_over2);
         
         // Set cameras aspect
         cameras.persp.aspect = w / h;

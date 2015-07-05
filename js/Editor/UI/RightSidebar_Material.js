@@ -5,8 +5,8 @@ var RightSidebar_Material = function(editor) {
     
     var materialClasses = {
 
-		// 'LineBasicMaterial': THREE.LineBasicMaterial,
-		// 'LineDashedMaterial': THREE.LineDashedMaterial,
+		'LineBasicMaterial': THREE.LineBasicMaterial,
+		'LineDashedMaterial': THREE.LineDashedMaterial,
 		'MeshBasicMaterial': THREE.MeshBasicMaterial,
 		'MeshDepthMaterial': THREE.MeshDepthMaterial,
 		// 'MeshFaceMaterial': THREE.MeshFaceMaterial,
@@ -14,7 +14,7 @@ var RightSidebar_Material = function(editor) {
 		'MeshNormalMaterial': THREE.MeshNormalMaterial,
 		'MeshPhongMaterial': THREE.MeshPhongMaterial,
 		// 'PointCloudMaterial': THREE.PointCloudMaterial,
-		// 'ShaderMaterial': THREE.ShaderMaterial,
+		'ShaderMaterial': THREE.ShaderMaterial,
 		// 'SpriteMaterial': THREE.SpriteMaterial,
         // 'SpriteCanvasMaterial': THREE.SpriteCanvasMaterial,
 		// 'Material': THREE.Material
@@ -75,7 +75,7 @@ var RightSidebar_Material = function(editor) {
     
     // VERTEX SHADER
     var materialVertexShaderPanel = new UIPanel();
-    var materialVertexShader = new UIButton('Edit');
+    var materialVertexShader = new UIButton('Edit').setStyle({"width": "200px", "margin": "0px 5px", "border": "none", "padding": "2px"});
 	materialVertexShader.click(function() {
 	
 		events.shaderEdited.dispatch(editor.mEditObject, "vs");
@@ -86,6 +86,76 @@ var RightSidebar_Material = function(editor) {
     materialVertexShaderPanel.add(materialVertexShader);
     
     container.add(materialVertexShaderPanel);
+    
+    // FRAGMENT SHADER
+    var materialFragmentShaderPanel = new UIPanel();
+    var materialFragmentShader = new UIButton('Edit').setStyle({"width": "200px", "margin": "0px 5px", "border": "none", "padding": "2px"});
+	materialFragmentShader.click(function() {
+	
+		events.shaderEdited.dispatch(editor.mEditObject, "fs");
+	
+	});
+    
+    materialFragmentShaderPanel.add(new UIText('Fragment Shader').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialFragmentShaderPanel.add(materialFragmentShader);
+    
+    container.add(materialFragmentShaderPanel);
+    
+    // MAP
+    var materialMapPanel = new UIPanel();
+    var materialMapEnabled = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_MapEnabledLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    var materialMap = new UITexture().setStyle({"margin": "0px 5px"}).onChange(update);
+    
+    materialMapPanel.add(new UIText('Map').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialMapPanel.add(materialMapEnabled);
+    materialMapPanel.add(materialMap);
+    
+    container.add(materialMapPanel);
+
+    // BUMPMAP
+    var materialBumpMapPanel = new UIPanel();
+    var materialBumpMapEnabled = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_BumpMapEnabledLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    var materialBumpMap = new UITexture().setStyle({"margin": "0px 5px"}).onChange(update);
+    
+    materialBumpMapPanel.add(new UIText('Bump Map').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialBumpMapPanel.add(materialBumpMapEnabled);
+    materialBumpMapPanel.add(materialBumpMap);
+    
+    container.add(materialBumpMapPanel);
+    
+    // NORMALMAP
+    var materialNormalMapPanel = new UIPanel();
+    var materialNormalMapEnabled = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_NormalMapEnabledLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    var materialNormalMap = new UITexture().setStyle({"margin": "0px 5px"}).onChange(update);
+    
+    materialNormalMapPanel.add(new UIText('Normal Map').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialNormalMapPanel.add(materialNormalMapEnabled);
+    materialNormalMapPanel.add(materialNormalMap);
+    
+    container.add(materialNormalMapPanel);
+    
+    // SPECULARMAP
+    var materialSpecularMapPanel = new UIPanel();
+    var materialSpecularMapEnabled = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_SpecularMapEnabledLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    var materialSpecularMap = new UITexture().setStyle({"margin": "0px 5px"}).onChange(update);
+    
+    materialSpecularMapPanel.add(new UIText('Specular Map').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialSpecularMapPanel.add(materialSpecularMapEnabled);
+    materialSpecularMapPanel.add(materialSpecularMap);
+    
+    container.add(materialSpecularMapPanel);
+    
+    // ENVMAP
+    var materialEnvMapPanel = new UIPanel();
+    var materialEnvMapEnabled = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_EnvMapEnabledLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    var materialEnvMap = new UITexture().setStyle({"margin": "0px 5px"}).onChange(update);
+    
+    materialEnvMapPanel.add(new UIText('Env Map').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialEnvMapPanel.add(materialEnvMapEnabled);
+    materialEnvMapPanel.add(materialEnvMap);
+    
+    container.add(materialEnvMapPanel);
+    
     
     // SIDE
     var materialSidePanel = new UIPanel();
@@ -131,6 +201,24 @@ var RightSidebar_Material = function(editor) {
     
     container.add(materialBlendingPanel);
     
+    // TRANSPARENT
+    var materialTransparentPanel = new UIPanel();
+    var materialTransparent = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_transparentLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
+    
+    materialTransparentPanel.add(new UIText('Transparent').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialTransparentPanel.add(materialTransparent);
+    
+    container.add(materialTransparentPanel);
+    
+    // OPACITY
+    var materialOpacityPanel = new UIPanel();
+    var materialOpacity = new UINumber(1, 0.05).setRange(0, 1).setStyle({"width": "200px", "margin": "0px 5px", "background-color": "#333", "color": "#eee", "border": "none", "padding": "2px", "font-size": "10px"}).change(update);
+        
+    materialOpacityPanel.add(new UIText('Opacity').setStyle({"width": "65px", "display": "inline-block", "font-size": "12px"}));
+    materialOpacityPanel.add(materialOpacity);   
+    
+    container.add(materialOpacityPanel);
+    
     // WIREFRAME
     var materialWireframePanel = new UIPanel();
     var materialWireframe = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_wireframeLink').setStyle({"border": "none", "vertical-align": "middle", "margin-left": "5px"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
@@ -147,12 +235,21 @@ var RightSidebar_Material = function(editor) {
         var geometry = object.geometry;
         var material = object.material;
         
+		var textureWarning = false;
+		var objectHasUvs = false;
+
+		if ( object instanceof THREE.Sprite ) objectHasUvs = true;
+		if ( geometry instanceof THREE.Geometry && geometry.faceVertexUvs[ 0 ].length > 0 ) objectHasUvs = true;
+		if ( geometry instanceof THREE.BufferGeometry && geometry.attributes.uv !== undefined ) objectHasUvs = true;        
+        
         if (check(material)) {
             
             // Change material
             if (material instanceof materialClasses[materialClass.getValue()] === false) {
                 
                 material = new materialClasses[materialClass.getValue()]();
+                if (check(material.vertexColors))
+                    material.vertexColors = THREE.FaceColors;
                 object.material = material;
                 
             }
@@ -181,6 +278,91 @@ var RightSidebar_Material = function(editor) {
                 
             }
             
+            if (material.map !== undefined) {
+             
+                var mapEnabled = materialMapEnabled.getValue();
+                
+                if ( objectHasUvs ) {
+                 
+                    material.map = mapEnabled ? materialMap.getValue() : null;
+                    material.needsUpdate = true;
+                    
+                } else {
+                 
+                    if (mapEnabled) textureWarning = true;
+                
+                }
+                
+            }
+            
+            if (material.bumpMap !== undefined) {
+             
+                var bumpMapEnabled = materialBumpMapEnabled.getValue();
+                
+                if ( objectHasUvs ) {
+                 
+                    material.bumpMap = bumpMapEnabled ? materialBumpMap.getValue() : null;
+                    material.needsUpdate = true;
+                    
+                } else {
+                 
+                    if (bumpMapEnabled) textureWarning = true;
+                
+                }
+                
+            }
+            
+            if (material.normalMap !== undefined) {
+             
+                var normalMapEnabled = materialMapEnabled.getValue();
+                
+                if ( objectHasUvs ) {
+                 
+                    material.normalMap = normalMapEnabled ? materialNormalMap.getValue() : null;
+                    material.needsUpdate = true;
+                    
+                } else {
+                 
+                    if (normalMapEnabled) textureWarning = true;
+                
+                }
+                
+            }
+            
+            if (material.specularMap !== undefined) {
+             
+                var specularMapEnabled = materialSpecularMapEnabled.getValue();
+                
+                if ( objectHasUvs ) {
+                 
+                    material.specularMap = specularMapEnabled ? materialSpecularMap.getValue() : null;
+                    material.needsUpdate = true;
+                    
+                } else {
+                 
+                    if (specularMapEnabled) textureWarning = true;
+                
+                }
+                
+            }
+            
+            if (material.envMap !== undefined) {
+             
+                var specularEnvMapEnabled = materialEnvMapEnabled.getValue();
+                
+                if ( objectHasUvs ) {
+                 
+                    material.envMap = specularEnvMapEnabled ? materialEnvMap.getValue() : null;
+                    material.needsUpdate = true;
+                    
+                } else {
+                 
+                    if (specularEnvMapEnabled) textureWarning = true;
+                
+                }
+                
+            }
+            
             if (check(material.side)) {
                 
                 material.side = parseInt(materialSide.getValue());                
@@ -196,6 +378,19 @@ var RightSidebar_Material = function(editor) {
             if (check(material.blending)) {
              
                 material.blending = parseInt(materialBlending.getValue());
+                
+            }
+            
+            if (check(material.transparent)) {
+                
+                material.transparent = materialTransparent.getValue();
+                
+            }
+            
+            if (check(material.opacity)) {
+                
+                material.opacity = materialOpacity.getValue();
+                
                 
             }
             
@@ -220,9 +415,18 @@ var RightSidebar_Material = function(editor) {
 			'emissive': materialEmissivePanel,
 			'specular': materialSpecularPanel,
 			'shininess': materialShininessPanel,
+            'vertexShader': materialVertexShaderPanel,
+            'fragmentShader': materialFragmentShaderPanel,
+            'map': materialMapPanel,
+			'bumpMap': materialBumpMapPanel,
+			'normalMap': materialNormalMapPanel,
+			'specularMap': materialSpecularMapPanel,
+			'envMap': materialEnvMapPanel,
 			'side': materialSidePanel,
 			'shading': materialShadingPanel,
             'blending': materialBlendingPanel,
+            'transparent': materialTransparentPanel,
+            'opacity': materialOpacityPanel,
             'wireframe': materialWireframePanel
 		};
          
@@ -230,7 +434,7 @@ var RightSidebar_Material = function(editor) {
 
 		for ( var property in properties ) {
 
-			properties[ property ].setVisible(check(material[ property ]));
+			properties[ property ].setVisible(material[ property ] !== undefined);
 
 		}
         
@@ -273,6 +477,42 @@ var RightSidebar_Material = function(editor) {
                 
             }
             
+            if (material.map !== undefined) {
+             
+                materialMapEnabled.setValue(material.map !== null);
+                materialMap.setValue(material.map);
+                
+            }
+            
+            if (material.bumpMap !== undefined) {
+             
+                materialBumpMapEnabled.setValue(material.bumpMap !== null);
+                materialBumpMap.setValue(material.bumpMap);
+                
+            }
+            
+            if (material.normalMap !== undefined) {
+             
+                materialNormalMapEnabled.setValue(material.normalMap !== null);
+                materialNormalMap.setValue(material.normalMap);
+                
+            }
+            
+            if (material.specularMap !== undefined) {
+             
+                materialSpecularMapEnabled.setValue(material.specularMap !== null);
+                materialSpecularMap.setValue(material.specularMap);
+                
+            }
+            
+            if (material.envMap !== undefined) {
+             
+                materialEnvMapEnabled.setValue(material.envMap !== null);
+                materialEnvMap.setValue(material.envMap);
+                
+            }
+            
+            
             if (check(material.side)) {
                 
                 materialSide.setValue( material.side );
@@ -288,6 +528,18 @@ var RightSidebar_Material = function(editor) {
             if (check(material.blending)) {
              
                 materialBlending.setValue( material.blending );
+                
+            }
+            
+            if (check(material.transparent)) {
+                
+                materialTransparent.setValue( material.transparent );
+                
+            }
+            
+            if (check(material.opacity)) {
+                
+                materialOpacity.setValue( material.opacity );
                 
             }
             

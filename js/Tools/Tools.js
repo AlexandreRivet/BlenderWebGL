@@ -23,3 +23,16 @@ function ZeroBeforeString(str, max) {
     str = str.toString();
     return str.length < max ? ZeroBeforeString("0" + str, max) : str;    
 }
+
+function exportString(content, filename) {
+    
+    var blob = new Blob([content], {type: 'text/plain'});
+    var objectURL = URL.createObjectURL(blob);
+    
+    var link = document.createElement('a');
+    link.href = objectURL;
+    link.download = filename || 'data.json';
+    link.target = '_blank';
+    link.click();
+    
+}

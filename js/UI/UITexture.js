@@ -17,8 +17,30 @@ var UITexture = function ()
         
     });
     
+    var canvas = document.createElement( 'canvas' );
+	canvas.width = 32;
+	canvas.height = 16;
+	canvas.style.cursor = 'pointer';
+	canvas.style.marginRight = '5px';
+	canvas.style.border = '1px solid #888';
+	canvas.addEventListener( 'click', function ( event ) {
+
+		input.click();
+
+	}, false );
+	canvas.addEventListener( 'drop', function ( event ) {
+
+		event.preventDefault();
+		event.stopPropagation();
+		loadFile( event.dataTransfer.files[ 0 ] );
+
+	}, false );
+	dom.appendChild( canvas );
+    
     var name = document.createElement('input');
     name.disabled = true;
+    name.style.width = '133px';
+	name.style.border = '1px solid #ccc';
     dom.appendChild(name);
     
     var loadFile = function(file) {
@@ -73,7 +95,7 @@ UITexture.prototype.getValue = function() {
 
 UITexture.prototype.setValue = function(texture) {
   
-    var name = this.mDOM.children[0];
+    var name = this.mDOM.children[1];
     
     if (check(texture)) {
         
