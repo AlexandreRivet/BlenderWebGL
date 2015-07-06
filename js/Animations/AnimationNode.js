@@ -1,20 +1,10 @@
-/*
- * 
- * CLASSE ANIMATIONNODE
- * 
- * AnimationNode.prototype.setKeyframe = function(time)
- * AnimationNode.prototype.setPosition = function(position)
- * AnimationNode.prototype.setOrientation = function(rotation)
- * AnimationNode.prototype.setScale = function(scale)
- * AnimationNode.prototype.setRotation = function(angle,axis)
- * AnimationNode.prototype.getKeyframe = function()
- * AnimationNode.prototype.getPosition = function()
- * AnimationNode.prototype.getRotation = function()
- * AnimationNode.prototype.getScale = function()
- * AnimationNode.prototype.changeState = function(nodeAnimation)
- * AnimationNode.prototype.clone = function()
- * 
- */
+/**
+	Class AnimationNode
+	
+	@brief		AnimationNode Class
+	@author		Maxime HELAINE
+	@date		27/06/2015
+*/
 
 AnimationNode = function(keyframe, pos, rot, scale) 
 {

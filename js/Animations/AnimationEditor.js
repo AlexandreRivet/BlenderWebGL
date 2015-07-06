@@ -1,3 +1,11 @@
+/**
+	Class AnimationEditor
+	
+	@brief		AnimationEditor Class
+	@author		Maxime HELAINE
+	@date		27/06/2015
+*/
+
 var ANIMATIONEDITOR = null;
 
 AnimationEditor = function() 
@@ -9,7 +17,6 @@ AnimationEditor = function()
     this.mCursorSelected;
     this.mPlayButton;
     this.mCurrentTimeEditor;
-    
 };
 
 /***********************************************************************************************\
@@ -75,7 +82,7 @@ AnimationEditor.prototype.removeKeyframeMarkerSelected = function()
             animation = currentMarker.mAnimation;
             animation.removeKey(currentMarker.mTime);
             this.mAllKeyFrameMarkers.splice(i,1);
-            this.updateDisplay(animation);
+            this.updateDisplayCursors(animation);
             this.mCursorSelected = null;
             return;
         } 
@@ -114,7 +121,12 @@ AnimationEditor.prototype.updateCurrentKeyFrames = function(animation)
             this.mCurrentKeyFrameMarkers.push(this.mAllKeyFrameMarkers[i]);   
     }
 };
-AnimationEditor.prototype.updateDisplay = function(animation)
+AnimationEditor.prototype.updateDisplayAnimation = function(animation, editor)
+{
+    animation.playAnimation(parseFloat(this.mCurrentTimeEditor.getValue()));
+    editor.mEvents.sceneGraphChanged.dispatch();
+}
+AnimationEditor.prototype.updateDisplayCursors = function(animation)
 {
     this.updateCurrentKeyFrames(animation);
     this.mCursorArea.clean();

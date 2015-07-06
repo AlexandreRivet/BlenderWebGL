@@ -1,3 +1,11 @@
+/**
+	Class KeyFrameMarker
+	
+	@brief		KeyFrameMarker Class
+	@author		Maxime HELAINE
+	@date		27/06/2015
+*/
+
 KeyFrameMarker = function(cursor, animationnode, time, animation) 
 {	
 	this.mCursor = cursor;

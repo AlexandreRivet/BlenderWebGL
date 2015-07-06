@@ -1,19 +1,10 @@
-/*
- * 
- * CLASSE Animation
- * 
- * Animation.prototype.start = function(startAnimation,length)
- * Animation.prototype.stop = function()
- * Animation.prototype.playAnimation = function()
- * Animation.prototype.playInverseAnimation = function()
- * Animation.prototype.pause = function()
- * Animation.prototype.setSpeed = function(coefficient)
- * Animation.prototype.setNbLoopMax = function(nbLoop)
- * Animation.prototype.isLoop = function(value)
- * Animation.prototype.isPong = function(value)
- * Animation.prototype.linearInterpolation = function(factor,vec1,vec2)
- * 
- */
+/**
+	Class Animation
+	
+	@brief		Animation Class
+	@author		Maxime HELAINE
+	@date		27/06/2015
+*/
 
 Animation = function(object, startTimeAnimation, interpolationMode, rotationInterpolationMode) 
 {	
@@ -149,6 +140,7 @@ Animation.prototype.refreshNodePosRotScale = function()
     this.mObject.rotation.copy(this.mCurrentRotation);
     this.mObject.scale.copy(this.mCurrentScale);
 };
+
 /***********************************************************************************************\
 * Refresh la position du mesh
 \***********************************************************************************************/
@@ -161,6 +153,16 @@ Animation.prototype.resetNodePosRotScale = function()
     
     this.mObject.rotation.copy(this.mStartRot);
     this.mObject.scale.copy(this.mStartScale);
+};
+Animation.prototype.updateStartPosRotScale = function()
+{
+	this.mStartPos.copy(this.mObject.position);
+    
+    //Old Version
+    //this.mObject.quaternion.copy(this.mCurrentRotation);
+    
+    this.mStartRot.copy(this.mObject.rotation);
+    this.mStartScale.copy(this.mObject.scale);
 };
 /***********************************************************************************************\
 * Fonction(s) d'interpolation(s)

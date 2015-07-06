@@ -47,8 +47,7 @@ var AnimationPanel = function(editor) {
         ANIMATIONEDITOR.getCurrentTimeEditor().setValue(currentTime);
         if(check(ANIMATIONMGR.mAnimationSelected))
         {
-            ANIMATIONMGR.mAnimationSelected.playAnimation(currentTime);
-            editor.mEvents.sceneGraphChanged.dispatch();
+            ANIMATIONEDITOR.updateDisplayAnimation(ANIMATIONMGR.mAnimationSelected, editor);
         }
         
     });
@@ -177,9 +176,25 @@ var AnimationPanel = function(editor) {
             var height = editorCursor.mDOM.offsetHeight;
             cursorKey.setStyle({'left':x+'px', 'height':height+'px'});
             cursorKey.click(function(e) {
+                if(ANIMATIONMGR.getState() == STATE.PLAY || ANIMATIONMGR.getState() == STATE.PAUSE)
+                    return;
+                
                 e.stopPropagation();
                 ANIMATIONEDITOR.mCursorSelected = cursorKey;
                 ANIMATIONEDITOR.selectCursor(cursorKey);
+                
+                //Place le cursor principal sur le curseur secondaire
+                /*debugger;
+                var x = e.pageX;
+                ANIMATIONEDITOR.getCursorPrincipal().setStyle({'left':x+'px'});
+        
+                var currentTime = getTimeWithPos(x, ANIMATIONEDITOR.mCursorArea.mDOM.offsetWidth, ANIMATIONMGR.mEnd);
+                ANIMATIONEDITOR.getCurrentTimeEditor().setValue(currentTime);
+                if(check(ANIMATIONMGR.mAnimationSelected))
+                {
+                    ANIMATIONEDITOR.updateDisplayAnimation(ANIMATIONMGR.mAnimationSelected, editor);
+                }*/
+                
             });
             ANIMATIONEDITOR.addKeyFrameAll(new KeyFrameMarker(cursorKey, currentAnimation.getKey(currentTime) ,currentTime, currentAnimation));
             ANIMATIONEDITOR.updateCurrentKeyFrames(currentAnimation);
@@ -194,6 +209,10 @@ var AnimationPanel = function(editor) {
         if(ANIMATIONMGR.getState() == STATE.PLAY || ANIMATIONMGR.getState() == STATE.PAUSE)
             return;
         ANIMATIONEDITOR.removeKeyframeMarkerSelected();
+        if(check(ANIMATIONMGR.mAnimationSelected))
+        {
+            ANIMATIONEDITOR.updateDisplayAnimation(ANIMATIONMGR.mAnimationSelected, editor);
+        }
     });
     toolPanelButtons.add(buttonRemoveKey);
     
