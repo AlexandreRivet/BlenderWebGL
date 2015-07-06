@@ -58,6 +58,8 @@ Menubar.File = function(editor) {
         }
         
         var content = editor.mScene.toJSON();
+        // content.animations = ANIMATIONMGR.toJSON();
+        
         content = JSON.stringify( content, null, '\t' );
 		content = content.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
         

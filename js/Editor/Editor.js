@@ -263,8 +263,8 @@ Editor.prototype.setMode = function(mode) {
         //this.mEditionHelpersScene.add(helper);
         
         // Add VertexColor for edit
-        // this.mEditObject.material.vertexColors = THREE.FaceColors;
-        this.mEditObject.material.vertexColors = THREE.VertexColors;
+        this.mEditObject.material.vertexColors = THREE.FaceColors;
+        // this.mEditObject.material.vertexColors = THREE.VertexColors;
         this.mEditObject.material.needsUpdate = true;
         
     } else if (this.mEditMode === EditMode.SCENE) {

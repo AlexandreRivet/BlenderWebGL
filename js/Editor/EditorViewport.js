@@ -40,6 +40,7 @@ var Viewport = function (editor) {
     cameras.left.position.fromArray([-250, 0, 0]);
     cameras.left.lookAt(new THREE.Vector3(0, 0, 0));
     
+    var shaderEditorOpened = false;    
     
     // Transform control
     var transformControls = new THREE.TransformControls(cameras.persp, container.mDOM);
@@ -133,6 +134,9 @@ var Viewport = function (editor) {
     
     var click = function() {
         
+        if (shaderEditorOpened)
+            return;
+        
         // To avoid drag
         if (mouseDownPosition.distanceTo(mouseUpPosition) === 0) {
    
@@ -182,6 +186,9 @@ var Viewport = function (editor) {
     
     var move = function() {
         
+        if (shaderEditorOpened)
+            return;
+        
         var intersects = [];
         if (editor.mEditMode === EditMode.SCENE)
             return;
@@ -195,11 +202,9 @@ var Viewport = function (editor) {
             if (intersected.faceIndex != lastFaceIndex)
             {                
                 if (lastFaceIndex != -1)
-                    editor.mEditObject.geometry.faces[lastFaceIndex].vertexColors[0] = editor.mEditObject.material.color;
+                    editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
                 
-                debugger;
-                
-                editor.mEditObject.geometry.faces[intersected.faceIndex].vertexColors[0] = new THREE.Color(0xff0000);
+                editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0xff0000);
                 editor.mEditObject.geometry.colorsNeedUpdate = true;            
                 
                 lastFaceIndex = intersected.faceIndex;
@@ -212,7 +217,7 @@ var Viewport = function (editor) {
         
             if (lastFaceIndex != -1) {
                 
-                editor.mEditObject.geometry.faces[lastFaceIndex].vertexColors[0] = editor.mEditObject.material.color;
+                editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
                 editor.mEditObject.geometry.colorsNeedUpdate = true;
                 
                 lastFaceIndex = -1;
@@ -427,6 +432,10 @@ var Viewport = function (editor) {
         editFrontControls.enabled = false;
         editLeftControls.enabled = false;
         
+        // Disable mouse interaction
+        shaderEditorOpened = true;
+        
+        
     });
     
     events.shaderClosed.add(function() {
@@ -436,6 +445,9 @@ var Viewport = function (editor) {
         editTopControls.enabled = true;
         editFrontControls.enabled = true;
         editLeftControls.enabled = true;
+        
+        // Enable mouse interaction
+        shaderEditorOpened = false;
         
     });
     
