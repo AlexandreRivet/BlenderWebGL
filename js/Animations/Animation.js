@@ -42,14 +42,26 @@ Animation = function(object, startTimeAnimation, interpolationMode, rotationInte
 
 Animation.prototype.addKey = function(key)
 {
-    if(key instanceof AnimationNode)
-        this.mSceneNodeAnimMap.push(key);
-    else
-        this.mSceneNodeAnimMap.push(new AnimationNode(key, this.mObject.position.clone(), this.mObject.rotation.clone(), this.mObject.scale.clone()));
+    this.mSceneNodeAnimMap.push(key);
     
     this.mSceneNodeAnimMap.sort(function(keyA, keyB) {
             return (keyA.m_Keyframe - keyB.m_Keyframe);
         });
+    
+    this.mStartAnimation = (check(this.mSceneNodeAnimMap[0])) ? this.mSceneNodeAnimMap[0].getKeyframe() : this.mStartAnimation;
+    //Old Version
+    //else
+        //this.mSceneNodeAnimMap.push(new AnimationNode(key, this.mObject.position.clone(), this.mObject.quaternion.clone(), this.mObject.scale.clone()));
+}
+Animation.prototype.addKeyByTime = function(time)
+{
+    this.mSceneNodeAnimMap.push(new AnimationNode(time, this.mObject.position.clone(), this.mObject.rotation.clone(), this.mObject.scale.clone()));
+    
+    this.mSceneNodeAnimMap.sort(function(keyA, keyB) {
+            return (keyA.m_Keyframe - keyB.m_Keyframe);
+        });
+    
+    this.mStartAnimation = (check(this.mSceneNodeAnimMap[0])) ? this.mSceneNodeAnimMap[0].getKeyframe() : this.mStartAnimation;
     //Old Version
     //else
         //this.mSceneNodeAnimMap.push(new AnimationNode(key, this.mObject.position.clone(), this.mObject.quaternion.clone(), this.mObject.scale.clone()));
@@ -59,17 +71,37 @@ Animation.prototype.setKey = function(key)
     for(var i = 0; i < this.mSceneNodeAnimMap.length; i++)
     {
         currentSceneNodeAnim = this.mSceneNodeAnimMap[i];
-        if(key == currentSceneNodeAnim.getKeyframe())
-            this.mSceneNodeAnimMap[i] = new AnimationNode(key, this.mObject.position.clone(), this.mObject.rotation.clone(), this.mObject.scale.clone());
+        if(key == currentSceneNodeAnim)
+            this.mSceneNodeAnimMap[i] = key;
     }
 }
-Animation.prototype.getKey = function(id)
+Animation.prototype.setKeyByTime = function(time)
+{
+    for(var i = 0; i < this.mSceneNodeAnimMap.length; i++)
+    {
+        currentSceneNodeAnim = this.mSceneNodeAnimMap[i];
+        if(time == currentSceneNodeAnim.getKeyframe())
+            this.mSceneNodeAnimMap[i] = new AnimationNode(time, this.mObject.position.clone(), this.mObject.rotation.clone(), this.mObject.scale.clone());
+    }
+}
+Animation.prototype.getKey = function(key)
 {
     var currentSceneNodeAnim;
     for(var i = 0; i < this.mSceneNodeAnimMap.length; i++)
     {
         currentSceneNodeAnim = this.mSceneNodeAnimMap[i];
-        if(id == currentSceneNodeAnim.getKeyframe())
+        if(key == currentSceneNodeAnim)
+            return currentSceneNodeAnim;
+    }
+    return null;
+}
+Animation.prototype.getKeyByTime = function(time)
+{
+    var currentSceneNodeAnim;
+    for(var i = 0; i < this.mSceneNodeAnimMap.length; i++)
+    {
+        currentSceneNodeAnim = this.mSceneNodeAnimMap[i];
+        if(time == currentSceneNodeAnim.getKeyframe())
             return currentSceneNodeAnim;
     }
     return null;
@@ -82,14 +114,25 @@ Animation.prototype.removeKey = function(key)
         if(key == currentSceneNodeAnim.getKeyframe())
             this.mSceneNodeAnimMap.splice(i,1);
     }
+    
+    if(this.mSceneNodeAnimMap.length != 0)
+        this.mStartAnimation = this.mSceneNodeAnimMap[0].getKeyframe();
 }
 /***********************************************************************************************\
 * playAnimation
 \***********************************************************************************************/
 Animation.prototype.playAnimation = function(currentTime)
 {
-    if(currentTime < this.mStartAnimation)
+    var nbKeyFrame = this.mSceneNodeAnimMap.length;
+    if(nbKeyFrame == 0)
         return;
+    
+    var currentTime_tmp = currentTime;
+    if(currentTime < this.mStartAnimation)
+        currentTime = this.mSceneNodeAnimMap[0].m_Keyframe;
+    
+    if(currentTime > this.mSceneNodeAnimMap[nbKeyFrame - 1].m_Keyframe)
+        currentTime = this.mSceneNodeAnimMap[nbKeyFrame - 1].m_Keyframe;
     
 	for(var i = 0; i < this.mSceneNodeAnimMap.length ; i++)
 	{

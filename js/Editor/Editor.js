@@ -217,8 +217,10 @@ Editor.prototype.selectObject = function (object) {
     
     if (this.mEditObject === object)
         return;
+    var animationSelected = ANIMATIONMGR.getAnimationSelectedByObject(object);
+    ANIMATIONMGR.mAnimationSelected = animationSelected;
     
-    ANIMATIONEDITOR.updateDisplayCursors(ANIMATIONMGR.getAnimationSelectedByObject(object));
+    ANIMATIONEDITOR.updateDisplayCursors(animationSelected);
     this.mEditObject = object;
     
     this.mEvents.objectSelected.dispatch(object);

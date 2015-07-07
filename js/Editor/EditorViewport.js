@@ -610,6 +610,7 @@ var Viewport = function (editor) {
             var currentTime = ANIMATIONMGR.mDurationPlay/1000;
             ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
             ANIMATIONEDITOR.updateTimeEditorAnimation(currentTime);
+
             if(ANIMATIONMGR.getState() == STATE.STOP)
             {
                 ANIMATIONEDITOR.getPlayButton().setTextContent('>');

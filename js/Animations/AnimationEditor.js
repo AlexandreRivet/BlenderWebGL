@@ -123,9 +123,9 @@ AnimationEditor.prototype.updateCurrentKeyFrames = function(animation)
 };
 AnimationEditor.prototype.updateDisplayAnimation = function(animation, editor)
 {
-    animation.playAnimation(parseFloat(this.mCurrentTimeEditor.getValue()));
+    animation.playAnimation(parseFloat(this.mCurrentTimeEditor.getValue()), true);
     editor.mEvents.sceneGraphChanged.dispatch();
-}
+};
 AnimationEditor.prototype.updateDisplayCursors = function(animation)
 {
     this.updateCurrentKeyFrames(animation);
@@ -135,14 +135,37 @@ AnimationEditor.prototype.updateDisplayCursors = function(animation)
     {
        this.mCursorArea.add(this.mCurrentKeyFrameMarkers[i].getCursor());    
     }
-}
+};
+AnimationEditor.prototype.clearByObject = function(object)
+{
+    var animation_tmp = ANIMATIONMGR.getAnimationSelectedByObject(object);
+    var indexArray = new Array();
+    for(var i = 0; i < this.mAllKeyFrameMarkers.length; i++)
+    {
+        if(animation_tmp === this.mAllKeyFrameMarkers[i].mAnimation)
+        {
+            this.mAllKeyFrameMarkers.splice(i,1);
+            i--;
+        }
+            
+    }
+    for(var i = 0; i < ANIMATIONMGR.mAnimationList.length; i++)
+    {
+        if(animation_tmp === ANIMATIONMGR.mAnimationList[i])
+        {
+            ANIMATIONMGR.mAnimationList.splice(i,1);
+            break;
+        }      
+    }
+    
+};
 AnimationEditor.prototype.clear = function()
 {
     this.mAllKeyFrameMarkers.splice(0,this.mAllKeyFrameMarkers.length);
     this.mCurrentKeyFrameMarkers.splice(0,this.mCurrentKeyFrameMarkers.length);
     this.mCursorArea.clean();
     this.mPlayButton.setTextContent('>');
-}
+};
 
 
 ANIMATIONEDITOR = new AnimationEditor();

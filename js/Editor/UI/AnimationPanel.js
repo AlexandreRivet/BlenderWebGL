@@ -48,6 +48,7 @@ var AnimationPanel = function(editor) {
         if(check(ANIMATIONMGR.mAnimationSelected))
         {
             ANIMATIONEDITOR.updateDisplayAnimation(ANIMATIONMGR.mAnimationSelected, editor);
+            editor.mEvents.objectChanged.dispatch(ANIMATIONMGR.mAnimationSelected.mObject);
         }
         
     });
@@ -168,7 +169,9 @@ var AnimationPanel = function(editor) {
                 }
                ANIMATIONMGR.setAnimationSelected(currentAnimation);     
             }
-            ANIMATIONMGR.addKeyAnimation(currentTime);
+            var state = ANIMATIONMGR.addKeyAnimationByTime(currentTime);
+            if(!state)
+                return;
             var cursorKey = new UIPanel();
             cursorKey.addClass('AnimationEditorCursor');
             editorPanelAreaScroll.add(cursorKey);

@@ -21,8 +21,14 @@ var TYPE = {
     PONG: 2
 };
 
+var ERRORANIM = {
+    BEFORESTARTTIME : -1,
+    AFTERLASTTIME : -2
+};
+
 Object.freeze(STATE);
 Object.freeze(TYPE);
+Object.freeze(ERRORANIM);
 
 AnimationManager = function(name, start, end) 
 {	
@@ -160,16 +166,33 @@ AnimationManager.prototype.getKeys = function(animation)
     var animationSelected = animation || this.mAnimationSelected;
     return animationSelected.mSceneNodeAnimMap;
 };
-    
 AnimationManager.prototype.addKeyAnimation = function(key)
 {
     if(!check(this.mAnimationSelected))
-        return;
+        return 0;
     
     if(check(this.mAnimationSelected.getKey(key)))
+    {
         this.mAnimationSelected.setKey(key);
+        return 0;
+    }   
     else
-        this.mAnimationSelected.addKey(key);    
+        this.mAnimationSelected.addKey(key);   
+    return 1;
+};    
+AnimationManager.prototype.addKeyAnimationByTime = function(time)
+{
+    if(!check(this.mAnimationSelected))
+        return 0;
+    
+    if(check(this.mAnimationSelected.getKeyByTime(time)))
+    {
+        this.mAnimationSelected.setKeyByTime(time);
+        return 0;
+    }   
+    else
+        this.mAnimationSelected.addKeyByTime(time);   
+    return 1;
 };
     
 /***********************************************************************************************\

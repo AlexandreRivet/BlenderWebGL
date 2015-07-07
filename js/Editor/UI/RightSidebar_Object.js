@@ -123,9 +123,13 @@ RightSidebar.Object3D = function(editor) {
       
         var object = editor.mEditObject;
         
-        var parent = object.parent;        
+        var parent = object.parent; 
+        ANIMATIONEDITOR.clearByObject(object);
+        ANIMATIONEDITOR.mCurrentKeyFrameMarkers.splice(0,ANIMATIONEDITOR.mCurrentKeyFrameMarkers.length);
+        ANIMATIONEDITOR.mCursorArea.clean();
         editor.removeObject(object);
         editor.selectObject(parent);
+       
         
     });
     var btn_edit = new UIButton('Edit object').setStyle({"padding": "2px", "width": "100px"}).click(function(e) {
@@ -178,6 +182,7 @@ RightSidebar.Object3D = function(editor) {
         
         
     });
+    
     
     function updateScaleX() {
         
