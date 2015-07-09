@@ -16,6 +16,8 @@ $(document).ready(function () {
     var animationPanel = new AnimationPanel(editor);
     document.body.appendChild(animationPanel.mDOM);
     
+    ANIMATIONMGR = new AnimationManager("AnimMgr", 0.0, 10.0, editor);
+    
     var windowResize = function(e) {
         
         editor.mEvents.windowResized.dispatch();

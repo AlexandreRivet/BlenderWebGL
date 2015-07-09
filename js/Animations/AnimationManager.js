@@ -30,7 +30,7 @@ Object.freeze(STATE);
 Object.freeze(TYPE);
 Object.freeze(ERRORANIM);
 
-AnimationManager = function(name, start, end) 
+AnimationManager = function(name, start, end, editor) 
 {	
 	this.mName = name || "Unknown";
 	this.mAnimationList = new Array();
@@ -49,6 +49,8 @@ AnimationManager = function(name, start, end)
 	this.mDurationPlay = 0;
     this.mLastTime = 0;
     this.mElapsedTime = 0;
+    
+    this.mEditor = editor;
 };
 
 /***********************************************************************************************\
@@ -309,6 +311,53 @@ AnimationManager.prototype.clear = function()
 {
     this.stop();
     this.mAnimationList.splice(0,this.mAnimationList.length);
-}
+};
+
+AnimationManager.prototype.toJSON = function()
+{
+    var animations = new Array();
     
-ANIMATIONMGR = new AnimationManager("AnimMgr",0.0,10.0);
+    for(var i = 0; i < this.mAnimationList.length; i++) {
+        
+        var animation = this.mAnimationList[i];
+        var animToJSON = {};
+        
+        console.log(animation);
+        
+        animToJSON.startAnimation = animation.mStartAnimation;
+        
+        animToJSON.object = animation.mObject.uuid;
+        animToJSON.startPos = animation.mStartPos;
+        animToJSON.startRot = animation.mStartRot;
+        animToJSON.startScale = animation.mStartScale;
+        
+        animToJSON.interpolationMode = animation.mInterpolationMode;
+        animToJSON.rotationInterpolationMode = animation.mRotationInterpolationMode;
+        
+        animToJSON.keyframes = new Array();
+        
+        for (var j = 0; j < animation.mSceneNodeAnimMap.length; j++) {
+            
+            animToJSON.keyframes.push(animation.mSceneNodeAnimMap[j]);
+            
+        }
+        
+        animations.push(animToJSON);
+        
+    }
+    
+    return animations;
+};
+
+ANIMATIONMGR.prototype.fromJSON = function(json) {
+    
+    for (var i = 0; i < json.length; i++) {
+        
+        var animationJSON = json[i];
+        var animation = new Animation(/*  */, animationJSON.startAnimation, animationJSON.interpolationMode, animation.rotationInterpolationMode)
+        
+        
+        
+    }
+    
+};
