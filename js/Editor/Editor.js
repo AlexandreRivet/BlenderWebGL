@@ -8,6 +8,13 @@ var EditMode =
     };
 Object.freeze(EditMode);
 
+var SelectionMode =
+    {
+        POINTS: 1,
+        FACES: 2
+    };
+Object.freeze(SelectionMode);
+
 var Editor = function (name) {
     'use strict';
     
@@ -17,6 +24,8 @@ var Editor = function (name) {
       
         // Clear the editor
         editorCleared : new signals.Signal(),
+        
+        selectionModeChanged: new signals.Signal(),
         
         transformModeChanged: new signals.Signal(),
         
@@ -76,12 +85,15 @@ var Editor = function (name) {
     this.mMaterials = {};
     this.mTextures = {};
     
+    
     this.mEditObject = null;
+    this.mMaterialEditObject = null;
+    
     this.mTransformEditObject = {"position": new THREE.Vector3(), "rotation": new THREE.Euler(), "scale": new THREE.Vector3()};
     
     this.mHelpers = {};
     
-    this.mEditMode = EditMode.SCENE;    
+    this.mEditMode = EditMode.SCENE;   
 };
 
 Editor.prototype.getName = function () {
@@ -257,18 +269,17 @@ Editor.prototype.setMode = function(mode) {
         this.mEditObject.rotation.set(0, 0, 0);
         this.mEditObject.scale.set(1, 1, 1);
         
+        // Change material just for interaction
+        this.mMaterialEditObject = this.mEditObject.material;
+        this.mEditObject.material = new THREE.MeshBasicMaterial({'color': 0xfffffff, 'vertexColors': THREE.FaceColors});
+        
         this.mEditionScene.add(this.mEditObject);
         
         // Add Edges helper
         //var helper = new THREE.WireframeHelper(this.mEditObject);
         //helper.material.color.set( 0xffffff );
         //this.mEditionHelpersScene.add(helper);
-        
-        // Add VertexColor for edit
-        this.mEditObject.material.vertexColors = THREE.FaceColors;
-        // this.mEditObject.material.vertexColors = THREE.VertexColors;
-        this.mEditObject.material.needsUpdate = true;
-        
+    
     } else if (this.mEditMode === EditMode.SCENE) {
         
         // Clear Edition Scene
@@ -285,14 +296,13 @@ Editor.prototype.setMode = function(mode) {
         this.mEditObject.position.copy(this.mTransformEditObject.position);
         this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
         this.mEditObject.scale.copy(this.mTransformEditObject.scale);
- 
+        
+        // Reaffect material for the real scene
+        this.mEditObject.material = this.mMaterialEditObject;        
+        
         this.mScene.add(this.mEditObject);
         this.mEvents.sceneGraphChanged.dispatch();
         this.mEvents.objectSelected.dispatch(this.mEditObject);
-        
-        // Remove VertexColor
-        this.mEditObject.material.vertexColors = THREE.NoColors;
-        this.mEditObject.material.needsUpdate = true;
         
     }
     

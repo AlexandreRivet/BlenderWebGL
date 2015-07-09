@@ -16,14 +16,25 @@ var Viewport = function (editor) {
     // Objects
     var objects = [];
     
+    // Maillage    
+    var selectionMode = SelectionMode.POINTS;
+    var verticesMgr = new VerticesManager(editor);
+    var facesMgr = new FacesManager(editor);
+    
+    // For Keyboard
+    var ctrlPressed = false;
+    
     // Edition
-    var lastFaceIndex = -1;
+    var lastFaceIndex = -1;    
     
     // Helpers
     var gridScene = new THREE.GridHelper(400, 25);
     var gridEdition = new THREE.GridHelper(400, 25);
+    var objectForSelection = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({'color': 0x000000}));
+    
     sceneHelpers.add(gridScene);
     editionHelpersScene.add(gridEdition);
+    editionHelpersScene.add(objectForSelection);
     
     // Set cameras
     var cameras = editor.mCameras;
@@ -41,6 +52,42 @@ var Viewport = function (editor) {
     cameras.left.lookAt(new THREE.Vector3(0, 0, 0));
     
     var shaderEditorOpened = false;    
+    
+    // Transform Control Selection
+    var selectionTransformControl = new THREE.TransformControls(cameras.persp, container.mDOM);
+    selectionTransformControl.setMode( 'translate' );
+    
+    selectionTransformControl.addEventListener('change', function() {
+    
+        var object = selectionTransformControl.object;
+        
+        /*if (check(object)) {
+         
+            if (
+            
+        }*/
+                
+        render();
+        
+    });
+    
+    selectionTransformControl.addEventListener('mouseDown', function() {
+        
+        editPerspControls.enabled = false;
+        
+    });
+    
+    selectionTransformControl.addEventListener('mouseUp', function() {
+        
+        selectionTransformControl.update();
+        editPerspControls.enabled = true; 
+        
+        render();
+        
+    });
+    // selectionTransformControl.attach(objectForSelection);
+    // editionHelpersScene.add(selectionTransformControl);
+    
     
     // Transform control
     var transformControls = new THREE.TransformControls(cameras.persp, container.mDOM);
@@ -155,6 +202,7 @@ var Viewport = function (editor) {
                 if (editor.mEditMode === EditMode.SCENE) {
                               
                     var object = intersects[0].object;
+                    console.log(intersects[0]);
                     
                     if (object.userData.object !== undefined) {
                         
@@ -167,10 +215,25 @@ var Viewport = function (editor) {
                     }
                     
                 } else if (editor.mEditMode === EditMode.OBJECT) {
+                
+                    var faceIndex = intersect.faceIndex;
                     
-                    alert("j'ai touché l'objet");
-                    // console.log(intersect);
+                    if (ctrlPressed) {
+                     
+                        facesMgr.pushFace(faceIndex);
+                        
+                    } else {
+                        
+                        facesMgr.addFace(faceIndex);
+                        
+                    }
                     
+                    debugger;
+                    
+                    var bary = facesMgr.getBarycentreFaces();
+                    objectForSelection.position.set(bary.x, bary.y, bary.z);
+                    
+                    // facesMgr.move(new THREE.Vector3(Math.random() * 10), 0, 0);
                 }
                 
             } else if (editor.mEditMode === EditMode.SCENE) {
@@ -194,15 +257,25 @@ var Viewport = function (editor) {
             return;
         else if (editor.mEditMode === EditMode.OBJECT)
             intersects = getIntersects(mouseUpPosition, editionScene.children);
-            
+        
         if (intersects.length > 0) {
                 
             var intersected = intersects[0];
             
-            if (intersected.faceIndex != lastFaceIndex)
+            if (check(editor.mEditObject.geometry.faces[intersected.faceIndex].selected) && editor.mEditObject.geometry.faces[intersected.faceIndex].selected)
+                return;
+            
+            if (intersected.faceIndex != lastFaceIndex && !intersected.face.selected)
             {                
-                if (lastFaceIndex != -1)
-                    editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
+                if (lastFaceIndex != -1) {
+                    
+                    if (!(check(editor.mEditObject.geometry.faces[lastFaceIndex].selected) && editor.mEditObject.geometry.faces[lastFaceIndex].selected))
+                    {
+                        editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
+                    }
+                    
+                }
+                    
                 
                 editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0xff0000);
                 editor.mEditObject.geometry.colorsNeedUpdate = true;            
@@ -217,12 +290,15 @@ var Viewport = function (editor) {
         
             if (lastFaceIndex != -1) {
                 
-                editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
-                editor.mEditObject.geometry.colorsNeedUpdate = true;
+                if (!(check(editor.mEditObject.geometry.faces[lastFaceIndex].selected) && editor.mEditObject.geometry.faces[lastFaceIndex].selected))
+                {
+                    editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
+                    editor.mEditObject.geometry.colorsNeedUpdate = true;
                 
-                lastFaceIndex = -1;
+                    lastFaceIndex = -1;
                 
-                render();
+                    render();
+                }
             }   
             
             
@@ -265,8 +341,60 @@ var Viewport = function (editor) {
         
     };
     
-    // TODO: Do we want our application on tablet ??
+    var keydown = function(e) {
+        
+        switch(e.which) {
+         
+            case 17:
+                ctrlPressed = true;
+                break;
+                
+        }        
+     
+    };
     
+    var keyup = function(e) {
+     
+        switch(e.which) {
+         
+            case 17:
+                ctrlPressed = false;
+                break;
+                
+            case 69:
+                facesMgr.move(new THREE.Vector3(0, 10, 0));
+                break;
+            
+            case 70:
+                facesMgr.move(new THREE.Vector3(10, 0, 0));
+                break;
+                
+            case 82:
+                facesMgr.move(new THREE.Vector3(0, 0, -10));
+                break;
+                
+            case 83:
+                facesMgr.move(new THREE.Vector3(-10, 0, 0));
+                break;
+                
+            case 87:
+                facesMgr.move(new THREE.Vector3(0, 0, 10));
+                break;
+            
+            case 88:
+                facesMgr.move(new THREE.Vector3(0, -10, 0));
+                break;
+                
+        }
+        
+        render();
+        
+    };
+    
+    // TODO: Do we want our application on tablet ??
+    document.addEventListener('keydown', keydown, false);
+    document.addEventListener('keyup', keyup, false);
+
     container.mousedown(mouseDown);
     container.mousemove(mouseMove);
     
@@ -345,6 +473,12 @@ var Viewport = function (editor) {
         
     });
     
+    events.selectionModeChanged.add(function(mode) {
+       
+        selectionMode = mode;
+        
+    });
+    
     events.sceneModeChanged.add(function() {
         
         if (editor.mEditMode === EditMode.SCENE) {
@@ -361,6 +495,8 @@ var Viewport = function (editor) {
             // Attach transform to object
             transformControls.attach(editor.mEditObject);
             
+            // Clean Faces Manager
+            facesMgr.cleanContext();
             
         } else if (editor.mEditMode === EditMode.OBJECT) {
          
@@ -375,6 +511,9 @@ var Viewport = function (editor) {
             
             // Detach transform
             transformControls.detach();
+            
+            // Inform Faces Manager
+            facesMgr.setObject(editor.mEditObject);
             
         }
         

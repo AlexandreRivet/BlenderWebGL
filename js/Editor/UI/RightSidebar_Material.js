@@ -10,7 +10,7 @@ var RightSidebar_Material = function(editor) {
 		'MeshBasicMaterial': THREE.MeshBasicMaterial,
 		'MeshDepthMaterial': THREE.MeshDepthMaterial,
 		// 'MeshFaceMaterial': THREE.MeshFaceMaterial,
-		// 'MeshLambertMaterial': THREE.MeshLambertMaterial,
+		'MeshLambertMaterial': THREE.MeshLambertMaterial,
 		'MeshNormalMaterial': THREE.MeshNormalMaterial,
 		'MeshPhongMaterial': THREE.MeshPhongMaterial,
 		// 'PointCloudMaterial': THREE.PointCloudMaterial,
@@ -233,7 +233,7 @@ var RightSidebar_Material = function(editor) {
         var object = editor.mEditObject;
         
         var geometry = object.geometry;
-        var material = object.material;
+        var material = editor.mMaterialEditObject;
         
 		var textureWarning = false;
 		var objectHasUvs = false;
@@ -248,9 +248,6 @@ var RightSidebar_Material = function(editor) {
             if (material instanceof materialClasses[materialClass.getValue()] === false) {
                 
                 material = new materialClasses[materialClass.getValue()]();
-                if (check(material.vertexColors))
-                    material.vertexColors = THREE.FaceColors;
-                object.material = material;
                 
             }
             
@@ -400,6 +397,8 @@ var RightSidebar_Material = function(editor) {
                 
             }
             
+            editor.mMaterialEditObject = material;
+            
             updateParameters();
             
             events.materialChanged.dispatch(material);            
@@ -449,7 +448,7 @@ var RightSidebar_Material = function(editor) {
             
             container.setVisible(true);
             
-            var material = object.material;
+            var material = editor.mMaterialEditObject;
             
             materialClass.setValue(material.type);
             

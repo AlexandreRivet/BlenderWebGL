@@ -44,7 +44,7 @@ Menubar.Add = function(editor) {
             
         }
         
-        var geometry = new THREE.BoxGeometry(100, 100, 100, 1, 1, 1);
+        var geometry = new THREE.BoxGeometry(100, 100, 100, 1, 1, 1);        
         var material = new THREE.MeshBasicMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Cube.' + (ZeroBeforeString(meshCount++, 3));

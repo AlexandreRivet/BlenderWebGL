@@ -349,15 +349,15 @@ AnimationManager.prototype.toJSON = function()
     return animations;
 };
 
-ANIMATIONMGR.prototype.fromJSON = function(json) {
+AnimationManager.prototype.fromJSON = function(json) {
     
-    for (var i = 0; i < json.length; i++) {
+    /*for (var i = 0; i < json.length; i++) {
         
         var animationJSON = json[i];
-        var animation = new Animation(/*  */, animationJSON.startAnimation, animationJSON.interpolationMode, animation.rotationInterpolationMode)
+        // var animation = new Animation(, animationJSON.startAnimation, animationJSON.interpolationMode, animation.rotationInterpolationMode)
         
         
         
-    }
+    }*/
     
 };

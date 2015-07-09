@@ -1,9 +1,10 @@
 /*global window, console, check */
 /*global THREE, EditorEvent */
 
-var VerticesManager = function() {
+var VerticesManager = function(editor) {
     "use strict";
     
+    this.mEditor = editor;
     this.mObjectGeometry = null;
     this.mVertices = [];
 };
@@ -82,7 +83,7 @@ VerticesManager.prototype.clearVertices = function() {
     this.mVertices = [];
 };
 
-VerticesManager.prototype.move = function(axis, delta) {
+VerticesManager.prototype.move = function(deltas) {
     /**
      * Deplace tous les vertices selectionné sur l'axe donné en paramètre de delta
      */
@@ -91,6 +92,10 @@ VerticesManager.prototype.move = function(axis, delta) {
     console.log("Move vertices");
     
     for(var i = 0; i < this.mVertices.length; ++i) {
-        this.mObjectGeometry.vertices[this.mVertices[i]] += delta;
+        this.mObjectGeometry.vertices[this.mVertices[i]].x += deltas.x;
+        this.mObjectGeometry.vertices[this.mVertices[i]].y += deltas.y;
+        this.mObjectGeometry.vertices[this.mVertices[i]].z += deltas.z;
     }
+    
+    this.mObjectGeometry.verticesNeedUpdate = true;
 };
