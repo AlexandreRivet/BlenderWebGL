@@ -704,7 +704,8 @@ var Viewport = function (editor) {
             if (check(editor.mHelpers[object.id])) {
                 editor.mHelpers[object.id].update();
             }
-            object.rigidBody.box.update();   
+            if(!(object instanceof THREE.Light))
+                object.rigidBody.box.update();   
         }
         
         

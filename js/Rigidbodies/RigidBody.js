@@ -56,6 +56,7 @@ var RigidBody = (function(){
 				I: Matrix.instance({ order: 4 }),
 				boundingBox: null,
 				mass: spec.mass || 1.0,
+				friction: spec.friction || 0.5,
 				showBox: true
 			};
 			
@@ -88,10 +89,35 @@ var RigidBody = (function(){
 					dir.mul(new THREE.Vector3(that.mass / that.g, that.mass / that.g, that.mass / that.g));
 					that.velocity.add(dir);
 					that.obj.position.add(that.velocity);
-				}
-                if(that.showBox)
-				{
-					that.box.update();
+					that.velocity.x *= that.friction;
+					that.velocity.y *= that.friction;
+					that.velocity.z *= that.friction;
+					
+					that.direction.y = lerp(that.direction.y, -1.0, 0.05);
+					
+					for(var i = 0; i < that.scene.children.length; ++i)
+					{
+						that.obj.geometry.computeBoundingBox();
+						var obj = that.scene.children[i];
+						if(obj.geometry && obj.geometry.computeBoundingBox)
+						{
+							obj.geometry.computeBoundingBox();
+							var objBox = obj.geometry.boundingBox;
+							
+							if(that.box.box.containsBox(objBox) === true)
+							{
+								var union = that.box.box.union(objBox);
+								var center_union = union.max.sub(union.min);
+								var dir = that.direction.clone();
+								var dv = dir.cross(center_union);
+								dir.negate();
+								dv.mul(that.velocity);
+								dv.mul(dir);
+								
+								that.obj.position.mul(dv);
+							}
+						}
+					}
 				}
 			};
 			
