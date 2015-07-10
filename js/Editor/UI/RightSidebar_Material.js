@@ -78,7 +78,7 @@ var RightSidebar_Material = function(editor) {
     var materialVertexShader = new UIButton('Edit').setStyle({"width": "200px", "margin": "0px 5px", "border": "none", "padding": "2px"});
 	materialVertexShader.click(function() {
 	
-		events.shaderEdited.dispatch(editor.mEditObject, "vs");
+		events.shaderEdited.dispatch(editor.mEditObject, editor.mMaterialEditObject, "vs");
 	
 	});
     
@@ -92,7 +92,7 @@ var RightSidebar_Material = function(editor) {
     var materialFragmentShader = new UIButton('Edit').setStyle({"width": "200px", "margin": "0px 5px", "border": "none", "padding": "2px"});
 	materialFragmentShader.click(function() {
 	
-		events.shaderEdited.dispatch(editor.mEditObject, "fs");
+		events.shaderEdited.dispatch(editor.mEditObject, editor.mMaterialEditObject, "fs");
 	
 	});
     
@@ -399,6 +399,8 @@ var RightSidebar_Material = function(editor) {
             
             editor.mMaterialEditObject = material;
             
+            // debugger;   
+            
             updateParameters();
             
             events.materialChanged.dispatch(material);            
@@ -429,7 +431,7 @@ var RightSidebar_Material = function(editor) {
             'wireframe': materialWireframePanel
 		};
          
-        var material = editor.mEditObject.material;
+        var material = editor.mMaterialEditObject;
 
 		for ( var property in properties ) {
 

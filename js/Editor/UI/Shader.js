@@ -2,7 +2,7 @@ var Shader = function(editor) {
   
     var events = editor.mEvents;
     
-    var currentObject;
+    var currentMaterial;
     var currentType;
     
     var container = new UIPanel();
@@ -23,16 +23,16 @@ var Shader = function(editor) {
        
         if (currentType == "vs") {
          
-            currentObject.material.vertexShader = codemirror.getValue();
+            currentMaterial.vertexShader = codemirror.getValue();
             
         } else if (currentType == "fs") {
             
-            currentObject.material.fragmentShader = codemirror.getValue();
+            currentMaterial.fragmentShader = codemirror.getValue();
             
         }
         
-        currentObject.material.needsUpdate = true;
-        events.materialChanged.dispatch(currentObject.material);
+        currentMaterial.needsUpdate = true;
+        events.materialChanged.dispatch(currentMaterial);
         
     });
 	rightButtons.add(update);
@@ -67,22 +67,22 @@ var Shader = function(editor) {
         
     });
     
-    events.shaderEdited.add(function(object, type) {
+    events.shaderEdited.add(function(object, material, type) {
     
 		container.setVisible(true);
         
-        currentObject = object;
+        currentMaterial = material;
         currentType = type;
 	
 		title.setTextContent(object.name + ' / ' + (( type == "vs") ? 'Vertex shader': 'Fragment shader' ));
 
         if (type == "vs") {
          
-            codemirror.setValue(object.material.vertexShader);
+            codemirror.setValue(currentMaterial.vertexShader);
             
         } else if (type == "fs") {
             
-            codemirror.setValue(object.material.fragmentShader);
+            codemirror.setValue(currentMaterial.fragmentShader);
         }
         
     });
