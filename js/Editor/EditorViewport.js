@@ -32,6 +32,7 @@ var Viewport = function (editor) {
     var gridScene = new THREE.GridHelper(400, 25);
     var gridEdition = new THREE.GridHelper(400, 25);
     var objectForSelection = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({'color': 0x000000}));
+    objectForSelection.visible = false;
     
     sceneHelpers.add(gridScene);
     editionHelpersScene.add(gridEdition);
@@ -229,19 +230,25 @@ var Viewport = function (editor) {
                         
                     }
                     
-                    debugger;
-                    
                     var bary = facesMgr.getBarycentreFaces();
-                    objectForSelection.position.set(bary.x, bary.y, bary.z);
                     
-                    // facesMgr.move(new THREE.Vector3(Math.random() * 10), 0, 0);
+                    objectForSelection.position.set(bary.x, bary.y, bary.z);
+                    objectForSelection.visible = true;                    
+                    
                 }
+                
+            } else if (editor.mEditMode === EditMode.OBJECT) {
+                
+                facesMgr.clearFaces();
+                objectForSelection.visible = false;
                 
             } else if (editor.mEditMode === EditMode.SCENE) {
                 
                 editor.selectObject(null);
                 
             }
+            
+            console.log(objectForSelection);
             
             render();
         }
@@ -259,53 +266,107 @@ var Viewport = function (editor) {
         else if (editor.mEditMode === EditMode.OBJECT)
             intersects = getIntersects(mouseUpPosition, editionScene.children);
         
+        var faces = editor.mEditObject.geometry.faces;
+        
+        // Je survole une face
         if (intersects.length > 0) {
                 
             var intersected = intersects[0];
             
-            if (check(editor.mEditObject.geometry.faces[intersected.faceIndex].selected) && editor.mEditObject.geometry.faces[intersected.faceIndex].selected)
-                return;
-            
-            if (intersected.faceIndex != lastFaceIndex && !intersected.face.selected)
-            {                
+            // Je survole une face différente de l'ancienne
+            if (intersected.faceIndex != lastFaceIndex)
+            {   
+                
+                // Traitement de l'ancienne face
                 if (lastFaceIndex != -1) {
-                    
-                    if (!(check(editor.mEditObject.geometry.faces[lastFaceIndex].selected) && editor.mEditObject.geometry.faces[lastFaceIndex].selected))
+                 
+                    // Si la face était sélectionnée faut la remettre en bleue
+                    if (check(faces[lastFaceIndex].selected) && faces[lastFaceIndex].selected) 
                     {
-                        editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
+                     
+                        faces[lastFaceIndex].color = new THREE.Color(0x0000ff);
+                        
+                    }
+                    
+                    // Si la face n'était pas sélectionnée on la remet en blanc
+                    
+                    else
+                    {
+                     
+                        faces[lastFaceIndex].color = new THREE.Color(0xffffff);
+                        
                     }
                     
                 }
-                    
                 
-                editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0xff0000);
-                editor.mEditObject.geometry.colorsNeedUpdate = true;            
+                // Je survole une face sélectionnée
+                if (check(faces[intersected.faceIndex].selected) && faces[intersected.faceIndex].selected)
+                {
+                    
+                    editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0x3498db);
+                    
+                }                
+                
+                // Je survole une face non sélectionnée
+                
+                else
+                {
+                    
+                    editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0xff0000);
+                    
+                }          
                 
                 lastFaceIndex = intersected.faceIndex;
                 
                 render();
             }
             
-            
-        } else {
-        
-            if (lastFaceIndex != -1) {
-                
-                if (!(check(editor.mEditObject.geometry.faces[lastFaceIndex].selected) && editor.mEditObject.geometry.faces[lastFaceIndex].selected))
+            // Je survole la même face
+            else   
+            {
+                // Je survole une face sélectionnée
+                if (check(faces[intersected.faceIndex].selected) && faces[intersected.faceIndex].selected)
                 {
-                    editor.mEditObject.geometry.faces[lastFaceIndex].color = editor.mEditObject.material.color;
-                    editor.mEditObject.geometry.colorsNeedUpdate = true;
-                
-                    lastFaceIndex = -1;
-                
-                    render();
+                    
+                    editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0x3498db);
+                    
                 }
-            }   
+                
+            }
             
+        } 
+        
+        // Je ne survole plus rien
+        
+        else 
+        {
+            // Si je survolais quelque chose
+            if (lastFaceIndex != -1) 
+            {
+
+                // Si la face était sélectionnée faut la remettre en bleue
+                if (check(faces[lastFaceIndex].selected) && faces[lastFaceIndex].selected) 
+                {
+
+                    faces[lastFaceIndex].color = new THREE.Color(0x0000ff);
+
+                }
+
+                // Si la face n'était pas sélectionnée on la remet en blanc
+
+                else
+                {
+
+                    faces[lastFaceIndex].color = new THREE.Color(0xffffff);
+
+                }
+                
+            }
             
         }
         
-        
+        editor.mEditObject.geometry.colorsNeedUpdate = true;        
+        render();
         
     };
     
@@ -481,6 +542,8 @@ var Viewport = function (editor) {
     });
     
     events.sceneModeChanged.add(function() {
+        
+        objectForSelection.visible = false;
         
         if (editor.mEditMode === EditMode.SCENE) {
         

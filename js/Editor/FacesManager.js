@@ -17,7 +17,7 @@ FacesManager.prototype.cleanContext = function() {
      * Clean le context du manager
      */
     "use strict";
-    this.mFaces = [];
+    this.clearFaces();
     this.mObjectGeometry = null;
 };
 
@@ -40,7 +40,6 @@ FacesManager.prototype.addFace = function(idFace) {
      */
     
     "use strict";    
-    console.log("Add face : " + idFace);
     
     this.clearFaces();
     this.pushFace(idFace);
@@ -54,11 +53,10 @@ FacesManager.prototype.pushFace = function(idFace) {
      */
     
     "use strict";
-    console.log("Push face : " + idFace);
     
     if(idFace > this.mObjectGeometry.faces.length)
     {
-        console.log("Out of range + " + idFace);
+        console.warn("Out of range + " + idFace);
     }
     else
     {
@@ -86,7 +84,6 @@ FacesManager.prototype.remove = function(idFace) {
      */
     
     "use strict";
-    console.log("Remove face " + idFace);
     
     var index = this.mFaces.indexOf(idFace);
     if (index != -1) {
@@ -109,7 +106,6 @@ FacesManager.prototype.popFace = function() {
      */
     
     "use strict";
-    console.log("Pop face");
     
     this.mFaces.pop();
     
@@ -122,7 +118,6 @@ FacesManager.prototype.clearFaces = function() {
      */
     
     "use strict";
-    console.log("Clear faces");
     
     while (this.mFaces.length > 0)
         this.remove(this.mFaces[0]);
@@ -136,7 +131,6 @@ FacesManager.prototype.move = function(deltas) {
      */
     
     "use strict";
-    console.log("Move faces");
     
     this.prepareVertices();
     

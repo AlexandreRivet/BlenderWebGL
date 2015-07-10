@@ -274,27 +274,16 @@ Editor.prototype.setMode = function(mode) {
         
         // Change material just for interaction
         this.mMaterialEditObject = this.mEditObject.material;
-        this.mEditObject.material = new THREE.MeshBasicMaterial({'color': 0xfffffff, 'vertexColors': THREE.FaceColors});
+        this.mEditObject.material = new THREE.MeshBasicMaterial({'color': 0xfffffff, 'vertexColors': THREE.FaceColors, 'side': 2});
         
         this.mEditionScene.add(this.mEditObject);
-        
-        // Add Edges helper
-        //var helper = new THREE.WireframeHelper(this.mEditObject);
-        //helper.material.color.set( 0xffffff );
-        //this.mEditionHelpersScene.add(helper);
     
     } else if (this.mEditMode === EditMode.SCENE) {
         
         // Clear Edition Scene
         var objects = this.mEditionScene.children;
         while(objects.length > 0)
-            this.removeObject(objects[0]);
-        
-        // TODO CHECKER ICI (suppression pendant parcours)
-        var objects = this.mEditionHelpersScene.children;
-        for (var i = 0; i < objects.length; i++)
-            if (!(objects[i] instanceof THREE.GridHelper))
-                this.removeObject(objects[i]);        
+            this.removeObject(objects[0]);     
 
         this.mEditObject.position.copy(this.mTransformEditObject.position);
         this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
