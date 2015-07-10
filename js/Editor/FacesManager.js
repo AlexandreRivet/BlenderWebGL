@@ -143,6 +143,8 @@ FacesManager.prototype.move = function(deltas) {
     }
     
     this.mObjectGeometry.verticesNeedUpdate = true;
+    
+    this.mEditor.mEvents.geometryChanged.dispatch();
 };
 
     

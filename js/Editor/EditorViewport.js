@@ -248,8 +248,6 @@ var Viewport = function (editor) {
                 
             }
             
-            console.log(objectForSelection);
-            
             render();
         }
         
