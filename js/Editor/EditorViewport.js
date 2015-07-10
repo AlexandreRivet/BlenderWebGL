@@ -616,7 +616,7 @@ var Viewport = function (editor) {
         var helper = new THREE.WireframeHelper(editor.mEditObject);
         helper.material.color.set( 0xffffff );
         editionHelpersScene.add(helper)
-       
+        editor.mEditObject.rigidBody.box.update();
         render();
         
     });
@@ -687,14 +687,14 @@ var Viewport = function (editor) {
     });
     
     events.helperAdded.add(function(object) {
-       
-        objects.push(object.getObjectByName('picker'));
+        if (check(object))
+            objects.push(object.getObjectByName('picker'));
         
     });
     
     events.helperRemoved.add(function(object) {
-       
-        objects.splice(objects.indexOf(object.getObjectByName('picker')), 1);
+        if (check(object))
+            objects.splice(objects.indexOf(object.getObjectByName('picker')), 1);
         
     });
     
@@ -715,12 +715,15 @@ var Viewport = function (editor) {
     });
     
     events.objectRemoved.add(function(object) {
-    
-        object.traverse(function(child) {
-            
-            objects.splice(objects.indexOf(child), 1);
-            
-        });
+        
+        if (check(object))
+        {
+            object.traverse(function(child) {
+
+                objects.splice(objects.indexOf(child), 1);
+
+            });
+        }
         
         render();
         
