@@ -26,6 +26,8 @@ UINumber.prototype.getValue = function() {
 UINumber.prototype.setValue = function(value) {
     'use strict';
     
+    debugger;
+    
     this.mDOM.value = parseFloat(value).toFixed(2) || 0.0;    
     
     return this;

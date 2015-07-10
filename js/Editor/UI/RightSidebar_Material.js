@@ -399,8 +399,6 @@ var RightSidebar_Material = function(editor) {
             
             editor.mMaterialEditObject = material;
             
-            // debugger;   
-            
             updateParameters();
             
             events.materialChanged.dispatch(material);            

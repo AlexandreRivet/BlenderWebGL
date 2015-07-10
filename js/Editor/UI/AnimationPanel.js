@@ -68,12 +68,12 @@ var AnimationPanel = function(editor) {
     
     
     toolPanelButtons.add(new UIText('Time').setStyle({"width": "40px", "display": "inline-block", "font-size": "12px"}));
-    var timeValueAnimation = new UINumber(0.0, 1.0).setStyle({"width": "60px", "margin": "0px 5px", "background-color": "#333", "color": "#eee","border": "none", "padding": "2px", "font-size": "10px"}).keyup(setTimeEditorAnimation);
+    var timeValueAnimation = new UINumber(0.0, 0.1).setStyle({"width": "60px", "margin": "0px 5px", "background-color": "#333", "color": "#eee","border": "none", "padding": "2px", "font-size": "10px"}).keyup(setTimeEditorAnimation);
     ANIMATIONEDITOR.setCurrentTimeEditor(timeValueAnimation);
     toolPanelButtons.add(timeValueAnimation);
     
     toolPanelButtons.add(new UIText('Duration').setStyle({"width": "50px", "display": "inline-block", "font-size": "12px"}));
-    var durationValueAnimation = new UINumber(10.0, 1.0).setStyle({"width": "60px", "margin": "0px 5px", "background-color": "#333", "color": "#eee","border": "none", "padding": "2px", "font-size": "10px"}).change(updateDurationEditorAnimation);
+    var durationValueAnimation = new UINumber(10.0, 0.1).setStyle({"width": "60px", "margin": "0px 5px", "background-color": "#333", "color": "#eee","border": "none", "padding": "2px", "font-size": "10px"}).change(updateDurationEditorAnimation);
     toolPanelButtons.add(durationValueAnimation);
     
    
