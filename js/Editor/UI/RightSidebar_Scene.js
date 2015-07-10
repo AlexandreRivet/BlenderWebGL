@@ -40,6 +40,8 @@ RightSidebar.Scene = function(editor) {
             for (var i = 0; i < objects.length; i++) {
                 
                 var object = objects[i];
+                if(object instanceof THREE.BoundingBoxHelper)
+                    continue;
                 
                 var content = pad;
                 content += '<span style="font-size:12px;">' + object.name + '</span>';

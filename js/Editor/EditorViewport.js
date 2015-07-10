@@ -1,4 +1,5 @@
-var requestIdAnimation;
+var requestIdAnimation = null;
+var requestIdRigidbody = null;
 
 var Viewport = function (editor) {
     'use strict';
@@ -603,6 +604,20 @@ var Viewport = function (editor) {
         });
         
         if (materialsNeedUpdate === true) updateMaterials();
+       
+        if(!(object instanceof THREE.Light))
+        {
+            RIGIDBODY.append({ 
+			scene: scene, 						//	Scene THREE.js nécessaire pour les calculs physiques par rapport aux autres objets
+			sceneHelpers : sceneHelpers,
+            obj: object, 						//	Objet physique
+			update: false, 						//	Mise-à-jour automatique ou pas du composant (Sinon il faut appeller la méthode update du composant rigidBody)
+			isKinematic: false, 				//	Physique des corps solides active ou pas
+			mass: 1.0	//	Masse de l'objet en Kg (Bon, pas très réaliste pour le moment mais on fait avec ... =_=)
+            });
+            object.rigidBody.showBox = true;						//	Box de collisions visible
+            object.rigidBody.box.update();
+        }
         
         render();
             
@@ -623,12 +638,14 @@ var Viewport = function (editor) {
     events.objectChanged.add(function(object) {
        
         transformControls.update();
-        
-        if (check(editor.mHelpers[object.id])) {
-            
-            editor.mHelpers[object.id].update();
-            
+        if (check(object))
+        {
+            if (check(editor.mHelpers[object.id])) {
+                editor.mHelpers[object.id].update();
+            }
+            object.rigidBody.box.update();   
         }
+        
         
         render();
         
@@ -689,9 +706,57 @@ var Viewport = function (editor) {
     });
     
     events.animatorLaunched.add(function() {
+        if(requestIdAnimation != null)
+            return;
+        
         renderAnimation();    
     });
-
+    
+    events.rigidbodyLaunched.add(function() {
+        if(requestIdRigidbody != null)
+            return;
+        
+        if(!RIGIDBODY.isInit)
+        {
+            var object_tmp;
+            for(var i = 0; i < scene.children.length; i++)
+            {
+                object_tmp = scene.children[i];
+                if((object_tmp instanceof THREE.Light))
+                    continue;
+                object_tmp.rigidBody.init();
+            }
+            RIGIDBODY.isInit = true;
+        }
+        RIGIDBODY.isRun = true;
+        renderRigidbody();    
+    });
+    events.rigidbodyStop.add(function() {
+        if(requestIdRigidbody == null)
+            return;
+        
+        window.cancelAnimationFrame(requestIdRigidbody);
+        requestIdRigidbody = null;
+        
+        RIGIDBODY.isRun = false;
+    });
+    events.rigidbodyReset.add(function() {
+        if(!RIGIDBODY.isInit)
+            return;
+        editor.mEvents.rigidbodyStop.dispatch();
+        var object_tmp;
+        for(var i = 0; i < scene.children.length; i++)
+        {
+            object_tmp = scene.children[i];
+            if((object_tmp instanceof THREE.Light))
+                continue;
+            object_tmp.rigidBody.reset();
+            object_tmp.rigidBody.box.update();
+        }
+        editor.mEvents.objectChanged.dispatch(editor.mEditObject);
+        RIGIDBODY.isInit = false;
+        RIGIDBODY.isRun = false;
+    });
     // Renderer
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setClearColor(0x555555);
@@ -734,17 +799,7 @@ var Viewport = function (editor) {
         {
             ANIMATIONMGR.updateAnimation(); 
             
-            var w = container.mDOM.offsetWidth / 2;
-            var h = container.mDOM.offsetHeight / 2;
-
-            sceneHelpers.updateMatrixWorld();
-            scene.updateMatrixWorld();
-
-            renderer.setViewport(0, 0, w * 2, h * 2);
-
-            renderer.clear();
-            renderer.render(scene, cameras.persp);
-            renderer.render(sceneHelpers, cameras.persp);
+            editor.mEvents.objectChanged.dispatch(editor.mEditObject);
             
             var currentTime = ANIMATIONMGR.mDurationPlay/1000;
             ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
@@ -754,6 +809,7 @@ var Viewport = function (editor) {
             {
                 ANIMATIONEDITOR.getPlayButton().setTextContent('>');
                 window.cancelAnimationFrame(requestIdAnimation);
+                requestIdAnimation = null;
                 return;
             }
             
@@ -761,6 +817,22 @@ var Viewport = function (editor) {
         } 
         
         requestIdAnimation = requestAnimationFrame(renderAnimation); 
+    };
+    function renderRigidbody() {
+        
+        console.log("Rigidbody");
+        //RigidBody.update(); 
+        var object_tmp;
+        for(var i = 0; i < scene.children.length; i++)
+        {
+            object_tmp = scene.children[i];
+            if((object_tmp instanceof THREE.Light))
+                continue;
+            object_tmp.rigidBody.update();
+        }
+        editor.mEvents.objectChanged.dispatch(editor.mEditObject);
+        
+        requestIdRigidbody = requestAnimationFrame(renderRigidbody); 
     };
     function render() {
         

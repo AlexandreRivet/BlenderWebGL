@@ -47,6 +47,9 @@ var Editor = function (name) {
         sceneModeChanged: new signals.Signal(),
         
         animatorLaunched: new signals.Signal(),
+        rigidbodyLaunched: new signals.Signal(),
+        rigidbodyStop: new signals.Signal(),
+        rigidbodyReset: new signals.Signal(),
         
         shaderEdited: new signals.Signal(),
         shaderClosed: new signals.Signal()

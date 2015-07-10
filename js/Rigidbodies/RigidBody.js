@@ -40,6 +40,10 @@ var RigidBody = (function(){
 			var that = {
 				obj: spec.obj,
 				scene: spec.scene || null,
+                sceneHelpers : spec.sceneHelpers || null,
+                startPos : spec.startPos || new THREE.Vector3(0,0,0),
+                startRot : spec.startRot || new THREE.Quaternion(0,0,0,0),
+                startScale : spec.startScale || new THREE.Vector3(0,0,0),
 				_update: spec.update || false,
 				isKinematic: spec.isKinematic,
 				box: null,
@@ -52,7 +56,7 @@ var RigidBody = (function(){
 				I: Matrix.instance({ order: 4 }),
 				boundingBox: null,
 				mass: spec.mass || 1.0,
-				showBox: false
+				showBox: true
 			};
 			
 			var update_interval = 0;
@@ -60,14 +64,23 @@ var RigidBody = (function(){
 			that.compute = function(){
 				that.obj.geometry.computeBoundingBox();
 				that.box = new THREE.BoundingBoxHelper(that.obj, "green");
-				that.scene.add(that.box);
+				that.sceneHelpers.add(that.box);
 			};
 			
+            that.init = function(){
+				that.startPos = that.obj.position.clone();
+                that.startRot = that.obj.rotation.clone();
+                that.startScale = that.obj.scale.clone();
+			};
+            
+            that.reset = function(){
+				that.obj.position.copy(that.startPos);
+                that.startRot.copy(that.obj.rotation);
+                that.startScale.copy(that.obj.scale);
+                that.velocity = new THREE.Vector3();
+			};
+            
 			that.update = function(){
-				if(that.showBox)
-				{
-					that.box.update();
-				}
 				if(that.isKinematic === false)
 				{
 					that.velocity.mul(that.acceleration);
@@ -76,14 +89,18 @@ var RigidBody = (function(){
 					that.velocity.add(dir);
 					that.obj.position.add(that.velocity);
 				}
+                if(that.showBox)
+				{
+					that.box.update();
+				}
 			};
 			
-			update_interval = setInterval(function(){
+			/*update_interval = setInterval(function(){
 				if(that._update)
 				{
 					that.update();
 				}
-			}, 16);
+			}, 16);*/
 			
 			that.compute();
 			that.obj.rigidBody = that;
@@ -325,3 +342,5 @@ function MakeMesh(verts, mat)
 
 
 RIGIDBODY = RigidBody;
+RIGIDBODY.isInit = false;
+RIGIDBODY.isRun = false;

@@ -137,14 +137,14 @@ var AnimationPanel = function(editor) {
     });
     toolPanelButtons.add(buttonHighSpeed);
     
-    var buttonLoop = (new UIButton('L')).addClass('sideBar_btn_small');
+    /*var buttonLoop = (new UIButton('L')).addClass('sideBar_btn_small');
     buttonLoop.click(function() {
         if(editor.mEditMode == EditMode.OBJECT)
             return;
 
         ANIMATIONMGR.setType(TYPE.LOOP);
     });
-    toolPanelButtons.add(buttonLoop);
+    toolPanelButtons.add(buttonLoop);*/
     
     var buttonAddKey = (new UIButton('+')).addClass('sideBar_btn_small');
     buttonAddKey.click(function() {
@@ -187,16 +187,16 @@ var AnimationPanel = function(editor) {
                 ANIMATIONEDITOR.selectCursor(cursorKey);
                 
                 //Place le cursor principal sur le curseur secondaire
-                /*debugger;
-                var x = e.pageX;
-                ANIMATIONEDITOR.getCursorPrincipal().setStyle({'left':x+'px'});
+                
+                var x = ANIMATIONEDITOR.mCursorSelected.mDOM.offsetLeft;
+                ANIMATIONEDITOR.getCursorPrincipal().setStyle({'left': x + 'px'});
         
                 var currentTime = getTimeWithPos(x, ANIMATIONEDITOR.mCursorArea.mDOM.offsetWidth, ANIMATIONMGR.mEnd);
                 ANIMATIONEDITOR.getCurrentTimeEditor().setValue(currentTime);
                 if(check(ANIMATIONMGR.mAnimationSelected))
                 {
                     ANIMATIONEDITOR.updateDisplayAnimation(ANIMATIONMGR.mAnimationSelected, editor);
-                }*/
+                }
                 
             });
             ANIMATIONEDITOR.addKeyFrameAll(new KeyFrameMarker(cursorKey, currentAnimation.getKey(currentTime) ,currentTime, currentAnimation));

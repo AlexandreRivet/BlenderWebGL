@@ -7,7 +7,6 @@
 */
 
 var ANIMATIONMGR = null;
-var requestIdAnimation = 0;
 
 var STATE = {
     PLAY: 2,
@@ -39,7 +38,7 @@ AnimationManager = function(name, start, end, editor)
     this.mStart = start || 0.0;
     this.mEnd = end || 20.0;
     this.mSpeed = 1.0;
-    this.mType = TYPE.ONCE;
+    this.mType = TYPE.LOOP;
     
     this.mAnimationSelected = null;
     
