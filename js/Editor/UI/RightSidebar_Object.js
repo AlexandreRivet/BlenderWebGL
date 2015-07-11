@@ -340,7 +340,11 @@ RightSidebar.Object3D = function(editor) {
     
     function updateUI(object) {
         if(!check(object))
+        {
+            objectBtnsPanel.setVisible(false);
             return;
+        }
+            
         if (object instanceof THREE.Scene) {
          
             objectBtnsPanel.setVisible(false);

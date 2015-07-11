@@ -204,7 +204,6 @@ var Viewport = function (editor) {
                 if (editor.mEditMode === EditMode.SCENE) {
                               
                     var object = intersects[0].object;
-                    console.log(intersects[0]);
                     
                     if (object.userData.object !== undefined) {
                         
@@ -614,7 +613,8 @@ var Viewport = function (editor) {
         var helper = new THREE.WireframeHelper(editor.mEditObject);
         helper.material.color.set( 0xffffff );
         editionHelpersScene.add(helper)
-        editor.mEditObject.rigidBody.box.update();
+        if(check(editor.mEditObject) && check(editor.mEditObject.rigidBody))
+            editor.mEditObject.rigidBody.box.update();
         render();
         
     });
@@ -666,7 +666,7 @@ var Viewport = function (editor) {
         
         if (materialsNeedUpdate === true) updateMaterials();
        
-        if(!(object instanceof THREE.Light))
+        if(!(object instanceof THREE.Light) )
         {
             RIGIDBODY.append({ 
 			scene: scene, 						//	Scene THREE.js nécessaire pour les calculs physiques par rapport aux autres objets
@@ -704,7 +704,7 @@ var Viewport = function (editor) {
             if (check(editor.mHelpers[object.id])) {
                 editor.mHelpers[object.id].update();
             }
-            if(!(object instanceof THREE.Light))
+            if (check(object) && check(object.rigidBody))
                 object.rigidBody.box.update();   
         }
         
@@ -867,7 +867,7 @@ var Viewport = function (editor) {
             editor.mEvents.objectChanged.dispatch(editor.mEditObject);
             
             var currentTime = ANIMATIONMGR.mDurationPlay/1000;
-            ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
+            ANIMATIONEDITOR.setPosWithTime(ANIMATIONEDITOR.getCursorPrincipal(),currentTime, ANIMATIONMGR.mEnd);
             ANIMATIONEDITOR.updateTimeEditorAnimation(currentTime);
 
             if(ANIMATIONMGR.getState() == STATE.STOP)

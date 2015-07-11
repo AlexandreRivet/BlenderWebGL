@@ -73,8 +73,8 @@ RightSidebar.Rigidbody = function(editor) {
     events.sceneModeChanged.add(function() {
        
         if (editor.mEditMode === EditMode.SCENE) {
-         
-            container.setVisible(true);            
+            if(check(editor.mEditObject) && check(editor.mEditObject.rigidBody))
+                container.setVisible(true);            
             
         } else if (editor.mEditMode === EditMode.OBJECT) {
          
@@ -85,7 +85,7 @@ RightSidebar.Rigidbody = function(editor) {
     });
     
     events.objectSelected.add(function(object) {
-        if (object != null && !(object instanceof THREE.Light)) {
+        if (check(object) && check(object.rigidBody)) {
             
             container.setVisible(true);
             updateUI(object);
@@ -128,8 +128,11 @@ RightSidebar.Rigidbody = function(editor) {
     
     function updateUI(object) {
         
-        if (!check(object) || object instanceof THREE.Light)
+        if (!check(object) || !check(object.rigidBody))
+        {
+            container.setVisible(false);
             return;
+        }
         objectKinematicLink.setValue( object.rigidBody.isKinematic );
         objectShowBoxLink.setValue( object.rigidBody.showBox );
         objectMass.setValue( object.rigidBody.mass );
