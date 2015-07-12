@@ -81,6 +81,16 @@ UIElement.prototype.getTextContent = function () {
 	return this.mDOM.textContent;
 };
 
+/*      
+    Retourne l'html généré
+*/
+UIElement.prototype.getHTML = function() {
+    'use strict';
+    
+    return this.mDOM.outerHTML;
+    
+};
+
 /*
     Gestion de la souris
 */

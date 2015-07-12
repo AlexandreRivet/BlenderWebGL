@@ -195,6 +195,8 @@ var Viewport = function (editor) {
             else if (editor.mEditMode === EditMode.OBJECT)
                 intersects = getIntersects(mouseUpPosition, editionScene.children);
             
+            debugger;
+            
             if (intersects.length > 0) {
                 
                 var intersect = intersects[0];
@@ -204,7 +206,6 @@ var Viewport = function (editor) {
                 if (editor.mEditMode === EditMode.SCENE) {
                               
                     var object = intersects[0].object;
-                    console.log(intersects[0]);
                     
                     if (object.userData.object !== undefined) {
                         

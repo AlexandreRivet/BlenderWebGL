@@ -98,24 +98,6 @@ Menubar.File = function(editor) {
     });
     container.addMenuItem(option);
     
-    // IMPORT DAE OPTION
-    var option = new UIPanel();
-    option.setTextContent('Import DAE');
-    
-    option.click(function() {
-        
-        if (editor.mEditMode === EditMode.OBJECT) {
-         
-            alert('You need to be in principal scene to do this.');            
-            return;
-            
-        }
-        
-        alert('TODO: import dae');
-        
-    });
-    container.addMenuItem(option);
-    
     // SEPARATOR
     container.addSeparator();
     
@@ -140,24 +122,6 @@ Menubar.File = function(editor) {
         var output = new OBJ().export(object);
         
         exportString(output, object.name + '.obj');
-        
-    });
-    container.addMenuItem(option);
-    
-    // IMPORT DAE OPTION
-    var option = new UIPanel();
-    option.setTextContent('Export DAE');
-    
-    option.click(function() {
-        
-        if (editor.mEditMode === EditMode.OBJECT) {
-         
-            alert('You need to be in principal scene to do this.');            
-            return;
-            
-        }
-        
-        alert('TODO: export dae');
         
     });
     container.addMenuItem(option);

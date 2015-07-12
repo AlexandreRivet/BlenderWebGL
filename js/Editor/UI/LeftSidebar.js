@@ -54,7 +54,7 @@ var LeftSidebar = function(editor) {
     container.add(buttonPS);
     
     // FACES BUTTON        
-    var buttonFS = new UIButton('Fac.');
+    var buttonFS = new UIButton().add(new UIImage('resources/images/edge.png'));
     buttonFS.addClass('sideBar_btn');
     buttonFS.setDisabled(true);
     buttonFS.click(function() {

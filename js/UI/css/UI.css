@@ -101,6 +101,12 @@ hr
     cursor:                         auto;
 }
 
+.Image_Button
+{
+    width:                          80%;
+    height:                         80%;
+}
+
 .Input
 {
     border:                         none;

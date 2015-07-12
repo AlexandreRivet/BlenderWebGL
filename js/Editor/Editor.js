@@ -132,7 +132,10 @@ Editor.prototype.addObject = function (object) {
         
     });
     
-    this.mScene.add(object);
+    if (check(this.mEditObject))
+        this.mEditObject.add(object);
+    else
+        this.mScene.add(object);
     
     this.mEvents.objectAdded.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();
@@ -272,6 +275,11 @@ Editor.prototype.setMode = function(mode) {
         this.mEditObject.rotation.set(0, 0, 0);
         this.mEditObject.scale.set(1, 1, 1);
         
+        this.mEditObject.traverse(function(child) {
+            child.visible = false;
+        });
+        this.mEditObject.visible = true;
+        
         // Change material just for interaction
         this.mMaterialEditObject = this.mEditObject.material;
         this.mEditObject.material = new THREE.MeshBasicMaterial({'color': 0xfffffff, 'vertexColors': THREE.FaceColors, 'side': 2});
@@ -288,6 +296,10 @@ Editor.prototype.setMode = function(mode) {
         this.mEditObject.position.copy(this.mTransformEditObject.position);
         this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
         this.mEditObject.scale.copy(this.mTransformEditObject.scale);
+        
+        this.mEditObject.traverse(function(child) {
+            child.visible = true;
+        });
         
         // Reaffect material for the real scene
         this.mEditObject.material = this.mMaterialEditObject;        

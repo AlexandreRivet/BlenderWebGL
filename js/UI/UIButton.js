@@ -14,3 +14,19 @@ var UIButton = function (value) {
 };
 
 UIButton.prototype = Object.create(UIElement.prototype);
+
+UIButton.prototype.add = function() {
+    'use strict';
+    
+    for (var i = 0; i < arguments.length; ++i)
+    {
+        var argument = arguments[i];
+        if (argument instanceof UIElement) {
+            this.mDOM.appendChild(argument.mDOM);
+            argument.addClass('Image_Button');
+        }
+        else   
+            console.error('UIPanel => ', argument, 'is not an instance of UIElement');
+    }
+    return this;    
+}
