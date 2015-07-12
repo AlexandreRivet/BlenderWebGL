@@ -209,7 +209,11 @@ Editor.prototype.removeObject = function(object) {
     
     
     object.parent.remove(object);
-    
+    if(check(object.rigidBody) && this.mEditMode === EditMode.OBJECT)
+    {
+        object.rigidBody.remove();
+        delete(object.rigidBody);
+    }
     this.mEvents.objectRemoved.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();    
 };
@@ -289,7 +293,9 @@ Editor.prototype.setMode = function(mode) {
     } else if (this.mEditMode === EditMode.SCENE) {
         
         // Clear Edition Scene
+        
         var objects = this.mEditionScene.children;
+        var rigidBody_tmp = (check(objects[0].rigidBody)?objects[0].rigidBody : null);
         while(objects.length > 0)
             this.removeObject(objects[0]);     
 
@@ -303,6 +309,9 @@ Editor.prototype.setMode = function(mode) {
         
         // Reaffect material for the real scene
         this.mEditObject.material = this.mMaterialEditObject;        
+        
+        //Reaffect RigidBody
+        // this.mEditObject.rigidBody = rigidBody_tmp;
         
         this.mScene.add(this.mEditObject);
         this.mEvents.sceneGraphChanged.dispatch();

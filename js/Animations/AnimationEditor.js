@@ -60,11 +60,11 @@ AnimationEditor.prototype.addKeyFrameCurrent = function(keyFrame)
             return (keyA.mTime - keyB.mTime);
     });
 };
-AnimationEditor.prototype.setPosWithTime = function(currentTime, timeMax)
+AnimationEditor.prototype.setPosWithTime = function(cursor, currentTime, timeMax)
 {
     var widthMax = $('.AnimationEditorAreaScroll')[0].offsetWidth;
     var pos = (currentTime / timeMax) * widthMax;
-    this.mCursorPrincipal.setStyle({'left':pos+'px'});
+    cursor.setStyle({'left':pos+'px'});
 }
 AnimationEditor.prototype.updateTimeEditorAnimation = function(currentTime)
 {
@@ -131,11 +131,23 @@ AnimationEditor.prototype.updateDisplayCursors = function(animation)
     this.updateCurrentKeyFrames(animation);
     this.mCursorArea.clean();
     this.mCursorArea.add(this.mCursorPrincipal);
+    var cursor;
     for(var i = 0; i < this.mCurrentKeyFrameMarkers.length; i++)
     {
-       this.mCursorArea.add(this.mCurrentKeyFrameMarkers[i].getCursor());    
+        cursor = this.mCurrentKeyFrameMarkers[i].getCursor();
+        this.mCursorArea.add(cursor);    
     }
 };
+AnimationEditor.prototype.updatePositionCursors = function(animation)
+{
+    var cursor;
+    this.setPosWithTime(ANIMATIONEDITOR.getCursorPrincipal(), parseFloat(this.mCurrentTimeEditor.getValue()), ANIMATIONMGR.mEnd);
+    for(var i = 0; i < this.mAllKeyFrameMarkers.length; i++)
+    {
+        cursor = this.mAllKeyFrameMarkers[i].getCursor();
+        this.setPosWithTime(cursor, this.mAllKeyFrameMarkers[i].getTime(), ANIMATIONMGR.mEnd); 
+    }       
+}
 AnimationEditor.prototype.clearByObject = function(object)
 {
     var animation_tmp = ANIMATIONMGR.getAnimationSelectedByObject(object);

@@ -56,7 +56,7 @@ var RigidBody = (function(){
 				I: Matrix.instance({ order: 4 }),
 				boundingBox: null,
 				mass: spec.mass || 1.0,
-				friction: spec.friction || 0.5,
+				friction: spec.friction || 1.0,
 				showBox: true
 			};
 			
@@ -81,44 +81,60 @@ var RigidBody = (function(){
                 that.velocity = new THREE.Vector3();
 			};
             
+            that.remove = function(){
+				for(var i = 0; i < that.sceneHelpers.children.length; ++i)
+                {
+                    if(that.box === that.sceneHelpers.children[i])
+                    {
+                        that.sceneHelpers.children.splice(i,1);
+                        delete(that.box);
+                        return;
+                    }
+                }
+			};
+            
 			that.update = function(){
 				if(that.isKinematic === false)
 				{
+					
 					that.velocity.mul(that.acceleration);
-					var dir = that.direction.clone();
-					dir.mul(new THREE.Vector3(that.mass / that.g, that.mass / that.g, that.mass / that.g));
-					that.velocity.add(dir);
-					that.obj.position.add(that.velocity);
-					that.velocity.x *= that.friction;
-					that.velocity.y *= that.friction;
-					that.velocity.z *= that.friction;
-					
-					that.direction.y = lerp(that.direction.y, -1.0, 0.05);
-					
+                    var dir = that.direction.clone();
+                    dir.mul(new THREE.Vector3(that.mass / that.g, that.mass / that.g, that.mass / that.g));
+                    that.velocity.add(dir);
+                    that.obj.position.add(that.velocity);
+                    that.velocity.x *= that.friction;
+                    that.velocity.y *= that.friction;
+                    that.velocity.z *= that.friction;
+
+                    that.direction.y = lerp(that.direction.y, -1.0, 0.05);
+                    that.box.update();
 					for(var i = 0; i < that.scene.children.length; ++i)
 					{
 						that.obj.geometry.computeBoundingBox();
 						var obj = that.scene.children[i];
-						if(obj.geometry && obj.geometry.computeBoundingBox)
+						if(obj.rigidBody && obj.rigidBody.box)
 						{
 							obj.geometry.computeBoundingBox();
-							var objBox = obj.geometry.boundingBox;
-							
-							if(that.box.box.containsBox(objBox) === true)
+							var objBox = obj.rigidBody.box;
+							console.log("Box Min Y: " + that.box.box.min.y + "  Box Max Y: " + that.box.box.max.y );
+							if(that.box !== objBox && that.box.box.isIntersectionBox(objBox.box)=== true)
 							{
-								var union = that.box.box.union(objBox);
-								var center_union = union.max.sub(union.min);
+                                var intersect = that.box.box.clone().intersect(objBox.box)
+				                var center_union = intersect.max.sub(intersect.min);
 								var dir = that.direction.clone();
-								var dv = dir.cross(center_union);
-								dir.negate();
-								dv.mul(that.velocity);
-								dv.mul(dir);
-								
-								that.obj.position.mul(dv);
+								dir.mul(center_union);
+                                dir.negate();
+                                that.velocity = new THREE.Vector3(0.0,0.0,0.0);
+                                that.obj.position.add(dir);
+                                that.box.update();
+                                return;
 							}
 						}
 					}
+                    
 				}
+                
+                
 			};
 			
 			/*update_interval = setInterval(function(){
@@ -132,13 +148,13 @@ var RigidBody = (function(){
 			that.obj.rigidBody = that;
 		},
 		
-		appendToScene: function(scene, update){
+		appendToScene: function(objet, update){
 			'use strict';
 			for(var i = 0; i < scene.children.length; ++i)
 			{
 				RigidBody.append({ obj: scene.children[i], update: update, isKinematic: true });
 			}
-		}
+        }
 	}
 })();
 

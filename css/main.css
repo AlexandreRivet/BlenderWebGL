@@ -104,6 +104,8 @@ body
     
     background-color:               #222;
     border-top:                     solid 1px #ccc;
+    
+    overflow:                       hidden;
 }
 
 .sideBar_btn {
@@ -196,7 +198,7 @@ SCROLLBAR
 .AnimationEditorArea{
     width: 100%;
     height:80%;
-    overflow-x: scroll;
+    overflow-x: hidden;
 }
 .AnimationEditorAreaScroll{
     min-width: 100%;

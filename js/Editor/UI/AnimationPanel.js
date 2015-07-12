@@ -228,12 +228,13 @@ var AnimationPanel = function(editor) {
             var currentTime = parseFloat(timeValueAnimation.getValue());
             if(currentTime > ANIMATIONMGR.mEnd)
                 return;
-            ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
+            ANIMATIONEDITOR.setPosWithTime(ANIMATIONEDITOR.mCursorPrincipal, currentTime, ANIMATIONMGR.mEnd);
         }
     }
     function updateDurationEditorAnimation()
     {
         ANIMATIONMGR.mEnd = parseFloat(durationValueAnimation.getValue());
+        ANIMATIONEDITOR.updatePositionCursors();
     }
     
     ANIMATIONEDITOR.mCursorArea = editorPanelAreaScroll;
