@@ -13,11 +13,9 @@ var RightSidebar_Geometry = function(editor) {
     
     function build() {
         
-        var object = editor.mEditObject;
+        var geometry = editor.mEditObject.geometry;     
 
-		if ( check(object) && object.geometry && editor.mEditMode == EditMode.OBJECT ) {
-
-			var geometry = object.geometry;
+		if ( geometry && editor.mEditMode == EditMode.OBJECT ) {
             
             container.setVisible(true);
             

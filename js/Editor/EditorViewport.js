@@ -195,8 +195,6 @@ var Viewport = function (editor) {
             else if (editor.mEditMode === EditMode.OBJECT)
                 intersects = getIntersects(mouseUpPosition, editionScene.children);
             
-            debugger;
-            
             if (intersects.length > 0) {
                 
                 var intersect = intersects[0];
@@ -386,7 +384,12 @@ var Viewport = function (editor) {
         var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
         mouseUpPosition.fromArray(position);
         
-        click();
+        
+        if (e.button == 0)
+            click();
+        else if (e.button == 2) {
+            alert('clic droit');
+        }
         
         document.removeEventListener('mouseup', mouseUp, false);
     };
@@ -597,26 +600,10 @@ var Viewport = function (editor) {
         
     });
     
-    events.geometryChanged.add(function() {
+    events.geometryChanged.add(function(geometry) {
         
-        // Update WireframeHelper
-        var helpers = editionHelpersScene.children;
+        editor.mEditObject.rigidBody.box.update();
         
-        for (var i = 0; i < helpers.length; i++) {
-         
-            if (helpers[i] instanceof THREE.WireframeHelper) {
-                
-                helpers[i].parent.remove(helpers[i]);   
-                
-            }
-        
-        }
-        
-        var helper = new THREE.WireframeHelper(editor.mEditObject);
-        helper.material.color.set( 0xffffff );
-        editionHelpersScene.add(helper)
-        if(check(editor.mEditObject) && check(editor.mEditObject.rigidBody))
-            editor.mEditObject.rigidBody.box.update();
         render();
         
     });
@@ -668,7 +655,7 @@ var Viewport = function (editor) {
         
         if (materialsNeedUpdate === true) updateMaterials();
        
-        if(!(object instanceof THREE.Light) )
+        if(!(object instanceof THREE.Light))
         {
             RIGIDBODY.append({ 
 			scene: scene, 						//	Scene THREE.js nécessaire pour les calculs physiques par rapport aux autres objets
@@ -706,7 +693,7 @@ var Viewport = function (editor) {
             if (check(editor.mHelpers[object.id])) {
                 editor.mHelpers[object.id].update();
             }
-            if (check(object) && check(object.rigidBody))
+            if(!(object instanceof THREE.Light))
                 object.rigidBody.box.update();   
         }
         
@@ -869,7 +856,7 @@ var Viewport = function (editor) {
             editor.mEvents.objectChanged.dispatch(editor.mEditObject);
             
             var currentTime = ANIMATIONMGR.mDurationPlay/1000;
-            ANIMATIONEDITOR.setPosWithTime(ANIMATIONEDITOR.getCursorPrincipal(),currentTime, ANIMATIONMGR.mEnd);
+            ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
             ANIMATIONEDITOR.updateTimeEditorAnimation(currentTime);
 
             if(ANIMATIONMGR.getState() == STATE.STOP)

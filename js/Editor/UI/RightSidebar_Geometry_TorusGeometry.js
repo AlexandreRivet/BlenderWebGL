@@ -53,14 +53,7 @@ var RightSidebar_Geometry_TorusGeometry = function(editor) {
     
     function update() {
       
-        var object = editor.mEditObject;
-        
-        if (!check(object))
-            return;
-        
-        object.geometry.dispose();
-        
-        object.geometry = new THREE.TorusGeometry(
+        var newGeometry = new THREE.TorusGeometry(
             objectRadius.getValue(), 
             objectTube.getValue(),
             objectRadialSegment.getValue(),
@@ -68,9 +61,13 @@ var RightSidebar_Geometry_TorusGeometry = function(editor) {
             objectArc.getValue()
         );
         
-        object.geometry.computeBoundingSphere();
+        editor.mEditObject.geometry.dispose();
+        editor.mEditObject.geometry = newGeometry;
         
-        events.geometryChanged.dispatch(editor.mEditObject);
+        editor.mEditObjectInObjectMode.geometry.dispose();
+        editor.mEditObjectInObjectMode.geometry = newGeometry.clone();
+        
+        events.geometryChanged.dispatch(newGeometry);
         
     };
     

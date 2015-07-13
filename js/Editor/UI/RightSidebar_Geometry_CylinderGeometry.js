@@ -55,14 +55,7 @@ var RightSidebar_Geometry_CylinderGeometry = function(editor) {
     
     function update() {
       
-        var object = editor.mEditObject;
-        
-        if (!check(object))
-            return;
-        
-        object.geometry.dispose();
-        
-        object.geometry = new THREE.CylinderGeometry(
+        var newGeometry = new THREE.CylinderGeometry(
             objectRadiusTop.getValue(), 
             objectRadiusBottom.getValue(),
             objectHeight.getValue(),
@@ -70,9 +63,13 @@ var RightSidebar_Geometry_CylinderGeometry = function(editor) {
             objectHeightSegment.getValue()
         );
         
-        object.geometry.computeBoundingSphere();
+        editor.mEditObject.geometry.dispose();
+        editor.mEditObject.geometry = newGeometry;
         
-        events.geometryChanged.dispatch(editor.mEditObject);
+        editor.mEditObjectInObjectMode.geometry.dispose();
+        editor.mEditObjectInObjectMode.geometry = newGeometry.clone();
+        
+        events.geometryChanged.dispatch(newGeometry);
         
     };
     

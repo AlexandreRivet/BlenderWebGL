@@ -63,15 +63,8 @@ var RightSidebar_Geometry_BoxGeometry = function(editor) {
     
     
     function update() {
-      
-        var object = editor.mEditObject;
         
-        if (!check(object))
-            return;
-        
-        object.geometry.dispose();
-        
-        object.geometry = new THREE.BoxGeometry(
+        var newGeometry = new THREE.BoxGeometry(
             objectWidth.getValue(), 
             objectHeight.getValue(),
             objectDepth.getValue(),
@@ -80,9 +73,13 @@ var RightSidebar_Geometry_BoxGeometry = function(editor) {
             objectDepthSegment.getValue()
         );
         
-        object.geometry.computeBoundingSphere();
+        editor.mEditObject.geometry.dispose();
+        editor.mEditObject.geometry = newGeometry;
         
-        events.geometryChanged.dispatch(editor.mEditObject);
+        editor.mEditObjectInObjectMode.geometry.dispose();
+        editor.mEditObjectInObjectMode.geometry = newGeometry.clone();
+        
+        events.geometryChanged.dispatch(newGeometry);
         
     };
     

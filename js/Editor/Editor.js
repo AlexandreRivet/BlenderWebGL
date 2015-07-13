@@ -78,7 +78,9 @@ var Editor = function (name) {
     this.mEditionScene = new THREE.Scene();
     this.mEditionScene.name = 'Scene Edition';
     
-    //TODO: SceneHelper for edition ??
+    this.mEditObjectInObjectMode = new THREE.Mesh(undefined, new THREE.MeshBasicMaterial({'color': 0xffffff, 'side': 2}));
+    this.mEditionScene.add(this.mEditObjectInObjectMode);
+    
     this.mEditionHelpersScene = new THREE.Scene();
     this.mEditionHelpersScene.name = 'Scene Edition Helpers';
     
@@ -88,12 +90,10 @@ var Editor = function (name) {
     this.mMaterials = {};
     this.mTextures = {};
     
-    
     this.mEditObject = null;
     this.mMaterialEditObject = null;
-    
-    this.mTransformEditObject = {"position": new THREE.Vector3(), "rotation": new THREE.Euler(), "scale": new THREE.Vector3()};
-    
+    this.mGeometryEditObject = null;
+        
     this.mHelpers = {};
     
     this.mEditMode = EditMode.SCENE;   
@@ -267,53 +267,17 @@ Editor.prototype.setMode = function(mode) {
         return;
     
     this.mEditMode = mode;
-    
-    // Save editObject transform
+
     if (this.mEditMode === EditMode.OBJECT) {
-        
-        this.mTransformEditObject.position.copy(this.mEditObject.position);
-        this.mTransformEditObject.rotation.copy(this.mEditObject.rotation);
-        this.mTransformEditObject.scale.copy(this.mEditObject.scale);
-        
-        this.mEditObject.position.set(0, 0, 0);
-        this.mEditObject.rotation.set(0, 0, 0);
-        this.mEditObject.scale.set(1, 1, 1);
-        
-        this.mEditObject.traverse(function(child) {
-            child.visible = false;
-        });
-        this.mEditObject.visible = true;
-        
-        // Change material just for interaction
+
         this.mMaterialEditObject = this.mEditObject.material;
-        this.mEditObject.material = new THREE.MeshBasicMaterial({'color': 0xfffffff, 'vertexColors': THREE.FaceColors, 'side': 2});
-        
-        this.mEditionScene.add(this.mEditObject);
+
+        this.mEditObjectInObjectMode.geometry = this.mEditObject.geometry.clone();
     
     } else if (this.mEditMode === EditMode.SCENE) {
         
-        // Clear Edition Scene
+        this.mEditObject.material = this.mMaterialEditObject;
         
-        var objects = this.mEditionScene.children;
-        var rigidBody_tmp = (check(objects[0].rigidBody)?objects[0].rigidBody : null);
-        while(objects.length > 0)
-            this.removeObject(objects[0]);     
-
-        this.mEditObject.position.copy(this.mTransformEditObject.position);
-        this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
-        this.mEditObject.scale.copy(this.mTransformEditObject.scale);
-        
-        this.mEditObject.traverse(function(child) {
-            child.visible = true;
-        });
-        
-        // Reaffect material for the real scene
-        this.mEditObject.material = this.mMaterialEditObject;        
-        
-        //Reaffect RigidBody
-        // this.mEditObject.rigidBody = rigidBody_tmp;
-        
-        this.mScene.add(this.mEditObject);
         this.mEvents.sceneGraphChanged.dispatch();
         this.mEvents.objectSelected.dispatch(this.mEditObject);
         
