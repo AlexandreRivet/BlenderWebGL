@@ -385,10 +385,16 @@ var Viewport = function (editor) {
         mouseUpPosition.fromArray(position);
         
         
-        if (e.button == 0)
+        if (e.button == 0) {
+            
+            events.rightClick.dispatch(false, 0, 0);
+            
             click();
-        else if (e.button == 2) {
-            alert('clic droit');
+            
+        } else if (e.button == 2) {
+            
+            events.rightClick.dispatch(true, e.clientX, e.clientY);
+            
         }
         
         document.removeEventListener('mouseup', mouseUp, false);
@@ -822,6 +828,9 @@ var Viewport = function (editor) {
     
 	var shader = new Shader(editor);
 	container.add(shader);
+    
+    var contextualMenu = new ContextualMenu(editor);
+    container.add(contextualMenu);
     
     function updateMaterials() {
       

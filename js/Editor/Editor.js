@@ -25,35 +25,47 @@ var Editor = function (name) {
         // Clear the editor
         editorCleared : new signals.Signal(),
         
+        // Mode changed
         selectionModeChanged: new signals.Signal(),
         
+        // Transform changed
         transformModeChanged: new signals.Signal(),
         
+        // Scene graph has to be updated
         sceneGraphChanged: new signals.Signal(),
         
+        // Geometry and material changed 
         geometryChanged: new signals.Signal(),
         materialChanged: new signals.Signal(),
         
+        // Update for objects
         objectSelected: new signals.Signal(),
         objectAdded: new signals.Signal(),
         objectChanged: new signals.Signal(),
         objectRemoved: new signals.Signal(),
         
+        // Update helpers
         helperAdded: new signals.Signal(),
         helperRemoved: new signals.Signal(),
         
+        // Window resized
         windowResized: new signals.Signal(),
         
+        // Change mode SCENE <=> OBJECT
         sceneModeChanged: new signals.Signal(),
         
+        // Animation + rigidbody
         animatorLaunched: new signals.Signal(),
         rigidbodyLaunched: new signals.Signal(),
         rigidbodyStop: new signals.Signal(),
         rigidbodyReset: new signals.Signal(),
         
+        // Shader edition
         shaderEdited: new signals.Signal(),
-        shaderClosed: new signals.Signal()
+        shaderClosed: new signals.Signal(),
         
+        // Right click
+        rightClick: new signals.Signal()
     };
     
     this.mCameras =

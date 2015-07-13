@@ -78,6 +78,47 @@ hr
     background:                     transparent;
 }
 
+/* Définition de la class ContextualMenu générique */
+.ContextualMenu
+{
+    position:                       absolute;
+    top:                            0px;
+    left:                           0px;
+    float:                          left;
+    cursor:                         pointer;
+    padding-right:                  8px;
+    
+}
+
+.ContextualMenu .Options
+{
+    position:                       absolute;
+    display:                        block;
+    padding:                        5px 0px;
+    background:                     #eee;
+    width:                          150px;
+}
+
+.ContextualMenu .Options .Option
+{
+    color:                          #222;
+    background-color:               transparent;
+    padding:                        5px 10px;
+    margin:                         2px !important;
+}
+
+.ContextualMenu .Options .Option:hover
+{
+    color:                          #eee;
+    background-color:               #222;
+}
+
+.ContextualMenu .Options .Option:active
+{
+    color:                          #666;
+    background:                     transparent;
+}
+
 /* Définition de la classe Button générique */
 .Button
 {
