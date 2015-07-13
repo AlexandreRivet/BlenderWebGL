@@ -298,7 +298,7 @@ Editor.prototype.setMode = function(mode) {
         var rigidBody_tmp = (check(objects[0].rigidBody)?objects[0].rigidBody : null);
         while(objects.length > 0)
             this.removeObject(objects[0]);     
-
+        debugger;
         this.mEditObject.position.copy(this.mTransformEditObject.position);
         this.mEditObject.rotation.copy(this.mTransformEditObject.rotation);
         this.mEditObject.scale.copy(this.mTransformEditObject.scale);
