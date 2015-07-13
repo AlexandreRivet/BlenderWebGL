@@ -77,13 +77,13 @@ var AnimationPanel = function(editor) {
     toolPanelButtons.add(durationValueAnimation);
     
    
-    var buttonPlay = new UIButton(">");
+    var buttonPlay = new UIButton("$");
     buttonPlay.addClass('sideBar_btn_small');
     buttonPlay.click(function() {
         if(editor.mEditMode == EditMode.OBJECT)
             return;
         
-        if(buttonPlay.getTextContent() == '>')
+        if(buttonPlay.getTextContent() == '$')
         {
             editor.deselectObject();
             buttonPlay.setTextContent('||');
@@ -95,7 +95,7 @@ var AnimationPanel = function(editor) {
         }
         else
         {
-            buttonPlay.setTextContent('>');
+            buttonPlay.setTextContent('$');
             ANIMATIONMGR.pause();
         }
            
@@ -103,13 +103,13 @@ var AnimationPanel = function(editor) {
     toolPanelButtons.add(buttonPlay);
     ANIMATIONEDITOR.setPlayButton(buttonPlay);
     
-    var buttonStop = (new UIButton('[]')).addClass('sideBar_btn_small');
+    var buttonStop = (new UIButton('#')).addClass('sideBar_btn_small');
     buttonStop.click(function() {
         if(editor.mEditMode == EditMode.OBJECT)
             return;
         
         ANIMATIONMGR.stop();
-        buttonPlay.setTextContent('>');
+        buttonPlay.setTextContent('$');
     });
     toolPanelButtons.add(buttonStop);
     

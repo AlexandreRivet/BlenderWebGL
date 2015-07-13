@@ -176,7 +176,7 @@ AnimationEditor.prototype.clear = function()
     this.mAllKeyFrameMarkers.splice(0,this.mAllKeyFrameMarkers.length);
     this.mCurrentKeyFrameMarkers.splice(0,this.mCurrentKeyFrameMarkers.length);
     this.mCursorArea.clean();
-    this.mPlayButton.setTextContent('>');
+    this.mPlayButton.setTextContent('$');
 };
 
 
