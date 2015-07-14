@@ -41,29 +41,6 @@ var LeftSidebar = function(editor) {
     
     container.add(new UISeparator());
     
-        
-    // POINTS BUTTON
-    var buttonPS = new UIButton('Poi.');
-    buttonPS.addClass('sideBar_btn');
-    buttonPS.setDisabled(true);
-    buttonPS.click(function() {
-        
-        events.selectionModeChanged.dispatch(SelectionMode.POINTS);
-        
-    });
-    container.add(buttonPS);
-    
-    // FACES BUTTON        
-    var buttonFS = new UIButton().add(new UIImage('resources/images/edge.png'));
-    buttonFS.addClass('sideBar_btn');
-    buttonFS.setDisabled(true);
-    buttonFS.click(function() {
-        
-        events.selectionModeChanged.dispatch(SelectionMode.FACES);
-        
-    });
-    container.add(buttonFS);
-    
     events.objectSelected.add(function(object) {
        
         if (object instanceof THREE.Scene) {
@@ -102,16 +79,12 @@ var LeftSidebar = function(editor) {
             buttonM.setDisabled(false); 
             buttonR.setDisabled(false);
             buttonS.setDisabled(false);
-            buttonPS.setDisabled(true);
-            buttonFS.setDisabled(true);
             
         } else if (editor.mEditMode === EditMode.OBJECT) {
          
             buttonM.setDisabled(true);
             buttonR.setDisabled(true);
             buttonS.setDisabled(true);
-            buttonPS.setDisabled(false);
-            buttonFS.setDisabled(false);
             
         }
         

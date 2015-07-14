@@ -92,11 +92,15 @@ var ContextualMenu = function(editor) {
     
     events.leftClick.add(function(x, y) {
         
+        // Pour prendre en compte la leftbar et la menubar
+        x -= 61;
+        y -= 31;
+        
         var xmin = container.mDOM.offsetLeft; 
         var xmax = xmin + container.mMenuItems.mDOM.offsetWidth;
         var ymin = container.mDOM.offsetTop;
-        var ymax = ymin + container.mMenuItems.mDOM.offsetHeight;
-        
+        var ymax = ymin + container.mMenuItems.mDOM.offsetHeight + 10; // lol c'est le padding
+
         if (!(x > xmin && x < xmax && y > ymin && y < ymax))  {
          
             container.setVisible(false);

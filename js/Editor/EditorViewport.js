@@ -384,11 +384,13 @@ var Viewport = function (editor) {
         var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
         mouseUpPosition.fromArray(position);
         
-        if (e.button == 0 && contextualMenu.mVisible === false) {
+        if (e.button == 0) {
             
-            events.leftClick.dispatch(e.clientX, e.clientY);
+            if (contextualMenu.mVisible === true)
+                events.leftClick.dispatch(e.clientX, e.clientY);
             
-            click();
+            if (contextualMenu.mVisible === false)
+                click();
             
         } else if (e.button == 2) {
             
