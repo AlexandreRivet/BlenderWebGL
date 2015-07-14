@@ -1,0 +1,433 @@
+{
+	"metadata": {
+		"version": 4.3,
+		"type": "Object",
+		"generator": "ObjectExporter"
+	},
+	"geometries": [
+		{
+			"uuid": "FE5E40AE-3571-4E2C-978E-35B9D43B89B2",
+			"type": "TorusGeometry",
+			"radius": 150,
+			"tube": 40,
+			"radialSegments": 32,
+			"tubularSegments": 32,
+			"arc": null
+		},
+		{
+			"uuid": "85DCB6A2-4BF9-4320-85F0-1FE178D91294",
+			"type": "TorusGeometry",
+			"radius": 150,
+			"tube": 40,
+			"radialSegments": 32,
+			"tubularSegments": 32,
+			"arc": null
+		},
+		{
+			"uuid": "929A7A50-69EE-4FA2-946A-704E829B82A4",
+			"type": "TorusGeometry",
+			"radius": 150,
+			"tube": 40,
+			"radialSegments": 32,
+			"tubularSegments": 32,
+			"arc": null
+		},
+		{
+			"uuid": "002D6AFD-1CDF-45B7-8AB3-863D726D2714",
+			"type": "TorusGeometry",
+			"radius": 150,
+			"tube": 40,
+			"radialSegments": 32,
+			"tubularSegments": 32,
+			"arc": null
+		}],
+	"materials": [
+		{
+			"uuid": "3134236B-AAB1-483E-A35B-88C2BA9F1C6C",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
+		},
+		{
+			"uuid": "A890B350-E297-4AF3-9F97-145D1894C017",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
+		},
+		{
+			"uuid": "0220376E-8500-4AC4-B555-C0FF6C42A0DB",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
+		},
+		{
+			"uuid": "F396D220-1D4D-4E4E-91B7-D58DB92D7D88",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
+		}],
+	"object": {
+		"uuid": "EBBFC8A5-B4A3-4EE1-8FFF-FC7605B18629",
+		"type": "Scene",
+		"name": "Scene",
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"children": [
+			{
+				"uuid": "A4F27E6D-8315-48CA-A573-E4612A4751DA",
+				"type": "Mesh",
+				"name": "Anneau 1",
+				"geometry": "FE5E40AE-3571-4E2C-978E-35B9D43B89B2",
+				"material": "3134236B-AAB1-483E-A35B-88C2BA9F1C6C",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,400,150,0,1]
+			},
+			{
+				"uuid": "44D7F395-869D-4A45-B41D-18733F145396",
+				"type": "Mesh",
+				"name": "Anneau 2",
+				"geometry": "85DCB6A2-4BF9-4320-85F0-1FE178D91294",
+				"material": "A890B350-E297-4AF3-9F97-145D1894C017",
+				"matrix": [0.0007963267271406949,0,-0.9999997019767761,0,0,1,0,0,0.9999997019767761,0,0.0007963267271406949,0,0,0,-450,1]
+			},
+			{
+				"uuid": "AC50C5A0-4DE1-4F99-A050-599B4ABDD766",
+				"type": "PointLight",
+				"name": "Light 1",
+				"color": 16776960,
+				"intensity": 1,
+				"distance": 400,
+				"decay": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,400,150,0,1]
+			},
+			{
+				"uuid": "F53FE30A-1212-42E0-904C-566FB1652F99",
+				"type": "Mesh",
+				"name": "Anneau 3",
+				"geometry": "929A7A50-69EE-4FA2-946A-704E829B82A4",
+				"material": "0220376E-8500-4AC4-B555-C0FF6C42A0DB",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-450,150,0,1]
+			},
+			{
+				"uuid": "FCF10886-D17C-4F3A-8F38-6B30AC92893C",
+				"type": "PointLight",
+				"name": "Light 2",
+				"color": 6550335,
+				"intensity": 1,
+				"distance": 400,
+				"decay": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-450,150,0,1]
+			},
+			{
+				"uuid": "5491DD9F-ECF9-41FB-8EEF-704DDBD37188",
+				"type": "Mesh",
+				"name": "Anneau 4",
+				"geometry": "002D6AFD-1CDF-45B7-8AB3-863D726D2714",
+				"material": "F396D220-1D4D-4E4E-91B7-D58DB92D7D88",
+				"matrix": [0.0007963267271406949,0,-0.9999997019767761,0,0,1,0,0,0.9999997019767761,0,0.0007963267271406949,0,0,0,450,1]
+			}]
+	},
+	"animations": [
+		{
+			"startAnimation": 0,
+			"object": "AC50C5A0-4DE1-4F99-A050-599B4ABDD766",
+			"startPos": {
+				"x": 400,
+				"y": 150,
+				"z": 0
+			},
+			"startRot": {
+				"_x": 0,
+				"_y": 0,
+				"_z": 0,
+				"_order": "XYZ"
+			},
+			"startScale": {
+				"x": 1,
+				"y": 1,
+				"z": 1
+			},
+			"interpolationMode": "linear",
+			"rotationInterpolationMode": "linear",
+			"keyframes": [
+				{
+					"m_Keyframe": 0,
+					"m_Position": {
+						"x": 400,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 2.5,
+					"m_Position": {
+						"x": 0,
+						"y": 0,
+						"z": -450
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 5,
+					"m_Position": {
+						"x": -450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 7.5,
+					"m_Position": {
+						"x": 0,
+						"y": 0,
+						"z": 450
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 9.947916666666666,
+					"m_Position": {
+						"x": 400,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}]
+		},
+		{
+			"startAnimation": 0,
+			"object": "FCF10886-D17C-4F3A-8F38-6B30AC92893C",
+			"startPos": {
+				"x": -450,
+				"y": 150,
+				"z": 0
+			},
+			"startRot": {
+				"_x": 0,
+				"_y": 0,
+				"_z": 0,
+				"_order": "XYZ"
+			},
+			"startScale": {
+				"x": 1,
+				"y": 1,
+				"z": 1
+			},
+			"interpolationMode": "linear",
+			"rotationInterpolationMode": "linear",
+			"keyframes": [
+				{
+					"m_Keyframe": 0,
+					"m_Position": {
+						"x": -450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 2.5,
+					"m_Position": {
+						"x": 0,
+						"y": 0,
+						"z": 450
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 5,
+					"m_Position": {
+						"x": 400,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 7.5,
+					"m_Position": {
+						"x": 0,
+						"y": 0,
+						"z": -450
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 9.947916666666666,
+					"m_Position": {
+						"x": -450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}]
+		}]
+}
