@@ -4,6 +4,7 @@
 	@brief		AnimationEditor Class
 	@author		Maxime HELAINE
 	@date		27/06/2015
+    @resum      Manager qui gère les éléments HTML du panel d'animation ( gestion des clés d'animation en particulier )
 */
 
 var ANIMATIONEDITOR = null;
@@ -60,12 +61,16 @@ AnimationEditor.prototype.addKeyFrameCurrent = function(keyFrame)
             return (keyA.mTime - keyB.mTime);
     });
 };
+
+// Positionne un cursor dans la timeline au bon endroit selon le temps donné en paramètre
 AnimationEditor.prototype.setPosWithTime = function(cursor, currentTime, timeMax)
 {
     var widthMax = $('.AnimationEditorAreaScroll')[0].offsetWidth;
     var pos = (currentTime / timeMax) * widthMax;
     cursor.setStyle({'left':pos+'px'});
 }
+
+// Update l'affichage du champ time de l'animation
 AnimationEditor.prototype.updateTimeEditorAnimation = function(currentTime)
 {
     this.mCurrentTimeEditor.setValue(currentTime);
@@ -105,6 +110,8 @@ AnimationEditor.prototype.unselectCursor = function(cursor)
     
     cursor.setClass('AnimationEditorCursor');
 }
+
+// Update les clés d'animation de l'objet selectionné
 AnimationEditor.prototype.updateCurrentKeyFrames = function(animation)
 {
     this.mCurrentKeyFrameMarkers.splice(0,this.mCurrentKeyFrameMarkers.length);
@@ -121,11 +128,15 @@ AnimationEditor.prototype.updateCurrentKeyFrames = function(animation)
             this.mCurrentKeyFrameMarkers.push(this.mAllKeyFrameMarkers[i]);   
     }
 };
+
+// Update l'affichage de l'animation : utilisé quand on clique sur la timeline, on joue une frame de l'animation.
 AnimationEditor.prototype.updateDisplayAnimation = function(animation, editor)
 {
     animation.playAnimation(parseFloat(this.mCurrentTimeEditor.getValue()), true);
     editor.mEvents.sceneGraphChanged.dispatch();
 };
+
+// Update de l'affichage des clés d'animation de l'objet sélectionné
 AnimationEditor.prototype.updateDisplayCursors = function(animation)
 {
     this.updateCurrentKeyFrames(animation);

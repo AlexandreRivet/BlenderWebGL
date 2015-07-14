@@ -1,3 +1,11 @@
+/**
+	Class AnimationEditor
+	
+	@brief		AnimationEditor Class
+	@author		Maxime HELAINE
+	@date		27/06/2015
+    @resum      Création du panel d'outils permettant de créer, supprimer, lancer des animations
+*/
 var AnimationPanel = function(editor) {
     'use strict';
     

@@ -4,6 +4,7 @@
 	@brief		AnimationManager Class
 	@author		Maxime HELAINE
 	@date		27/06/2015
+    @resum      Manager qui gère le bon fonctionne des animations : Play / Pause / Stop ainsi que la gestion du temps.
 */
 
 var ANIMATIONMGR = null;
@@ -215,6 +216,9 @@ AnimationManager.prototype.play = function()
         var nodeAnimation = null;
         for(var i = 0; i < this.mAnimationList.length; i++)
         {
+            if(this.mAnimationList[i].mSceneNodeAnimMap.length == 0)
+                continue;
+            
             this.mAnimationList[i].updateStartPosRotScale();
             
             nodeAnimation = (this.getKeys(this.mAnimationList[i]))[0];

@@ -4,6 +4,7 @@
 	@brief		KeyFrameMarker Class
 	@author		Maxime HELAINE
 	@date		27/06/2015
+    @resum      Objet qui fait le lien entre l'animation, les clés d'animation, le temps et l'objet cursor HTML
 */
 
 KeyFrameMarker = function(cursor, animationnode, time, animation) 

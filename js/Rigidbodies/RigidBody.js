@@ -92,11 +92,11 @@ var RigidBody = (function(){
                     }
                 }
 			};
-            
+            // Update du rigidbody
 			that.update = function(){
 				if(that.isKinematic === false)
 				{
-					
+					//Calcule de la nouvelle position de l'objet en fonction de sa velocité
 					that.velocity.mul(that.acceleration);
                     var dir = that.direction.clone();
                     dir.mul(new THREE.Vector3(that.mass / that.g, that.mass / that.g, that.mass / that.g));
@@ -107,9 +107,12 @@ var RigidBody = (function(){
                     that.velocity.z *= that.friction;
 
                     that.direction.y = lerp(that.direction.y, -1.0, 0.05);
+                    
+                    //update de la bounding box
                     that.box.update();
 					for(var i = 0; i < that.scene.children.length; ++i)
 					{
+                        //Test des collisions
 						that.obj.geometry.computeBoundingBox();
 						var obj = that.scene.children[i];
 						if(obj.rigidBody && obj.rigidBody.box)

@@ -4,6 +4,7 @@
 	@brief		Animation Class
 	@author		Maxime HELAINE
 	@date		27/06/2015
+    @resum      Module d'animation
 */
 
 Animation = function(object, startTimeAnimation, interpolationMode, rotationInterpolationMode) 
