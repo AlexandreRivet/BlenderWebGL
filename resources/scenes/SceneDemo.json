@@ -15,6 +15,16 @@
 			"arc": null
 		},
 		{
+			"uuid": "8826D3B4-C6FF-4222-BD34-F78BF8BDC3E0",
+			"type": "BoxGeometry",
+			"width": 100,
+			"height": 100,
+			"depth": 100,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
+		},
+		{
 			"uuid": "85DCB6A2-4BF9-4320-85F0-1FE178D91294",
 			"type": "TorusGeometry",
 			"radius": 150,
@@ -33,6 +43,16 @@
 			"arc": null
 		},
 		{
+			"uuid": "EC814347-7677-40A2-B847-3A8F6CF1C889",
+			"type": "BoxGeometry",
+			"width": 100,
+			"height": 100,
+			"depth": 100,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
+		},
+		{
 			"uuid": "002D6AFD-1CDF-45B7-8AB3-863D726D2714",
 			"type": "TorusGeometry",
 			"radius": 150,
@@ -40,6 +60,15 @@
 			"radialSegments": 32,
 			"tubularSegments": 32,
 			"arc": null
+		},
+		{
+			"uuid": "B89F14CB-1809-4AD4-9F6E-E9519A30F8E1",
+			"type": "CylinderGeometry",
+			"radiusTop": 50,
+			"radiusBottom": 100,
+			"height": 300,
+			"radialSegments": 32,
+			"heightSegments": 2
 		}],
 	"materials": [
 		{
@@ -49,6 +78,10 @@
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30
+		},
+		{
+			"uuid": "6C2B2ED1-6F94-4722-9A41-E514D13663F5",
+			"type": "MeshNormalMaterial"
 		},
 		{
 			"uuid": "A890B350-E297-4AF3-9F97-145D1894C017",
@@ -67,12 +100,26 @@
 			"shininess": 30
 		},
 		{
+			"uuid": "BA837C22-D8CA-4A89-A977-A43422303B81",
+			"type": "MeshNormalMaterial"
+		},
+		{
 			"uuid": "F396D220-1D4D-4E4E-91B7-D58DB92D7D88",
 			"type": "MeshPhongMaterial",
 			"color": 16777215,
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30
+		},
+		{
+			"uuid": "DDB18AAC-83D2-4145-B717-8CD0D76EFA80",
+			"type": "MeshPhongMaterial",
+			"color": 65535,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30,
+			"opacity": 0.6,
+			"transparent": true
 		}],
 	"object": {
 		"uuid": "EBBFC8A5-B4A3-4EE1-8FFF-FC7605B18629",
@@ -86,7 +133,16 @@
 				"name": "Anneau 1",
 				"geometry": "FE5E40AE-3571-4E2C-978E-35B9D43B89B2",
 				"material": "3134236B-AAB1-483E-A35B-88C2BA9F1C6C",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,400,150,0,1]
+				"matrix": [0.9999188184738159,0.012740883976221085,0,0,-0.012740883976221085,0.9999188184738159,0,0,0,0,1,0,450,150,0,1],
+				"children": [
+					{
+						"uuid": "ECC2A1A0-7C6B-483A-9E6B-66CF23314AEB",
+						"type": "Mesh",
+						"name": "Cube.000",
+						"geometry": "8826D3B4-C6FF-4222-BD34-F78BF8BDC3E0",
+						"material": "6C2B2ED1-6F94-4722-9A41-E514D13663F5",
+						"matrix": [0.5,0,0,0,0,0.5,0,0,0,0,0.5,0,0,225,0,1]
+					}]
 			},
 			{
 				"uuid": "44D7F395-869D-4A45-B41D-18733F145396",
@@ -94,7 +150,7 @@
 				"name": "Anneau 2",
 				"geometry": "85DCB6A2-4BF9-4320-85F0-1FE178D91294",
 				"material": "A890B350-E297-4AF3-9F97-145D1894C017",
-				"matrix": [0.0007963267271406949,0,-0.9999997019767761,0,0,1,0,0,0.9999997019767761,0,0.0007963267271406949,0,0,0,-450,1]
+				"matrix": [0.0007962886593304574,0,-0.9999997019767761,0,0,1,0,0,0.9999997019767761,0,0.0007962886593304574,0,0,0,-450,1]
 			},
 			{
 				"uuid": "AC50C5A0-4DE1-4F99-A050-599B4ABDD766",
@@ -104,7 +160,7 @@
 				"intensity": 1,
 				"distance": 400,
 				"decay": 1,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,400,150,0,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,444.6000061035156,148.1999969482422,-5.400000095367432,1]
 			},
 			{
 				"uuid": "F53FE30A-1212-42E0-904C-566FB1652F99",
@@ -112,7 +168,16 @@
 				"name": "Anneau 3",
 				"geometry": "929A7A50-69EE-4FA2-946A-704E829B82A4",
 				"material": "0220376E-8500-4AC4-B555-C0FF6C42A0DB",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-450,150,0,1]
+				"matrix": [0.996537983417511,-0.08313897252082825,0,0,0.08313897252082825,0.996537983417511,0,0,0,0,1,0,-450,150,0,1],
+				"children": [
+					{
+						"uuid": "6D7B2DE2-3D37-452D-A846-93A56DA39BEB",
+						"type": "Mesh",
+						"name": "Cube.007",
+						"geometry": "EC814347-7677-40A2-B847-3A8F6CF1C889",
+						"material": "BA837C22-D8CA-4A89-A977-A43422303B81",
+						"matrix": [0.5,0,0,0,0,0.5,0,0,0,0,0.5,0,0,225,0,1]
+					}]
 			},
 			{
 				"uuid": "FCF10886-D17C-4F3A-8F38-6B30AC92893C",
@@ -122,7 +187,7 @@
 				"intensity": 1,
 				"distance": 400,
 				"decay": 1,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-450,150,0,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-446.3999938964844,148.8000030517578,3.5999999046325684,1]
 			},
 			{
 				"uuid": "5491DD9F-ECF9-41FB-8EEF-704DDBD37188",
@@ -130,7 +195,23 @@
 				"name": "Anneau 4",
 				"geometry": "002D6AFD-1CDF-45B7-8AB3-863D726D2714",
 				"material": "F396D220-1D4D-4E4E-91B7-D58DB92D7D88",
-				"matrix": [0.0007963267271406949,0,-0.9999997019767761,0,0,1,0,0,0.9999997019767761,0,0.0007963267271406949,0,0,0,450,1]
+				"matrix": [0.0007962886593304574,0,-0.9999997019767761,0,0,1,0,0,0.9999997019767761,0,0.0007962886593304574,0,0,0,450,1]
+			},
+			{
+				"uuid": "896D9B09-966B-41C0-B1F1-26B42B3763AA",
+				"type": "Mesh",
+				"name": "Cylinder.004",
+				"geometry": "B89F14CB-1809-4AD4-9F6E-E9519A30F8E1",
+				"material": "DDB18AAC-83D2-4145-B717-8CD0D76EFA80",
+				"matrix": [3,0,0,0,0,3,0,0,0,0,3,0,0,0,0,1]
+			},
+			{
+				"uuid": "1C24B96E-D5BF-475F-A0A7-F45EF75F42F6",
+				"type": "DirectionalLight",
+				"name": "DirectionalLight.000",
+				"color": 16777215,
+				"intensity": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,1,0,1]
 			}]
 	},
 	"animations": [
@@ -138,9 +219,9 @@
 			"startAnimation": 0,
 			"object": "AC50C5A0-4DE1-4F99-A050-599B4ABDD766",
 			"startPos": {
-				"x": 400,
-				"y": 150,
-				"z": 0
+				"x": 444.6000061035156,
+				"y": 148.1999969482422,
+				"z": -5.400000095367432
 			},
 			"startRot": {
 				"_x": 0,
@@ -159,7 +240,7 @@
 				{
 					"m_Keyframe": 0,
 					"m_Position": {
-						"x": 400,
+						"x": 450,
 						"y": 150,
 						"z": 0
 					},
@@ -259,7 +340,7 @@
 				{
 					"m_Keyframe": 9.947916666666666,
 					"m_Position": {
-						"x": 400,
+						"x": 450,
 						"y": 150,
 						"z": 0
 					},
@@ -286,9 +367,9 @@
 			"startAnimation": 0,
 			"object": "FCF10886-D17C-4F3A-8F38-6B30AC92893C",
 			"startPos": {
-				"x": -450,
-				"y": 150,
-				"z": 0
+				"x": -446.3999938964844,
+				"y": 148.8000030517578,
+				"z": 3.5999999046325684
 			},
 			"startRot": {
 				"_x": 0,
@@ -415,6 +496,152 @@
 						"_x": 0,
 						"_y": 0,
 						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}]
+		},
+		{
+			"startAnimation": 0,
+			"object": "F53FE30A-1212-42E0-904C-566FB1652F99",
+			"startPos": {
+				"x": -450,
+				"y": 150,
+				"z": 0
+			},
+			"startRot": {
+				"_x": 0,
+				"_y": 0,
+				"_z": 25.049506178010475,
+				"_order": "XYZ"
+			},
+			"startScale": {
+				"x": 1,
+				"y": 1,
+				"z": 1
+			},
+			"interpolationMode": "linear",
+			"rotationInterpolationMode": "linear",
+			"keyframes": [
+				{
+					"m_Keyframe": 0,
+					"m_Position": {
+						"x": -450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 9.947916666666666,
+					"m_Position": {
+						"x": -450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 25.12,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}]
+		},
+		{
+			"startAnimation": 0,
+			"object": "A4F27E6D-8315-48CA-A573-E4612A4751DA",
+			"startPos": {
+				"x": 450,
+				"y": 150,
+				"z": 0
+			},
+			"startRot": {
+				"_x": 0,
+				"_y": 0,
+				"_z": -25.12,
+				"_order": "XYZ"
+			},
+			"startScale": {
+				"x": 1,
+				"y": 1,
+				"z": 1
+			},
+			"interpolationMode": "linear",
+			"rotationInterpolationMode": "linear",
+			"keyframes": [
+				{
+					"m_Keyframe": 0,
+					"m_Position": {
+						"x": 450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": 0,
+						"_order": "XYZ"
+					},
+					"m_Scale": {
+						"x": 1,
+						"y": 1,
+						"z": 1
+					},
+					"m_Angle": 0,
+					"m_Axis": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				},
+				{
+					"m_Keyframe": 9.953125,
+					"m_Position": {
+						"x": 450,
+						"y": 150,
+						"z": 0
+					},
+					"m_Orientation": {
+						"_x": 0,
+						"_y": 0,
+						"_z": -25.12,
 						"_order": "XYZ"
 					},
 					"m_Scale": {

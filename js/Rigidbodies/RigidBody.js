@@ -65,7 +65,7 @@ var RigidBody = (function(){
 			that.compute = function(){
 				that.obj.geometry.computeBoundingBox();
 				that.box = new THREE.BoundingBoxHelper(that.obj, Math.random() * 0xffffff);
-                that.box.visible = true;
+                that.box.visible = false;
 				that.sceneHelpers.add(that.box);
 			};
 			

@@ -704,7 +704,7 @@ var Viewport = function (editor) {
             
                 if (check(child.rigidBody) && check(child.rigidBody.box)) {
             
-                    child.rigidBody.showBox = true;						//	Box de collisions visible
+                    child.rigidBody.showBox = false;						//	Box de collisions visible
                     child.rigidBody.box.update();
                 
                 }
