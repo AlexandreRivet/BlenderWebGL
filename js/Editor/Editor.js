@@ -238,11 +238,17 @@ Editor.prototype.removeObject = function(object) {
     
     
     object.parent.remove(object);
-    if(check(object.rigidBody) && this.mEditMode === EditMode.OBJECT)
-    {
-        object.rigidBody.remove();
-        delete(object.rigidBody);
-    }
+    object.traverse(function(child) {
+
+        if (check(child.rigidBody)) {
+
+            child.rigidBody.remove();
+            delete(child.rigidBody);
+            
+        }
+
+    });
+    
     this.mEvents.objectRemoved.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();    
 };

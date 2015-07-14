@@ -691,7 +691,7 @@ var Viewport = function (editor) {
             
             objects.push(child);
             
-            if(!(child instanceof THREE.Light))
+            if(!(child instanceof THREE.Light) && check(child.geometry))
             {
                 RIGIDBODY.append({ 
 			    scene: scene, 						//	Scene THREE.js nécessaire pour les calculs physiques par rapport aux autres objets
@@ -700,25 +700,23 @@ var Viewport = function (editor) {
                 update: false, 						//	Mise-à-jour automatique ou pas du composant (Sinon il faut appeller la méthode update du composant rigidBody)
                 isKinematic: false, 				//	Physique des corps solides active ou pas
                 mass: 1.0	                          //	Masse de l'objet en Kg (Bon, pas très réaliste pour le moment mais on fait avec ... =_=)
-            });
+                });
             
-            if (check(child.rigidBody) && check(child.rigidBody.box)) {
+                if (check(child.rigidBody) && check(child.rigidBody.box)) {
             
-                child.rigidBody.showBox = false;						//	Box de collisions visible
-                child.rigidBody.box.update();
+                    child.rigidBody.showBox = true;						//	Box de collisions visible
+                    child.rigidBody.box.update();
                 
-            }
+                }
         
-        }
-            
-            
+            }
             
         });
         
+        updateRigidbody(object);
+        
         if (materialsNeedUpdate === true) updateMaterials();
        
-        
-        
         render();
             
     });
@@ -737,13 +735,17 @@ var Viewport = function (editor) {
     
     events.objectChanged.add(function(object) {
         transformControls.update();
+        
         if (check(object))
         {
             if (check(editor.mHelpers[object.id])) {
+            
                 editor.mHelpers[object.id].update();
+        
             }
-            if(check(object.rigidBody) && check(object.rigidBody.box))
-                object.rigidBody.box.update();   
+            
+            updateRigidbody(object);
+            
         }
         
         
@@ -761,6 +763,8 @@ var Viewport = function (editor) {
 
             });
         }
+        
+        updateRigidbody(editor.mScene);
         
         render();
         
@@ -834,6 +838,7 @@ var Viewport = function (editor) {
         RIGIDBODY.isRun = true;
         renderRigidbody();    
     });
+    
     events.rigidbodyStop.add(function() {
         if(requestIdRigidbody == null)
             return;
@@ -843,6 +848,7 @@ var Viewport = function (editor) {
         
         RIGIDBODY.isRun = false;
     });
+    
     events.rigidbodyReset.add(function() {
         if(!RIGIDBODY.isInit)
             return;
@@ -860,6 +866,7 @@ var Viewport = function (editor) {
         RIGIDBODY.isInit = false;
         RIGIDBODY.isRun = false;
     });
+    
     // Renderer
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setClearColor(0x555555);
@@ -874,6 +881,30 @@ var Viewport = function (editor) {
     
     var contextualMenu = new ContextualMenu(editor);
     container.add(contextualMenu);
+    
+    function updateRigidbody(reference) {
+      
+        reference.traverse(function(child) {
+                 
+            if (check(child.rigidBody) && check(child.rigidBody.box)) {
+                    
+                child.rigidBody.box.update();
+                
+            }               
+            
+        });
+        
+        reference.traverseAncestors(function(parent) {
+                 
+            if (check(parent.rigidBody) && check(parent.rigidBody.box)) {
+                    
+                parent.rigidBody.box.update();
+                    
+            }               
+            
+        });
+        
+    };
     
     function updateMaterials() {
       
@@ -924,6 +955,7 @@ var Viewport = function (editor) {
         
         requestIdAnimation = requestAnimationFrame(renderAnimation); 
     };
+    
     function renderRigidbody() { 
         var object_tmp;
         for(var i = 0; i < scene.children.length; i++)
@@ -937,6 +969,7 @@ var Viewport = function (editor) {
         
         requestIdRigidbody = requestAnimationFrame(renderRigidbody); 
     };
+    
     function render() {
         
         var w = container.mDOM.offsetWidth / 2;

@@ -39,8 +39,7 @@ RightSidebar.Scene = function(editor) {
                 if(object instanceof THREE.BoundingBoxHelper)
                     continue;
                 
-                var content = pad;
-                content += '<span style="font-size:12px;">' + object.name + '</span>';
+                var content = pad + '<span style="font-size:12px;">' + object.name + '</span>';
                 
                 options.push(
                     {
@@ -49,7 +48,7 @@ RightSidebar.Scene = function(editor) {
                     }
                 );
                 
-                addObjects(object.children, pad + pad);
+                addObjects(object.children, pad + '&nbsp;&nbsp;&nbsp;');
             }
         
         
