@@ -3,6 +3,15 @@ Menubar.File = function(editor) {
     
     var container = new UIMenu('File');
     
+    // Create a fileinput but not visible for the user
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.addEventListener('change', function(e) {
+        
+        editor.mLoader.loadFile(fileInput.files[0]);    
+        
+    });
+    
     // NEW OPTION
     var option = new UIPanel();
     option.setTextContent('New');
@@ -39,7 +48,14 @@ Menubar.File = function(editor) {
             
         }        
         
-        alert('TODO: open');
+        if (confirm('Are you sure you want to open new scene?\nYou should save before.')) {
+         
+            editor.clear();
+            ANIMATIONMGR.clear(); 
+            ANIMATIONEDITOR.clear(); 
+        }
+        
+        fileInput.click();
         
     });
     container.addMenuItem(option);
@@ -71,16 +87,7 @@ Menubar.File = function(editor) {
     // SEPARATOR
     container.addSeparator();
     
-    // IMPORT OBJ OPTION
-    // Create a fileinput but not visible for the user
-    var fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.addEventListener('change', function(e) {
-        
-        editor.mLoader.loadFile(fileInput.files[0]);    // On veut charger que le premier (peut être plusieurs ??)
-        
-    });
-    
+    // IMPORT OBJ OPTION    
     var option = new UIPanel();
     option.setTextContent('Import OBJ');
     

@@ -38,9 +38,7 @@ var LeftSidebar = function(editor) {
         
     });
     container.add(buttonS);
-    
-    container.add(new UISeparator());
-    
+
     events.objectSelected.add(function(object) {
        
         if (object instanceof THREE.Scene) {

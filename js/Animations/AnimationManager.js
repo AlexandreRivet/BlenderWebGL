@@ -352,13 +352,84 @@ AnimationManager.prototype.toJSON = function()
 
 AnimationManager.prototype.fromJSON = function(json) {
     
-    /*for (var i = 0; i < json.length; i++) {
+    var editor = this.mEditor;
+    var scene = editor.mScene;
+    
+    debugger;
+    
+    for (var i = 0; i < json.length; i++) {
         
-        var animationJSON = json[i];
-        // var animation = new Animation(, animationJSON.startAnimation, animationJSON.interpolationMode, animation.rotationInterpolationMode)
+        var jsonAnim = json[i];
         
+        console.log(jsonAnim);
         
+        var animation = new Animation(scene.getObjectByProperty('uuid', jsonAnim.object), jsonAnim.startAnimation, jsonAnim.interpolationMode, jsonAnim.rotationInterpolationMode)
         
-    }*/
+        for (var j = 0; j < jsonAnim.keyframes.length; j++) {
+            
+            var key = jsonAnim.keyframes[j];
+         
+            var animationNode = new AnimationNode(
+                key.m_Keyframe,
+                new THREE.Vector3(
+                    key.m_Position.x,
+                    key.m_Position.y,
+                    key.m_Position.z
+                ),
+                new THREE.Euler(
+                    key.m_Orientation._x,
+                    key.m_Orientation._y,
+                    key.m_Orientation._z
+                ),
+                new THREE.Vector3(
+                    key.m_Scale.x,
+                    key.m_Scale.y,
+                    key.m_Scale.z                    
+                )
+            );
+         
+            setCursorKey(key.m_Keyframe, animation, animationNode);
+            
+            animation.addKey(animationNode);
+        }
+        
+        this.addAnimation(animation);
+        
+    }
     
 };
+
+function setCursorKey(keyframe, animation, animationNode) {
+    
+    var cursorKey = new UIPanel();
+    cursorKey.addClass('AnimationEditorCursor');
+    cursorKey.setStyle({'height': ANIMATIONEDITOR.mCursorArea.mDOM.offsetHeight + 'px' });
+        
+    var keyframeMarker = new KeyFrameMarker(cursorKey, animationNode, keyframe, animation);
+													
+    ANIMATIONEDITOR.setPosWithTime(cursorKey, keyframeMarker.getTime(), ANIMATIONMGR.mEnd); 
+    ANIMATIONEDITOR.addKeyFrameAll(keyframeMarker);
+
+    cursorKey.click(function(e) {
+       if(ANIMATIONMGR.getState() == STATE.PLAY || ANIMATIONMGR.getState() == STATE.PAUSE)
+          return;
+
+       e.stopPropagation();
+       ANIMATIONEDITOR.mCursorSelected = cursorKey;
+       ANIMATIONEDITOR.selectCursor(cursorKey);
+
+        //Place le cursor principal sur le curseur secondaire
+
+       var x = ANIMATIONEDITOR.mCursorSelected.mDOM.offsetLeft;
+       ANIMATIONEDITOR.getCursorPrincipal().setStyle({'left': x + 'px'});
+
+       var currentTime = getTimeWithPos(x, ANIMATIONEDITOR.mCursorArea.mDOM.offsetWidth, ANIMATIONMGR.mEnd);
+       ANIMATIONEDITOR.getCurrentTimeEditor().setValue(currentTime);
+       if(check(ANIMATIONMGR.mAnimationSelected))
+       {
+          ANIMATIONEDITOR.updateDisplayAnimation(ANIMATIONMGR.mAnimationSelected, editor);
+       }
+
+   });
+    
+}

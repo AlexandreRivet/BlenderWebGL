@@ -28,7 +28,34 @@ var Loader = function(editor)
                 
                 break;
                 
-            case 'dae':
+            case 'json':
+                
+                var reader = new FileReader();
+                reader.addEventListener('load', function(e) {
+                    
+                    var result = e.target.result;
+                    var data;
+                    
+                    try {
+                     
+                        data = JSON.parse(result);
+                        
+                    } catch(error) {
+                     
+                        alert("Can't parse your file.");
+                        return;
+                        
+                    }
+                    
+                    var scene = new THREE.ObjectLoader().parse(data);
+                    editor.setScene(scene);
+                    
+                    var animations = data.animations;
+                    if (check(animations))
+                        ANIMATIONMGR.fromJSON(animations);
+                    
+                });
+                reader.readAsText(file);
                 
                 break;
                 

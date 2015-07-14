@@ -7807,7 +7807,7 @@ THREE.Object3D.prototype = {
 		return this.getObjectByName( name );
 
 	},
-
+    
 	getObjectById: function ( id ) {
 
 		return this.getObjectByProperty( 'id', id );

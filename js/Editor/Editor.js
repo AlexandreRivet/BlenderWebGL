@@ -349,3 +349,17 @@ Editor.prototype.clear = function() {
     
     this.mEvents.editorCleared.dispatch();
 };
+
+Editor.prototype.setScene = function(scene) {
+    'use strict';
+    
+    this.mScene.uuid = scene.uuid;
+    this.mScene.name = scene.name;
+    
+    while(scene.children.length > 0) {
+        
+        this.addObject(scene.children[0]);
+        
+    }
+    
+};
