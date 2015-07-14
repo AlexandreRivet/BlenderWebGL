@@ -8,14 +8,6 @@ RightSidebar.Rigidbody = function(editor) {
     var container = new UIHidingPanel('RIGIDBODY');
     container.setVisible(false);
     
-    
-    
-    // Rigidbody
-    /*var objectRigidBodyPanel = new UIPanel();
-    var objectRigidBodyLink = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_rigidbodylink').setStyle({"border": "none", "vertical-align": "middle"}), new UILabel('').setClass('LabelForCheckbox')).change(update);
-    objectRigidBodyPanel.add(new UIText('RigidBody').setStyle({"width": "70px", "display": "inline-block", "font-size": "12px"}));
-    objectRigidBodyPanel.add(objectRigidBodyLink);*/
-    
     // IsKinematic
     var objectKinematicPanel = new UIPanel();
     var objectKinematicLink = new UICheckboxGroup(new UICheckbox(false).setID('checkbox_kinematiclink').setStyle({"border": "none", "vertical-align": "middle"}), new UILabel('').setClass('LabelForCheckbox')).change(update);

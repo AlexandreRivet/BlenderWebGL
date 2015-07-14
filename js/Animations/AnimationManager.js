@@ -354,14 +354,10 @@ AnimationManager.prototype.fromJSON = function(json) {
     
     var editor = this.mEditor;
     var scene = editor.mScene;
-    
-    debugger;
-    
+
     for (var i = 0; i < json.length; i++) {
         
         var jsonAnim = json[i];
-        
-        console.log(jsonAnim);
         
         var animation = new Animation(scene.getObjectByProperty('uuid', jsonAnim.object), jsonAnim.startAnimation, jsonAnim.interpolationMode, jsonAnim.rotationInterpolationMode)
         

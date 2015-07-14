@@ -264,9 +264,7 @@ var Viewport = function (editor) {
         
         // Je survole une face
         if (intersects.length > 0) {
-                
-            debugger;
-            
+
             var intersected = intersects[0];
             
             // Je survole une face différente de l'ancienne
@@ -389,9 +387,9 @@ var Viewport = function (editor) {
             if (contextualMenu.mVisible === false)
                 click();
             
-        } else if (e.button == 2) {
+        } else if (e.button == 1) {
             
-            events.rightClick.dispatch(e.clientX, e.clientY);
+            events.rightClick.dispatch(container, e.clientX, e.clientY);
             
         }
         
@@ -631,10 +629,18 @@ var Viewport = function (editor) {
         objectForSelection.visible = false;
         facesMgr.setObject(editor.mEditObjectInObjectMode);
         
+        editor.mEditObject.rigidBody.box.update();
+        
+        render();
+        
     });
     
     events.geometryChanged.add(function(geometry) {
         
+        editor.mEditObject.geometry.dispose();
+        editor.mEditObject.geometry = editor.mEditObjectInObjectMode.geometry.clone();
+        
+        debugger;
         
         editor.mEditObject.rigidBody.box.update();
         
@@ -685,23 +691,33 @@ var Viewport = function (editor) {
             
             objects.push(child);
             
+            if(!(child instanceof THREE.Light))
+            {
+                RIGIDBODY.append({ 
+			    scene: scene, 						//	Scene THREE.js nécessaire pour les calculs physiques par rapport aux autres objets
+			    sceneHelpers : sceneHelpers,
+                obj: child, 						//	Objet physique
+                update: false, 						//	Mise-à-jour automatique ou pas du composant (Sinon il faut appeller la méthode update du composant rigidBody)
+                isKinematic: false, 				//	Physique des corps solides active ou pas
+                mass: 1.0	                          //	Masse de l'objet en Kg (Bon, pas très réaliste pour le moment mais on fait avec ... =_=)
+            });
+            
+            if (check(child.rigidBody) && check(child.rigidBody.box)) {
+            
+                child.rigidBody.showBox = false;						//	Box de collisions visible
+                child.rigidBody.box.update();
+                
+            }
+        
+        }
+            
+            
+            
         });
         
         if (materialsNeedUpdate === true) updateMaterials();
        
-        if(!(object instanceof THREE.Light))
-        {
-            RIGIDBODY.append({ 
-			scene: scene, 						//	Scene THREE.js nécessaire pour les calculs physiques par rapport aux autres objets
-			sceneHelpers : sceneHelpers,
-            obj: object, 						//	Objet physique
-			update: false, 						//	Mise-à-jour automatique ou pas du composant (Sinon il faut appeller la méthode update du composant rigidBody)
-			isKinematic: false, 				//	Physique des corps solides active ou pas
-			mass: 1.0	//	Masse de l'objet en Kg (Bon, pas très réaliste pour le moment mais on fait avec ... =_=)
-            });
-            object.rigidBody.showBox = true;						//	Box de collisions visible
-            object.rigidBody.box.update();
-        }
+        
         
         render();
             
@@ -726,7 +742,7 @@ var Viewport = function (editor) {
             if (check(editor.mHelpers[object.id])) {
                 editor.mHelpers[object.id].update();
             }
-            if(check(object.rigidBody))
+            if(check(object.rigidBody) && check(object.rigidBody.box))
                 object.rigidBody.box.update();   
         }
         
@@ -897,7 +913,7 @@ var Viewport = function (editor) {
 
             if(ANIMATIONMGR.getState() == STATE.STOP)
             {
-                ANIMATIONEDITOR.getPlayButton().setTextContent('>');
+                ANIMATIONEDITOR.getPlayButton().setTextContent('$');
                 window.cancelAnimationFrame(requestIdAnimation);
                 requestIdAnimation = null;
                 return;

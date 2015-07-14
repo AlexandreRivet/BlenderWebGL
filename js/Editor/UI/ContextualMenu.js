@@ -74,11 +74,25 @@ var ContextualMenu = function(editor) {
     container.addMenuItem(optionR);
     
     
-    events.rightClick.add(function(x, y) {
+    events.rightClick.add(function(content, x, y) {
        
         // Afficher le container
         container.setVisible(true);
         
+        var cmWidth = container.mMenuItems.mDOM.offsetWidth;
+        var cmHeight = container.mMenuItems.mDOM.offsetHeight;
+        
+        console.log(cmWidth + ' - ' + cmHeight);
+        
+        var maxX = 61 + content.mDOM.offsetWidth - cmWidth;
+        var maxY = 31 + content.mDOM.offsetHeight - cmHeight;
+        
+        if (x > maxX)
+            x = maxX;
+        
+        if (y > maxY)
+            y = maxY;
+            
         // Le placer correctement
         container.setStyle({
             'top': y - 31 + 'px',

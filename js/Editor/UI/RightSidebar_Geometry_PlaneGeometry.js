@@ -59,7 +59,7 @@ var RightSidebar_Geometry_PlaneGeometry = function(editor) {
         editor.mEditObjectInObjectMode.geometry.dispose();
         editor.mEditObjectInObjectMode.geometry = newGeometry.clone();
         
-        events.geometryChanged.dispatch(newGeometry);
+        events.basicGeometryChanged.dispatch(newGeometry);
         
     };
     

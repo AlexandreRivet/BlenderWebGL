@@ -301,13 +301,12 @@ Editor.prototype.setMode = function(mode) {
 
         this.mMaterialEditObject = this.mEditObject.material;
 
-        this.mEditObjectInObjectMode.geometry = this.mEditObject.geometry;
+        this.mEditObjectInObjectMode.geometry.dispose();
+        this.mEditObjectInObjectMode.geometry = this.mEditObject.geometry.clone();
     
     } else if (this.mEditMode === EditMode.SCENE) {
 
         this.mEditObject.material = this.mMaterialEditObject;
-        
-        // this.mEditObject.geometry = this.mEditObjectInObjectMode.geometry;
         
         this.mEvents.sceneGraphChanged.dispatch();
         this.mEvents.objectSelected.dispatch(this.mEditObject);
