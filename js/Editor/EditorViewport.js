@@ -191,7 +191,7 @@ var Viewport = function (editor) {
    
             var intersects = [];
             if (editor.mEditMode === EditMode.SCENE)
-                intersects = getIntersects(mouseUpPosition, scene.children);
+                intersects = getIntersects(mouseUpPosition, objects);
             else if (editor.mEditMode === EditMode.OBJECT)
                 intersects = getIntersects(mouseUpPosition, editionScene.children);
             
@@ -384,16 +384,15 @@ var Viewport = function (editor) {
         var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
         mouseUpPosition.fromArray(position);
         
-        
-        if (e.button == 0) {
+        if (e.button == 0 && contextualMenu.mVisible === false) {
             
-            events.rightClick.dispatch(false, 0, 0);
+            events.leftClick.dispatch(e.clientX, e.clientY);
             
             click();
             
         } else if (e.button == 2) {
             
-            events.rightClick.dispatch(true, e.clientX, e.clientY);
+            events.rightClick.dispatch(e.clientX, e.clientY);
             
         }
         

@@ -15,10 +15,6 @@ RightSidebar.Scene = function(editor) {
         
         editor.selectObjectById(parseInt(tree.getValue()));
         
-        // alert('TODO: tree changed');
-        
-        // editor.selectObjectById(parseInt(tree.getValue()));
-        
     }); 
     content.add(tree);
     

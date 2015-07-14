@@ -12,7 +12,25 @@ var ContextualMenu = function(editor) {
     
     optionD.click(function() {
         
-        alert('DETACH');
+        var object = editor.mEditObject;
+        
+        if (check(object)) {
+            
+            if (check(object.parent)) {
+                
+                var newParentId = editor.mScene.id;
+        
+                if ( object.parent.id !== newParentId && object.id !== newParentId) {
+                    
+                    editor.moveObject(object, editor.mScene.getObjectById(newParentId)); 
+                    
+                }
+                
+            }
+            
+        }
+        
+        container.setVisible(false);
         
     });
     
@@ -23,17 +41,43 @@ var ContextualMenu = function(editor) {
     
     optionR.click(function() {
         
-        alert('DETACH CHILDREN');
+        var object = editor.mEditObject;
+        
+        if (check(object)) {
+            
+            var children = object.children;
+            
+            if (check(children) && children.length > 0) {
+             
+                var newParentId = editor.mScene.id;
+                
+                while (children.length > 0) {
+                 
+                    var child = children[0];
+                    
+                    if (child.parent.id !== newParentId && child.id !== newParentId) {
+                        
+                        editor.moveObject(child, editor.mScene.getObjectById(newParentId));
+                            
+                    }                    
+                    
+                }
+                
+            }
+            
+        }
+        
+        container.setVisible(false);
         
     });
     
     container.addMenuItem(optionR);
     
     
-    events.rightClick.add(function(visible, x, y) {
+    events.rightClick.add(function(x, y) {
        
         // Afficher le container
-        container.setVisible(visible);
+        container.setVisible(true);
         
         // Le placer correctement
         container.setStyle({
@@ -43,6 +87,21 @@ var ContextualMenu = function(editor) {
         
         // Update les paramètres à afficher
         build();
+        
+    });
+    
+    events.leftClick.add(function(x, y) {
+        
+        var xmin = container.mDOM.offsetLeft; 
+        var xmax = xmin + container.mMenuItems.mDOM.offsetWidth;
+        var ymin = container.mDOM.offsetTop;
+        var ymax = ymin + container.mMenuItems.mDOM.offsetHeight;
+        
+        if (!(x > xmin && x < xmax && y > ymin && y < ymax))  {
+         
+            container.setVisible(false);
+            
+        }
         
     });
     

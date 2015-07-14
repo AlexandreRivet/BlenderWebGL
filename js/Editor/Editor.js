@@ -64,8 +64,9 @@ var Editor = function (name) {
         shaderEdited: new signals.Signal(),
         shaderClosed: new signals.Signal(),
         
-        // Right click
-        rightClick: new signals.Signal()
+        // Mouse
+        rightClick: new signals.Signal(),
+        leftClick: new signals.Signal()
     };
     
     this.mCameras =
@@ -151,6 +152,21 @@ Editor.prototype.addObject = function (object) {
     
     this.mEvents.objectAdded.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();
+};
+
+Editor.prototype.moveObject = function(object, parent) {
+    'use strict';
+    
+    if (!check(parent)) {
+     
+        parent = this.mScene;
+        
+    }
+    
+    parent.add(object);
+    
+    this.mEvents.sceneGraphChanged.dispatch();
+    
 };
 
 Editor.prototype.addGeometry = function(geometry) {
