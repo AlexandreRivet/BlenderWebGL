@@ -79,6 +79,7 @@ var RightSidebar_Geometry_BoxGeometry = function(editor) {
         editor.mEditObjectInObjectMode.geometry.dispose();
         editor.mEditObjectInObjectMode.geometry = newGeometry.clone();
         
+        events.basicGeometryChanged.dispatch(newGeometry);
         events.geometryChanged.dispatch(newGeometry);
         
     };

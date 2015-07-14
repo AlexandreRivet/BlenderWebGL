@@ -36,6 +36,7 @@ var Editor = function (name) {
         
         // Geometry and material changed 
         geometryChanged: new signals.Signal(),
+        basicGeometryChanged: new signals.Signal(),
         materialChanged: new signals.Signal(),
         
         // Update for objects
@@ -91,7 +92,7 @@ var Editor = function (name) {
     this.mEditionScene = new THREE.Scene();
     this.mEditionScene.name = 'Scene Edition';
     
-    this.mEditObjectInObjectMode = new THREE.Mesh(undefined, new THREE.MeshBasicMaterial({'color': 0xffffff, 'side': 2}));
+    this.mEditObjectInObjectMode = new THREE.Mesh(undefined, new THREE.MeshBasicMaterial({'color': 0xffffff, 'side': 2, 'vertexColors': THREE.FaceColors}));
     this.mEditionScene.add(this.mEditObjectInObjectMode);
     
     this.mEditionHelpersScene = new THREE.Scene();
@@ -300,12 +301,14 @@ Editor.prototype.setMode = function(mode) {
 
         this.mMaterialEditObject = this.mEditObject.material;
 
-        this.mEditObjectInObjectMode.geometry = this.mEditObject.geometry.clone();
+        this.mEditObjectInObjectMode.geometry = this.mEditObject.geometry;
     
     } else if (this.mEditMode === EditMode.SCENE) {
 
         this.mEditObject.material = this.mMaterialEditObject;
-
+        
+        // this.mEditObject.geometry = this.mEditObjectInObjectMode.geometry;
+        
         this.mEvents.sceneGraphChanged.dispatch();
         this.mEvents.objectSelected.dispatch(this.mEditObject);
         

@@ -24,6 +24,9 @@ var Viewport = function (editor) {
     
     // For Keyboard
     var ctrlPressed = false;
+    var xPressed = false;
+    var yPressed = false;
+    var zPressed = false;
     
     // Edition
     var lastFaceIndex = -1;    
@@ -62,12 +65,6 @@ var Viewport = function (editor) {
     selectionTransformControl.addEventListener('change', function() {
     
         var object = selectionTransformControl.object;
-        
-        /*if (check(object)) {
-         
-            if (
-            
-        }*/
                 
         render();
         
@@ -263,11 +260,13 @@ var Viewport = function (editor) {
         else if (editor.mEditMode === EditMode.OBJECT)
             intersects = getIntersects(mouseUpPosition, editionScene.children);
         
-        var faces = editor.mEditObject.geometry.faces;
+        var faces = editor.mEditObjectInObjectMode.geometry.faces;
         
         // Je survole une face
         if (intersects.length > 0) {
                 
+            debugger;
+            
             var intersected = intersects[0];
             
             // Je survole une face différente de l'ancienne
@@ -300,7 +299,7 @@ var Viewport = function (editor) {
                 if (check(faces[intersected.faceIndex].selected) && faces[intersected.faceIndex].selected)
                 {
                     
-                    editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0x3498db);
+                   editor.mEditObjectInObjectMode.geometry.faces[intersected.faceIndex].color = new THREE.Color(0x3498db);
                     
                 }                
                 
@@ -309,13 +308,11 @@ var Viewport = function (editor) {
                 else
                 {
                     
-                    editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0xff0000);
+                    editor.mEditObjectInObjectMode.geometry.faces[intersected.faceIndex].color = new THREE.Color(0xff0000);
                     
                 }          
                 
                 lastFaceIndex = intersected.faceIndex;
-                
-                render();
             }
             
             // Je survole la même face
@@ -325,7 +322,7 @@ var Viewport = function (editor) {
                 if (check(faces[intersected.faceIndex].selected) && faces[intersected.faceIndex].selected)
                 {
                     
-                    editor.mEditObject.geometry.faces[intersected.faceIndex].color = new THREE.Color(0x3498db);
+                    editor.mEditObjectInObjectMode.geometry.faces[intersected.faceIndex].color = new THREE.Color(0x3498db);
                     
                 }
                 
@@ -362,7 +359,7 @@ var Viewport = function (editor) {
             
         }
         
-        editor.mEditObject.geometry.colorsNeedUpdate = true;        
+        editor.mEditObjectInObjectMode.geometry.colorsNeedUpdate = true;        
         render();
         
     };
@@ -420,6 +417,18 @@ var Viewport = function (editor) {
                 ctrlPressed = true;
                 break;
                 
+            case 88:
+                xPressed = true;
+                break;
+                
+            case 89:
+                yPressed = true;
+                break;
+                
+            case 90:
+                zPressed = true;
+                break;
+                
         }        
      
     };
@@ -432,30 +441,38 @@ var Viewport = function (editor) {
                 ctrlPressed = false;
                 break;
                 
-            case 69:
-                facesMgr.move(new THREE.Vector3(0, 10, 0));
-                break;
-            
-            case 70:
-                facesMgr.move(new THREE.Vector3(10, 0, 0));
-                break;
-                
-            case 82:
-                facesMgr.move(new THREE.Vector3(0, 0, -10));
-                break;
-                
-            case 83:
-                facesMgr.move(new THREE.Vector3(-10, 0, 0));
-                break;
-                
-            case 87:
-                facesMgr.move(new THREE.Vector3(0, 0, 10));
-                break;
-            
             case 88:
-                facesMgr.move(new THREE.Vector3(0, -10, 0));
+                xPressed = false;
                 break;
                 
+            case 89:
+                yPressed = false;
+                break;
+                
+            case 90:
+                zPressed = false;
+                break;    
+                
+            case 107:
+                facesMgr.move(
+                    new THREE.Vector3(
+                        ((xPressed) ? 10 : 0),
+                        ((yPressed) ? 10 : 0),
+                        ((zPressed) ? 10 : 0)                        
+                    )
+                );
+                
+                break;
+                
+            case 109:
+                facesMgr.move(
+                    new THREE.Vector3(
+                        ((xPressed) ? -10 : 0),
+                        ((yPressed) ? -10 : 0),
+                        ((zPressed) ? -10 : 0)                        
+                    )
+                );
+                break;
         }
         
         render();
@@ -570,6 +587,7 @@ var Viewport = function (editor) {
             
             // Clean Faces Manager
             facesMgr.cleanContext();
+            lastFaceIndex = -1;
             
         } else if (editor.mEditMode === EditMode.OBJECT) {
          
@@ -586,7 +604,7 @@ var Viewport = function (editor) {
             transformControls.detach();
             
             // Inform Faces Manager
-            facesMgr.setObject(editor.mEditObject);
+            facesMgr.setObject(editor.mEditObjectInObjectMode);
             
         }
         
@@ -607,7 +625,16 @@ var Viewport = function (editor) {
         
     });
     
+    events.basicGeometryChanged.add(function(geometry) {
+        
+        lastFaceIndex = -1;
+        objectForSelection.visible = false;
+        facesMgr.setObject(editor.mEditObjectInObjectMode);
+        
+    });
+    
     events.geometryChanged.add(function(geometry) {
+        
         
         editor.mEditObject.rigidBody.box.update();
         
