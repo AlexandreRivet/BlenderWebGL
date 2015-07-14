@@ -691,14 +691,13 @@ var Viewport = function (editor) {
     });
     
     events.objectChanged.add(function(object) {
-       
         transformControls.update();
         if (check(object))
         {
             if (check(editor.mHelpers[object.id])) {
                 editor.mHelpers[object.id].update();
             }
-            if(!(object instanceof THREE.Light))
+            if(check(object.rigidBody))
                 object.rigidBody.box.update();   
         }
         
@@ -781,7 +780,7 @@ var Viewport = function (editor) {
             for(var i = 0; i < scene.children.length; i++)
             {
                 object_tmp = scene.children[i];
-                if((object_tmp instanceof THREE.Light))
+                if(!(check(object_tmp.rigidBody)))
                     continue;
                 object_tmp.rigidBody.init();
             }
@@ -864,7 +863,7 @@ var Viewport = function (editor) {
             editor.mEvents.objectChanged.dispatch(editor.mEditObject);
             
             var currentTime = ANIMATIONMGR.mDurationPlay/1000;
-            ANIMATIONEDITOR.setPosWithTime(currentTime, ANIMATIONMGR.mEnd);
+            ANIMATIONEDITOR.setPosWithTime(ANIMATIONEDITOR.mCursorPrincipal, currentTime, ANIMATIONMGR.mEnd);
             ANIMATIONEDITOR.updateTimeEditorAnimation(currentTime);
 
             if(ANIMATIONMGR.getState() == STATE.STOP)
@@ -880,15 +879,12 @@ var Viewport = function (editor) {
         
         requestIdAnimation = requestAnimationFrame(renderAnimation); 
     };
-    function renderRigidbody() {
-        
-        console.log("Rigidbody");
-        //RigidBody.update(); 
+    function renderRigidbody() { 
         var object_tmp;
         for(var i = 0; i < scene.children.length; i++)
         {
             object_tmp = scene.children[i];
-            if((object_tmp instanceof THREE.Light))
+            if(!(check(object_tmp.rigidBody)))
                 continue;
             object_tmp.rigidBody.update();
         }

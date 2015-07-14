@@ -321,8 +321,6 @@ AnimationManager.prototype.toJSON = function()
         var animation = this.mAnimationList[i];
         var animToJSON = {};
         
-        console.log(animation);
-        
         animToJSON.startAnimation = animation.mStartAnimation;
         
         animToJSON.object = animation.mObject.uuid;

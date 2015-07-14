@@ -116,7 +116,6 @@ var RigidBody = (function(){
 						{
 							obj.geometry.computeBoundingBox();
 							var objBox = obj.rigidBody.box;
-							console.log("Box Min Y: " + that.box.box.min.y + "  Box Max Y: " + that.box.box.max.y );
 							if(that.box !== objBox && that.box.box.isIntersectionBox(objBox.box)=== true)
 							{
                                 var intersect = that.box.box.clone().intersect(objBox.box)
