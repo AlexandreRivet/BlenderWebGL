@@ -81,9 +81,7 @@ var ContextualMenu = function(editor) {
         
         var cmWidth = container.mMenuItems.mDOM.offsetWidth;
         var cmHeight = container.mMenuItems.mDOM.offsetHeight;
-        
-        console.log(cmWidth + ' - ' + cmHeight);
-        
+
         var maxX = 61 + content.mDOM.offsetWidth - cmWidth;
         var maxY = 31 + content.mDOM.offsetHeight - cmHeight;
         
