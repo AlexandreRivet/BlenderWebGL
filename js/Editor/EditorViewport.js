@@ -379,19 +379,27 @@ var Viewport = function (editor) {
         var position = getMousePosition(container.mDOM, e.clientX, e.clientY);
         mouseUpPosition.fromArray(position);
         
-        if (e.button == 0) {
+        if (editor.mEditMode == EditMode.SCENE)
+        {
+            if (e.button == 0) {
             
-            if (contextualMenu.mVisible === true)
-                events.leftClick.dispatch(e.clientX, e.clientY);
+                if (contextualMenu.mVisible === true)
+                    events.leftClick.dispatch(e.clientX, e.clientY);
             
-            if (contextualMenu.mVisible === false)
-                click();
+                if (contextualMenu.mVisible === false)
+                    click();
             
-        } else if (e.button == 1) {
+            } else if (e.button == 1) {
             
-            events.rightClick.dispatch(container, e.clientX, e.clientY);
+                events.rightClick.dispatch(container, e.clientX, e.clientY);
             
+            }    
         }
+        else if (editor.mEditMode == EditMode.OBJECT)
+        {
+            click();    
+        }
+        
         
         document.removeEventListener('mouseup', mouseUp, false);
     };

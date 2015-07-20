@@ -153,6 +153,7 @@ Editor.prototype.addObject = function (object) {
     
     this.mEvents.objectAdded.dispatch(object);
     this.mEvents.sceneGraphChanged.dispatch();
+    this.mEvents.windowResized.dispatch();
 };
 
 Editor.prototype.moveObject = function(object, parent) {
@@ -167,6 +168,7 @@ Editor.prototype.moveObject = function(object, parent) {
     parent.add(object);
     
     this.mEvents.sceneGraphChanged.dispatch();
+    this.mEvents.windowResized.dispatch();
     
 };
 
